@@ -38,19 +38,24 @@ così chiunque può rigenerarlo uguale.
 4. **Scheda aspetto** per personaggio in `prompts/characters.yaml`, presa da `story/bible.md`, identica in
    tutti i prompt di quel personaggio (posa in scena, ritratti).
 
-## Animazioni
+## Coerenza visiva dei personaggi tra pose e fotogrammi
 
-Generare fotogrammi diversi con SDXL produce personaggi che cambiano da un fotogramma all'altro. Quindi:
+Generare fotogrammi o pose diverse da zero con diffusion model produce inevitabilmente "allucinazioni" e derive
+sui dettagli (fisionomia, colore dei vestiti, proporzioni). Per garantire che ogni personaggio sia sempre
+rigorosamente lo stesso in tutte le pose:
 
-1. Si genera **una posa base** del personaggio, di profilo, figura intera, su fondo neutro.
-2. `animate.py` la divide in fasce (testa, busto, gambe) e deriva i fotogrammi:
-   - `idle`: 2 fotogrammi, respiro di 1 px sul busto;
-   - `walk`: 4 fotogrammi, gambe alternate e oscillazione di 1 px;
-   - `talk`: 2 fotogrammi, sul ritratto, bocca aperta/chiusa nella zona del mento.
-3. Uscita: spritesheet PNG + JSON atlas Phaser (stesso formato dell'export di Aseprite/LibreSprite).
-   Un fotogramma ritoccato a mano si salva sopra quello generato: il gioco non cambia.
-4. Nel gioco si aggiungono movimenti via codice (passo, piccoli rimbalzi, specchiatura sinistra/destra),
-   che non richiedono asset.
+1. **Scheda aspetto invariante** in `prompts/characters.yaml`: definisce l'identità del personaggio (cappello,
+   foggia e colore esatto dell'abito, fisionomia, età, negativi dedicati) applicata a ogni richiesta.
+2. **Bozzetto guida di posa** (`data/layouts/pose_profile_<id>.png`): silhouette a blocchi colore piatti che
+   fissa anatomia, proporzioni e palette dell'abito prima dell'inferenza SDXL (tramite `img2img` con strength tarata
+   a 0.75 e rumore a 6). Ad esempio, `pose_profile_enfield.png` impone la giacca chiara a Enfield, distinguendolo
+   immediatamente dal pastrano scuro di Utterson.
+3. **Derivazione fotogrammi con `animate.py`**: invece di rigenerare fotogrammi con l'IA (che cambierebbe i pixel
+   del personaggio a ogni passo), `animate.py` prende la singola posa base approvata e genera proceduralmente
+   l'intera animazione di camminata e respiro idle. In questo modo **l'identità del personaggio è matematicamente identica
+   al 100% su tutti i fotogrammi**, senza alcuno sfarfallio.
+4. **Atlas Phaser standard**: lo spritesheet e il file atlas JSON (`assets/characters/<id>.png/.json`) vengono
+   caricati nativamente da Phaser con le animazioni `idle` e `walk`.
 
 ## Passi (da implementare)
 

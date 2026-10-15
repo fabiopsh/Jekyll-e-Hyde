@@ -51,6 +51,9 @@ export interface Api {
     generate(id: string, job: LlmJob): Promise<string>
     cancel(id: string): Promise<void>
   }
+  app: {
+    quit(): Promise<void>
+  }
 }
 
 export const CHANNELS = {
@@ -64,4 +67,7 @@ export const CHANNELS = {
   llmStatus: 'llm:status',
   llmGenerate: 'llm:generate',
   llmCancel: 'llm:cancel',
+  appQuit: 'app:quit',
 } as const
+
+

@@ -3,6 +3,7 @@
 id: loc_by_street
 name: La stradina
 background: backgrounds/loc_by_street
+music: audio/music/mus_by_street.mp3
 walkable: [[0, 195], [480, 195], [480, 268], [0, 268]]
 scale: { far_y: 195, far: 0.9, near_y: 268, near: 1.1 }
 entries:

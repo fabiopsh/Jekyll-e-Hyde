@@ -5,7 +5,9 @@ import type { Effect, Scene as SceneData } from '../../shared/content-schema'
 import { check } from '../../game/rules'
 import type { Session } from '../session'
 import { isModal } from '../ui/dom'
-import { closeVerbMenu, hoverLabel, verbMenu, type VerbOption } from '../ui/room-ui'
+import { closeVerbMenu, hoverLabel, isVerbMenuOpen, verbMenu, type VerbOption } from '../ui/room-ui'
+import { playClickSound } from '../audio'
+
 
 export const GAME_WIDTH = 480
 export const GAME_HEIGHT = 270
@@ -47,6 +49,7 @@ export class RoomScene extends Phaser.Scene {
   }
 
   create(): void {
+    this.input.setDefaultCursor("url('/ui/cursor_default.png') 2 2, default")
     const s = this.session.state
     this.cameras.main.fadeIn(250)
     this.addImageOrPlaceholder(this.room.background, 0)
@@ -96,11 +99,12 @@ export class RoomScene extends Phaser.Scene {
 
     // exits
     for (const ex of this.room.exits) {
-      const zone = this.add.zone(ex.shape.x, ex.shape.y, ex.shape.w, ex.shape.h).setOrigin(0).setInteractive({ cursor: 'pointer' })
+      const zone = this.add.zone(ex.shape.x, ex.shape.y, ex.shape.w, ex.shape.h).setOrigin(0).setInteractive({ cursor: "url('/ui/cursor_pointer.png') 2 2, pointer" })
       zone.on('pointerover', () => hoverLabel(`→ ${ex.name}`))
       zone.on('pointerout', () => hoverLabel(null))
       zone.on('pointerdown', (p: Phaser.Input.Pointer) => {
         if (isModal() || p.rightButtonDown()) return
+        playClickSound()
         closeVerbMenu()
         const target = this.nearestWalkable({ x: ex.shape.x + ex.shape.w / 2, y: ex.shape.y + ex.shape.h })
         this.walkTo(target, () => {
@@ -193,11 +197,16 @@ export class RoomScene extends Phaser.Scene {
     name: string,
     menu: () => { at: Pt; options: VerbOption[] },
   ): void {
-    obj.setInteractive({ cursor: 'pointer' })
+    obj.setInteractive({ cursor: "url('/ui/cursor_pointer.png') 2 2, pointer" })
     obj.on('pointerover', () => hoverLabel(name))
     obj.on('pointerout', () => hoverLabel(null))
     obj.on('pointerdown', (p: Phaser.Input.Pointer) => {
       if (isModal()) return
+      playClickSound()
+      if (isVerbMenuOpen()) {
+        closeVerbMenu()
+        return
+      }
       const { at, options } = menu()
       const look = options.find((o) => o.label === 'Osserva')
       if (p.rightButtonDown()) { if (look) { closeVerbMenu(); this.walkTo(at, look.run); } return }

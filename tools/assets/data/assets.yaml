@@ -61,7 +61,7 @@ assets:
     source: "story/chapters/01-storia-della-porta.md, Profili personaggio: enfield"
     character: enfield
     pose: base
-    layout: layouts/pose_profile_right.png
+    layout: layouts/pose_profile_enfield.png
     strength: 0.75
     noise: 6
 

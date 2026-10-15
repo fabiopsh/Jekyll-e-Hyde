@@ -21,49 +21,124 @@ nodes:
         next: null
   silence:
     lines:
-      - { speaker: narrator, it: "I due camminavano senza dirsi nulla, come ogni domenica." }
+      - speaker: narrator
+        emotion: quiet_atmosphere
+        it: "I due camminavano senza dirsi nulla, come ogni domenica."
     next: null
   signer:
     lines:
-      - { speaker: narrator, it: "Da quello stato lo richiamò Utterson, che domandò piuttosto bruscamente:" }
-      - { speaker: utterson, src: D01.5.1, it: "E Lei non sa se chi ha firmato l’assegno abita lì?" }
-      - { speaker: enfield, src: D01.5.2, it: "Un posto verosimile, non è vero? Ma mi è capitato di notare il suo indirizzo; abita in una qualche piazza." }
-      - { speaker: utterson, src: D01.5.4, it: "E non ha mai chiesto del... luogo con la porta?" }
-      - { speaker: enfield, src: D01.5.5, it: "No, signore; avevo un certo riguardo. Ho idee molto nette sul fare domande; sa troppo di giorno del giudizio. Si comincia una domanda ed è come far partire un sasso." }
-      - { speaker: enfield, src: D01.5.6, it: "Se ne sta seduti tranquilli in cima a una collina; e il sasso se ne va, mettendone in moto altri; e presto qualche vecchio tipo bonario (l’ultimo a cui avrebbe pensato) viene colpito in testa nel suo giardino sul retro e la famiglia deve cambiare cognome. No, signore, ne faccio una regola: più la cosa ha l’aria di una faccenda losca, meno chiedo." }
-      - { speaker: utterson, src: D01.5.7, it: "Una regola ottima, anche questa." }
-      - { speaker: enfield, src: D01.5.8, it: "Ma il posto l’ho studiato per conto mio. Sembra a malapena una casa. Non c’è un’altra porta, e nessuno entra o esce da quella se non, molto di rado, il signore della mia avventura." }
-      - { speaker: enfield, src: D01.5.9, it: "Ci sono tre finestre che danno sul cortile al primo piano; nessuna sotto; le finestre sono sempre chiuse, ma sono pulite. E poi c’è un camino che per lo più fuma; quindi qualcuno deve abitarci. Eppure non è sicuro; perché gli edifici sono così addossati gli uni agli altri intorno al cortile che è difficile dire dove ne finisce uno e ne comincia un altro." }
+      - speaker: narrator
+        emotion: narrative_interruption
+        it: "Da quello stato lo richiamò Utterson, che domandò piuttosto bruscamente:"
+      - speaker: utterson
+        src: D01.5.1
+        emotion: sharp_inquiry
+        it: "E Lei non sa se chi ha firmato l’assegno abita lì?"
+      - speaker: enfield
+        src: D01.5.2
+        emotion: ironical_reply
+        it: "Un posto verosimile, non è vero? Ma mi è capitato di notare il suo indirizzo; abita in una qualche piazza."
+      - speaker: utterson
+        src: D01.5.4
+        emotion: cautious_probing
+        it: "E non ha mai chiesto del... luogo con la porta?"
+      - speaker: enfield
+        src: D01.5.5
+        emotion: candid_rule
+        it: "No, signore; avevo un certo riguardo. Ho idee molto nette sul fare domande; sa troppo di giorno del giudizio. Si comincia una domanda ed è come far partire un sasso."
+      - speaker: enfield
+        src: D01.5.6
+        emotion: vivid_metaphor
+        it: "Se ne sta seduti tranquilli in cima a una collina; e il sasso se ne va, mettendone in moto altri; e presto qualche vecchio tipo bonario (l’ultimo a cui avrebbe pensato) viene colpito in testa nel suo giardino sul retro e la famiglia deve cambiare cognome. No, signore, ne faccio una regola: più la cosa ha l’aria di una faccenda losca, meno chiedo."
+      - speaker: utterson
+        src: D01.5.7
+        emotion: dry_agreement
+        it: "Una regola ottima, anche questa."
+      - speaker: enfield
+        src: D01.5.8
+        emotion: architectural_curiosity
+        it: "Ma il posto l’ho studiato per conto mio. Sembra a malapena una casa. Non c’è un’altra porta, e nessuno entra o esce da quella se non, molto di rado, il signore della mia avventura."
+      - speaker: enfield
+        src: D01.5.9
+        emotion: building_analysis
+        it: "Ci sono tre finestre che danno sul cortile al primo piano; nessuna sotto; le finestre sono sempre chiuse, ma sono pulite. E poi c’è un camino che per lo più fuma; quindi qualcuno deve abitarci. Eppure non è sicuro; perché gli edifici sono così addossati gli uni agli altri intorno al cortile che è difficile dire dove ne finisce uno e ne comincia un altro."
     effects: [{ learn: F01.10 }, { learn: F01.13 }, { learn: F01.14 }, { set: c1_asked_signer }]
     next: null
   name:
     lines:
-      - { speaker: narrator, it: "I due ripresero a camminare per un po’ in silenzio." }
-      - { speaker: utterson, src: D01.6.1, it: "Enfield, è una buona regola, la Sua." }
-      - { speaker: enfield, src: D01.6.3, it: "Sì, credo di sì." }
-      - { speaker: utterson, src: D01.6.4, it: "Ma nonostante questo, c’è un punto su cui voglio chiedere. Voglio chiedere il nome di quell’uomo che ha calpestato la bambina." }
-      - { speaker: enfield, src: D01.6.6, it: "Ebbene, non vedo che male potrebbe fare. Era un uomo di nome Hyde." }
-      - { speaker: utterson, src: D01.6.8, emotion: grave, it: "Hm. Che tipo d’uomo è a vedersi?" }
-      - { speaker: enfield, src: D01.6.10, it: "Non è facile da descrivere. C’è qualcosa che non va nel suo aspetto; qualcosa di spiacevole, qualcosa di decisamente detestabile. Non ho mai visto un uomo che mi stesse tanto antipatico, e tuttavia non so bene perché." }
-      - { speaker: enfield, src: D01.6.10, it: "Deve essere deforme da qualche parte; dà una forte sensazione di deformità, benché non sappia indicare il punto. È un uomo dall’aspetto straordinario, eppure davvero non saprei citare nulla di fuori dal comune. No, signore; non ne vengo a capo; non so descriverlo. E non è mancanza di memoria; perché giuro che lo vedo in questo momento." }
+      - speaker: narrator
+        emotion: quiet_atmosphere
+        it: "I due ripresero a camminare per un po’ in silenzio."
+      - speaker: utterson
+        src: D01.6.1
+        emotion: thoughtful_preface
+        it: "Enfield, è una buona regola, la Sua."
+      - speaker: enfield
+        src: D01.6.3
+        emotion: casual_assent
+        it: "Sì, credo di sì."
+      - speaker: utterson
+        src: D01.6.4
+        emotion: decisive_question
+        it: "Ma nonostante questo, c’è un punto su cui voglio chiedere. Voglio chiedere il nome di quell’uomo che ha calpestato la bambina."
+      - speaker: enfield
+        src: D01.6.6
+        emotion: naming_hyde
+        it: "Ebbene, non vedo che male potrebbe fare. Era un uomo di nome Hyde."
+      - speaker: utterson
+        src: D01.6.8
+        emotion: intense_curiosity
+        it: "Hm. Che tipo d’uomo è a vedersi?"
+      - speaker: enfield
+        src: D01.6.10
+        emotion: struggle_to_describe
+        it: "Non è facile da descrivere. C’è qualcosa che non va nel suo aspetto; qualcosa di spiacevole, qualcosa di decisamente detestabile. Non ho mai visto un uomo che mi stesse tanto antipatico, e tuttavia non so bene perché."
+      - speaker: enfield
+        src: D01.6.10
+        emotion: visceral_repulsion
+        it: "Deve essere deforme da qualche parte; dà una forte sensazione di deformità, benché non sappia indicare il punto. È un uomo dall’aspetto straordinario, eppure davvero non saprei citare nulla di fuori dal comune. No, signore; non ne vengo a capo; non so descriverlo. E non è mancanza di memoria; perché giuro che lo vedo in questo momento."
     effects: [{ learn: F01.15 }, { learn: F01.16 }]
     next: null
   key:
     lines:
-      - { speaker: narrator, it: "Utterson camminò di nuovo un tratto in silenzio e, a quanto pareva, sotto il peso di una riflessione." }
-      - { speaker: utterson, src: D01.7.1, it: "È sicuro che abbia usato una chiave?" }
-      - { speaker: enfield, src: D01.7.2, it: "Mio caro signore..." }
-      - { speaker: utterson, src: D01.7.3, it: "Sì, lo so; so che deve sembrarLe strano. Il fatto è che, se non Le chiedo il nome dell’altra parte, è perché lo so già. Vede, Richard, il Suo racconto ha colto nel segno. Se è stato impreciso in qualche punto, farà meglio a correggerlo." }
-      - { speaker: enfield, src: D01.7.5, it: "Credo che avrebbe potuto avvertirmi. Ma sono stato pedantemente esatto, come lo chiama Lei. Quel tipo aveva una chiave; e per di più ce l’ha ancora. Gliel’ho vista usare non più di una settimana fa." }
-      - { speaker: narrator, it: "Utterson sospirò profondamente ma non disse una parola; e il giovane riprese poco dopo." }
-      - { speaker: enfield, src: D01.7.7, it: "Ecco un’altra lezione a non dire nulla. Mi vergogno della mia lingua lunga. Facciamo un patto: non parlarne mai più." }
+      - speaker: narrator
+        emotion: heavy_reflection
+        it: "Utterson camminò di nuovo un tratto in silenzio e, a quanto pareva, sotto il peso di una riflessione."
+      - speaker: utterson
+        src: D01.7.1
+        emotion: lawyer_cross_examination
+        it: "È sicuro che abbia usato una chiave?"
+      - speaker: enfield
+        src: D01.7.2
+        emotion: offended_disbelief
+        it: "Mio caro signore..."
+      - speaker: utterson
+        src: D01.7.3
+        emotion: grave_revelation
+        it: "Sì, lo so; so che deve sembrarLe strano. Il fatto è che, se non Le chiedo il nome dell’altra parte, è perché lo so già. Vede, Richard, il Suo racconto ha colto nel segno. Se è stato impreciso in qualche punto, farà meglio a correggerlo."
+      - speaker: enfield
+        src: D01.7.5
+        emotion: stubborn_assertion
+        it: "Credo che avrebbe potuto avvertirmi. Ma sono stato pedantemente esatto, come lo chiama Lei. Quel tipo aveva una chiave; e per di più ce l’ha ancora. Gliel’ho vista usare non più di una settimana fa."
+      - speaker: narrator
+        emotion: heavy_sigh
+        it: "Utterson sospirò profondamente ma non disse una parola; e il giovane riprese poco dopo."
+      - speaker: enfield
+        src: D01.7.7
+        emotion: self_reproach_and_pact
+        it: "Ecco un’altra lezione a non dire nulla. Mi vergogno della mia lingua lunga. Facciamo un patto: non parlarne mai più."
     effects: [{ learn: F01.17 }, { learn: F01.18 }]
     choices:
       - text: "«Con tutto il cuore.»"
         next: bargain
   bargain:
     lines:
-      - { speaker: utterson, src: D01.7.9, it: "Con tutto il cuore. Ci stringo la mano sopra, Richard." }
-      - { speaker: narrator, it: "Fine del primo capitolo. I capitoli successivi sono in lavorazione." }
+      - speaker: utterson
+        src: D01.7.9
+        emotion: warm_gentleman_pact
+        it: "Con tutto il cuore. Ci stringo la mano sopra, Richard."
+      - speaker: narrator
+        emotion: chapter_conclusion
+        it: "Fine del primo capitolo. I capitoli successivi sono in lavorazione."
     effects: [{ learn: F01.19 }, { set: c1_bargain }]
     next: null

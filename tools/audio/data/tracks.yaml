@@ -1,0 +1,35 @@
+# Soundtrack definitions for Jekyll & Hyde.
+# Each track defines:
+#   id: file name in assets/audio/music/
+#   prompt: musical description for Meta MusicGen
+#   duration: duration in seconds to generate (typically 25-35s for loops)
+#   loop_crossfade: crossfade duration in seconds for seamless looping (default: 2.5s)
+#   volume: normalized peak volume (default: 0.85)
+
+tracks:
+  - id: mus_menu_theme
+    scene: main_menu
+    title: Tema Principale — Il Romanzo
+    duration: 22
+    loop_crossfade: 2.0
+    prompt: >-
+      victorian gothic london 1886, melancholic solo cello with antique parlor piano and quiet violin,
+      somber, mysterious, period chamber classical music, slow tempo, atmospheric 16-bit adventure game
+
+  - id: mus_by_street
+    scene: loc_by_street
+    title: La Stradina di Domenica
+    duration: 22
+    loop_crossfade: 2.0
+    prompt: >-
+      victorian london 1880, quiet empty cobblestone street on a sunday, gentle clarinet,
+      soft pizzicato cello and warm acoustic chamber strings, peaceful yet subtle mystery, point and click rpg
+
+  - id: mus_sinister_story
+    scene: d01_door_story
+    title: La Storia della Porta
+    duration: 22
+    loop_crossfade: 2.0
+    prompt: >-
+      dark victorian gothic suspense, brooding low cello drone, eerie tremolo strings and sinister music box,
+      cold winter night, suspenseful drama, slow tempo, gothic novel soundtrack

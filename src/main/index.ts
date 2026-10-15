@@ -5,6 +5,7 @@ import { CHANNELS } from '../shared/ipc'
 import { RunStore } from './saves/runs'
 import { LlmService } from './llm'
 
+
 // In dev the project root holds content/ and story/; in a packaged build they are copied to resources/.
 const root = app.isPackaged ? process.resourcesPath : process.cwd()
 
@@ -48,8 +49,12 @@ app.whenReady().then(() => {
   ipcMain.handle(CHANNELS.llmStatus, () => llm.status())
   ipcMain.handle(CHANNELS.llmGenerate, (_e, id, job) => llm.generate(id, job))
   ipcMain.handle(CHANNELS.llmCancel, (_e, id) => llm.cancel(id))
+  ipcMain.handle(CHANNELS.appQuit, () => {
+    app.quit()
+  })
 
   createWindow()
+
   app.on('activate', () => BrowserWindow.getAllWindows().length === 0 && createWindow())
 })
 

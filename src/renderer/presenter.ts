@@ -7,19 +7,54 @@ import type { Session } from './session'
 import { RoomScene, type RoomCallbacks } from './phaser/RoomScene'
 import { narrate, playDialogue } from './ui/story-panels'
 import { openChat } from './ui/chat'
-import { journal } from './ui/screens'
+import { journal, pauseMenu } from './ui/screens'
 import { isModal, toast } from './ui/dom'
-import { closeVerbMenu } from './ui/room-ui'
+import { closeVerbMenu, isVerbMenuOpen } from './ui/room-ui'
+import { playMusic, stopMusic } from './audio'
 
 export class Presenter {
   private queue: Command[] = []
   private busy = false
   private ended: (() => void) | null = null
+  private cleanupKeydown: (() => void) | null = null
 
   constructor(private readonly game: Phaser.Game, private readonly session: Session) {
     session.onCommands((cmds) => this.enqueue(cmds))
-    window.addEventListener('keydown', (e) => {
-      if ((e.key === 'j' || e.key === 'J') && !isModal()) { closeVerbMenu(); void journal(session) }
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.key === 'j' || e.key === 'J') && !isModal()) {
+        closeVerbMenu()
+        void journal(session)
+      } else if (e.key === 'Escape') {
+        if (isVerbMenuOpen()) {
+          closeVerbMenu()
+        } else if (!isModal()) {
+          void this.openPauseMenu()
+        }
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    this.cleanupKeydown = () => window.removeEventListener('keydown', onKey)
+  }
+
+  private async openPauseMenu(): Promise<void> {
+    closeVerbMenu()
+    await pauseMenu(this.session, {
+      onResume: () => {},
+      onJournal: () => void journal(this.session),
+      onMainMenu: async () => {
+        await this.session.save()
+        this.game.scene.stop('room')
+        this.cleanupKeydown?.()
+        this.ended?.()
+      },
+      onQuit: async () => {
+        await this.session.save()
+        if (window.api?.app?.quit) {
+          await window.api.app.quit()
+        } else {
+          window.close()
+        }
+      },
     })
   }
 
@@ -58,9 +93,11 @@ export class Presenter {
       case 'chapter': return this.chapterIntro(c.number)
       case 'goto': return this.showScene(c.scene)
       case 'end':
+        stopMusic()
         await narrate(['Fine.'])
         await this.session.save()
         this.game.scene.stop('room')
+        this.cleanupKeydown?.()
         this.ended?.()
     }
   }
@@ -73,6 +110,7 @@ export class Presenter {
   private showScene(id: string): void {
     const scene = this.session.content.scenes[id]
     if (!scene) { toast(`Scena mancante: ${id}`); return }
+    if (scene.music) playMusic(scene.music)
     const callbacks: RoomCallbacks = {
       run: (effects) => { this.session.run(effects) },
       talk: (npcId, dialogue, chat) => {

@@ -27,42 +27,74 @@ Aggiornato: 2026-10-15. Chi lavora qui aggiorna questo file a fine sessione (ved
 - **Bug fix finestre d'azione**: corretto il ciclo di vita del menu contestuale (`src/renderer/ui/room-ui.ts`,
   `RoomScene.ts`, `presenter.ts`). Ora la finestra si chiude correttamente su clic opzione, clic fuori, tasto Esc,
   apertura diario o cambio scena. Non è più possibile aprire finestre multiple sovrapposte.
-- **Pipeline asset capitolo 1 completata e integrata**:
-  - Aggiunti e generati con GPU (SDXL + Pixel Art XL LoRA) sprite e ritratto di `enfield`.
-  - Animazioni idle/walk e atlas Phaser generati per Utterson ed Enfield (`animate.py`).
-  - Creati script `tools/assets/export.py` e `tools/assets/contact_sheet.py`.
-  - Asset esportati nella cartella di gioco `assets/` (`backgrounds/`, `characters/`, `portraits/`, `items/`)
-    con `assets/manifest.json`.
-  - Ricalibrate le coordinate di hotspot, camminata e NPC in `content/scenes/loc_by_street.yaml` sullo sfondo reale.
+- **UI & UX Vittoriana + Typewriter effect**:
+  - Selezione del testo disabilitata su tutta la UI (`user-select: none` in `style.css`), preservando gli input di testo.
+  - Schermata del menu principale ridisegnata come frontespizio di un libro d'epoca vittoriano: doppio bordo con angolari, titolazione dorata con sfumatura metallica, fregi tipografici e citazione d'apertura del romanzo (`src/renderer/ui/screens.ts`).
+  - Implementato effetto macchina da scrivere/streaming progressivo per narrazione, dialoghi canonici e risposte chat LLM (`typeText` in `dom.ts`, `story-panels.ts`, `chat.ts`).
+  - Salto istantaneo: un clic/Spazio mostra immediatamente l'intera frase, il secondo avanza.
+  - Cursore lampeggiante dorato, freccia di avanzamento pulsante `▸`, scrollbar in ottone antico e bordi dorati in `style.css`.
+- **Pipeline musicale in locale (Meta MusicGen)**:
+  - Implementato `tools/audio/generate_music.py` con modello `facebook/musicgen-small` su GPU (CUDA FP16).
+  - Algoritmo di looping seamless: crossfade a pari potenza di 2 secondi per eliminare stacchi e click nei loop.
+  - Generazione ed esportazione di 3 colonne sonore in MP3/WAV a 32 kHz (`assets/audio/music/`) con `assets/audio/manifest.json`:
+    - `mus_menu_theme`: tema principale del menu (violoncello malinconico e pianoforte vittoriano da salotto).
+    - `mus_by_street`: atmosfera della stradina di domenica (archi gentili, pizzicato, quiete con mistero).
+    - `mus_sinister_story`: tema cupo per la storia della porta (violoncello grave, tremolo d'archi e carillon sinistro).
+  - Gestore audio disaccoppiato `src/renderer/audio.ts`: transizioni fluide in dissolvenza (crossfade), sblocco autoplay su primo clic, arresto a fine partita e cambio musica automatico nei dialoghi drammatici (es. `d01_door_story` attiva `mus_sinister_story` e ripristina la musica della scena all'uscita).
+- **Audio classico delle avventure grafiche (LucasArts / Pentiment)**:
+  - Eliminato il TTS neurale su decisione di Fabio (voci sintetiche inadatte al tono recitativo del romanzo).
+  - Implementati talk-blip procedurali a latenza zero tramite Web Audio API durante l'animazione typewriter:
+    - Utterson: timbro grave baritonale (~125 Hz a dente di sega con filtro passa-basso).
+    - Enfield: timbro tenore brillante e vivace (~260 Hz a triangolo).
+    - Narratore: ticchettio meccanico d'epoca di tasti e nastro da macchina da scrivere antica.
+  - Rimossa tutta l'infrastruttura TTS (script Python, IPC, dipendenze residue).
+- **Puntatore vittoriano a tema in pixel art**:
+  - `assets/ui/cursor_default.png`: guanto vittoriano in pelle avorio con polsino in ottone dorato, gemma e bordo scuro ad alto contrasto.
+  - `assets/ui/cursor_pointer.png`: guanto d'oro radioso con aura ambrata attivo sull'hover di hotspot, uscite, pulsanti, scelte e link.
+  - Integrato in tutto il CSS (`style.css`) e direttamente sul canvas Phaser (`RoomScene.ts`).
+- **Menu di Pausa su tasto `ESC`**:
+  - Accessibile premendo `ESC` durante l'esplorazione.
+  - Pannello vittoriano con capitolo, luogo corrente, regolazione volume Musica ed Effetti sonori con slider dedicati, Riprendi (ESC), Diario (J), Torna al Menu Principale ed Esci dal gioco (`app:quit`).
+- **Effetti sonori tattili sui click (`playClickSound`)**:
+  - Sintetizzatore Web Audio di micro-transienti meccanici in ottone/legno d'epoca agganciato a livello globale su pulsanti HTML, opzioni di dialogo e hotspot/uscite della scena.
+- **Risolto bug menu esamina porta**:
+  - Cliccando sul pulsante "Osserva" della porta, il menu non si sposta più: bloccata la propagazione degli eventi pointerdown/mousedown/mouseup/click al canvas Phaser e introdotta la guardia `isVerbMenuOpen()`.
 
 ## In corso
 
-- Verifica manuale di Fabio sul capitolo 1 con grafica reale e bug fix menu.
+- Verifica finale delle nuove funzionalità classiche e del capitolo 1 con Fabio.
 
 ## Prossimi passi
 
-1. Prova manuale di Fabio sul capitolo 1 con grafica reale (passi sotto) e riscontro.
-2. Capitolo 2 (`docs/DESIGN.md` §3), poi 3-8, poi i flashback 9-10. Un capitolo per volta, ognuno con il suo
-   giro in `tests/content-playthrough.test.ts`.
-3. Pacchetto desktop (electron-builder, modello in `resources/models/`, binari CPU + Vulkan).
+1. Prova manuale completa di Fabio del capitolo 1 con audio classico, cursore a tema, menu di pausa e fix porta.
+2. Predisposizione dei contenuti per il Capitolo 2 (*Search for Mr. Hyde* / *Alla ricerca di Mr Hyde*).
 
 ## Da provare a mano (Fabio)
 
-Capitolo 1 giocabile con asset grafici reali (sfondo stradina, sprite camminata Utterson ed Enfield, ritratto Enfield nei dialoghi).
-1. `npm run dev` → *Nuova partita*. Quattro cartoline narrate (clic o Spazio).
-2. Nella stradina: verificare lo sfondo disegnato `loc_by_street.png` e i personaggi Utterson ed Enfield animati.
-3. Clic su pavimento: Utterson cammina correttamente.
-4. **Verifica bug finestra**: fare clic sulla porta o su Enfield per aprire il menu delle azioni.
-   - Verificare che cliccando fuori o premendo Esc la finestra si chiuda.
-   - Verificare che cliccando un'azione la finestra si chiuda immediatamente.
-   - Verificare che cliccando su un altro oggetto non si accumulino finestre aperte.
-5. Clic sulla porta → *Osserva*: parte il racconto di Enfield (verificare posizionamento del punto d'interazione porta).
-6. Clic su Enfield → *Parla*: le domande compaiono una alla volta nell'ordine del libro, fino al patto; durante il dialogo compare il ritratto di Enfield.
-7. Clic su Enfield → *Conversa*: chat libera con LLM locale (Qwen / Ollama).
-8. Tasto J: diario con obiettivo e fatti.
-9. Dopo il patto: "Fine" → menu → *Storico partite*.
+Capitolo 1 completo con stile classico avventura grafica (LucasArts/Pentiment):
+1. Esegui `npm run dev`.
+2. **Puntatore a tema**:
+   - Sposta il mouse: nota il cursore con guanto vittoriano avorio e polsino d'epoca dorato.
+   - Passa il mouse su pulsanti, botteghe, porta, uscite o su Enfield: il cursore diventa un guanto in oro brillante radioso.
+3. **Effetti sonori sui click**:
+   - Clicca su qualsiasi pulsante del menu o scelta: ascolta il feedback sonoro tattile meccanico d'epoca.
+4. **Dialoghi in stile classico (Talk-blip)**:
+   - Inizia una partita: nella narrazione d'apertura il testo scorre con il ritmico ticchettio vintage della macchina da scrivere.
+   - Clic sulla porta → *Osserva*:
+     - **Fix menu porta**: il menu non si sposta, il primo click su "Osserva" avvia immediatamente il dialogo!
+     - Mentre Utterson parla, il testo scorre accompagnato dal suo caratteristico tono baritonale grave.
+     - Quando parla Enfield, il tono vocale diventa un tenore brillante e giovanile.
+     - Un clic/Spazio mostra subito il testo completo, il successivo avanza.
+5. **Menu di Pausa (ESC)**:
+   - Durante l'esplorazione, premi `ESC`.
+   - Si apre il Menu di Pausa vittoriano:
+     - Regola i volumi (Musica e Effetti Sonori): muovendo lo slider degli effetti senti il click al volume selezionato.
+     - Prova i pulsanti: *Diario (J)*, *Riprendi*, o *Torna al Menu Principale* (salva e torna al libro).
+6. **Chat libera LLM**:
+   - Clic su Enfield → *Conversa*:
+     - Digita una domanda (es. *"Chi abita in quella casa?"*).
+     - Quando Enfield risponde, il testo scorre con il suo blip vocale ritmico. Premi `ESC` per chiudere la chat in qualsiasi momento.
 
-Da riportare: testi troppo piccoli o lenti, coordinate di clic imperfette sullo sfondo, animazioni o risposte LLM fuori tono.
 
 ## Problemi aperti
 

@@ -153,6 +153,7 @@ export const Dialogue = z.strictObject({
   id,
   start: id,
   nodes: z.record(id, DialogueNode),
+  music: z.string().optional(),
 })
 export type Dialogue = z.infer<typeof Dialogue>
 

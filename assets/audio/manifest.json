@@ -1,0 +1,35 @@
+[
+  {
+    "id": "mus_menu_theme",
+    "scene": "main_menu",
+    "title": "Tema Principale \u2014 Il Romanzo",
+    "model": "facebook/musicgen-small",
+    "duration": 22,
+    "sampling_rate": 32000,
+    "file": "music/mus_menu_theme.mp3",
+    "prompt": "victorian gothic london 1886, melancholic solo cello with antique parlor piano and quiet violin, somber, mysterious, period chamber classical music, slow tempo, atmospheric 16-bit adventure game",
+    "generated_at": "2026-10-15T18:00:04+00:00"
+  },
+  {
+    "id": "mus_by_street",
+    "scene": "loc_by_street",
+    "title": "La Stradina di Domenica",
+    "model": "facebook/musicgen-small",
+    "duration": 22,
+    "sampling_rate": 32000,
+    "file": "music/mus_by_street.mp3",
+    "prompt": "victorian london 1880, quiet empty cobblestone street on a sunday, gentle clarinet, soft pizzicato cello and warm acoustic chamber strings, peaceful yet subtle mystery, point and click rpg",
+    "generated_at": "2026-10-15T18:00:24+00:00"
+  },
+  {
+    "id": "mus_sinister_story",
+    "scene": "d01_door_story",
+    "title": "La Storia della Porta",
+    "model": "facebook/musicgen-small",
+    "duration": 22,
+    "sampling_rate": 32000,
+    "file": "music/mus_sinister_story.mp3",
+    "prompt": "dark victorian gothic suspense, brooding low cello drone, eerie tremolo strings and sinister music box, cold winter night, suspenseful drama, slow tempo, gothic novel soundtrack",
+    "generated_at": "2026-10-15T18:00:43+00:00"
+  }
+]

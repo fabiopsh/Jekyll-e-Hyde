@@ -4,6 +4,7 @@ import type { LogEvent, RunMeta } from '../../shared/ipc'
 import { chapterOf } from '../../game/rules'
 import type { Session } from '../session'
 import { h, modal, ui } from './dom'
+import { getVolume, playClickSound, setSfxVolume, setVolume } from '../audio'
 
 const fmtTime = (ms: number) => {
   const m = Math.floor(ms / 60000)
@@ -17,13 +18,29 @@ export function mainMenu(content: Content): Promise<MenuChoice> {
   return new Promise(async (resolve) => {
     const runs = await window.api.runs.list()
     const last = runs.find((r) => !r.endedAt)
-    const screen = h('div', { class: 'screen menu' },
-      h('h1', {}, 'Lo strano caso del dottor Jekyll e del signor Hyde'),
-      h('p', { class: 'subtitle' }, 'dal romanzo di Robert Louis Stevenson (1886)'),
-      h('div', { class: 'menu-buttons' },
-        last ? h('button', { onclick: () => done({ kind: 'resume', id: last.id }) }, `Continua — cap. ${last.chapter}, ${fmtTime(last.playtimeMs)}`) : null,
-        h('button', { onclick: () => done({ kind: 'new' }) }, 'Nuova partita'),
-        h('button', { onclick: () => history(content, runs) }, `Storico partite (${runs.length})`),
+    const screen = h('div', { class: 'screen menu-book' },
+      h('div', { class: 'book-cover' },
+        h('div', { class: 'book-frame' },
+          h('div', { class: 'book-author' }, 'ROBERT LOUIS STEVENSON'),
+          h('div', { class: 'book-divider' }, '— • —'),
+          h('h1', { class: 'book-title' },
+            h('span', { class: 'title-small' }, 'LO STRANO CASO DEL'),
+            h('span', { class: 'title-large' }, 'DOTTOR JEKYLL'),
+            h('span', { class: 'title-small' }, 'E DEL'),
+            h('span', { class: 'title-large' }, 'SIGNOR HYDE'),
+          ),
+          h('div', { class: 'book-ornament' }, '❦  ⚜  ❦'),
+          h('p', { class: 'book-edition' }, 'Londra, 1886 · Traduzione fedele e avventura grafica in pixel art'),
+          h('div', { class: 'menu-buttons' },
+            last ? h('button', { class: 'menu-btn resume', onclick: () => done({ kind: 'resume', id: last.id }) },
+              `Riprendi la lettura (Cap. ${last.chapter} · ${fmtTime(last.playtimeMs)})`) : null,
+            h('button', { class: 'menu-btn new', onclick: () => done({ kind: 'new' }) }, 'Comincia la lettura (Nuova partita)'),
+            h('button', { class: 'menu-btn history', onclick: () => history(content, runs) }, `Cronache delle indagini (${runs.length} registrate)`),
+          ),
+          h('div', { class: 'book-quote' },
+            '«Tutti gli esseri umani, quali noi li conosciamo, sono un miscuglio di bene e di male…»',
+          ),
+        ),
       ),
     )
     const done = (c: MenuChoice) => { screen.remove(); resolve(c) }
@@ -95,3 +112,125 @@ export function journal(session: Session): Promise<void> {
     ui().append(screen)
   }))
 }
+
+export interface PauseActions {
+  onResume: () => void
+  onJournal: () => void
+  onMainMenu: () => void | Promise<void>
+  onQuit: () => void | Promise<void>
+}
+
+export function pauseMenu(session: Session, actions: PauseActions): Promise<void> {
+  return modal(() => new Promise<void>((resolve) => {
+    const { state, content } = session
+    const ch = chapterOf(content, state.chapter)
+    const currentScene = content.scenes[state.scene]
+    const sceneName = currentScene ? currentScene.name : state.scene
+
+    const vol = getVolume()
+    let musicPct = Math.round(vol.music * 100)
+    let sfxPct = Math.round(vol.sfx * 100)
+
+    const musicLabel = h('span', { class: 'volume-val' }, `${musicPct}%`)
+    const sfxLabel = h('span', { class: 'volume-val' }, `${sfxPct}%`)
+
+    const musicSlider = h('input', {
+      type: 'range',
+      min: '0',
+      max: '100',
+      step: '5',
+      value: String(musicPct),
+      class: 'volume-slider',
+      oninput: (e: Event) => {
+        const val = Number((e.target as HTMLInputElement).value)
+        musicPct = val
+        musicLabel.textContent = `${val}%`
+        setVolume(val / 100)
+      },
+    })
+
+    const sfxSlider = h('input', {
+      type: 'range',
+      min: '0',
+      max: '100',
+      step: '5',
+      value: String(sfxPct),
+      class: 'volume-slider',
+      oninput: (e: Event) => {
+        const val = Number((e.target as HTMLInputElement).value)
+        sfxPct = val
+        sfxLabel.textContent = `${val}%`
+        setSfxVolume(val / 100)
+        playClickSound()
+      },
+    })
+
+    let closed = false
+    const close = () => {
+      if (closed) return
+      closed = true
+      screen.remove()
+      window.removeEventListener('keydown', key)
+      resolve()
+    }
+
+    const screen = h('div', { class: 'screen pause-overlay' },
+      h('div', { class: 'pause-card panel' },
+        h('div', { class: 'pause-header' },
+          h('div', { class: 'pause-subtitle' }, '— • —'),
+          h('h2', { class: 'pause-title' }, 'PAUSA'),
+          h('div', { class: 'pause-info' }, `Capitolo ${ch.number}: ${ch.title}`),
+          h('div', { class: 'pause-loc' }, `Luogo: ${sceneName}`),
+        ),
+        h('div', { class: 'pause-audio-section' },
+          h('div', { class: 'audio-control' },
+            h('label', {}, 'Musica:'),
+            musicSlider,
+            musicLabel,
+          ),
+          h('div', { class: 'audio-control' },
+            h('label', {}, 'Effetti sonori:'),
+            sfxSlider,
+            sfxLabel,
+          ),
+        ),
+        h('div', { class: 'pause-buttons' },
+          h('button', {
+            class: 'pause-btn resume-btn',
+            onclick: () => { close(); actions.onResume() },
+          }, 'Riprendi l\'esplorazione (Esc)'),
+          h('button', {
+            class: 'pause-btn journal-btn',
+            onclick: () => { close(); actions.onJournal() },
+          }, 'Diario delle indagini (J)'),
+          h('button', {
+            class: 'pause-btn mainmenu-btn',
+            onclick: async () => { close(); await actions.onMainMenu() },
+          }, 'Menu Principale'),
+          h('button', {
+            class: 'pause-btn quit-btn',
+            onclick: async () => { close(); await actions.onQuit() },
+          }, 'Esci dal gioco'),
+        ),
+      ),
+    )
+
+    const key = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        e.stopPropagation()
+        close()
+        actions.onResume()
+      } else if (e.key === 'j' || e.key === 'J') {
+        e.preventDefault()
+        e.stopPropagation()
+        close()
+        actions.onJournal()
+      }
+    }
+
+    setTimeout(() => window.addEventListener('keydown', key), 0)
+    ui().append(screen)
+  }))
+}
+

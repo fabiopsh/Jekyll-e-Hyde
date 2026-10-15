@@ -21,13 +21,17 @@ let open: HTMLElement | null = null
 let dismissListener: ((e: PointerEvent) => void) | null = null
 let keyListener: ((e: KeyboardEvent) => void) | null = null
 
+export function isVerbMenuOpen(): boolean {
+  return open !== null
+}
+
 export function closeVerbMenu(): void {
   if (dismissListener) {
-    window.removeEventListener('pointerdown', dismissListener)
+    window.removeEventListener('pointerdown', dismissListener, true)
     dismissListener = null
   }
   if (keyListener) {
-    window.removeEventListener('keydown', keyListener)
+    window.removeEventListener('keydown', keyListener, true)
     keyListener = null
   }
   if (open) {
@@ -40,10 +44,29 @@ export function verbMenu(title: string, at: MouseEvent, options: VerbOption[]): 
   closeVerbMenu()
   const menu = h('div', { class: 'verb-menu panel' },
     h('div', { class: 'verb-title' }, title),
-    ...options.map((o) => h('button', { onclick: () => { closeVerbMenu(); o.run() } }, o.label)),
+    ...options.map((o) =>
+      h('button', {
+        onclick: (e: Event) => {
+          e.stopPropagation()
+          closeVerbMenu()
+          o.run()
+        },
+
+      }, o.label)
+    ),
   )
-  menu.style.left = `${Math.min(at.clientX, window.innerWidth - 220)}px`
-  menu.style.top = `${Math.min(at.clientY, window.innerHeight - 60 - options.length * 52)}px`
+
+  // Prevent clicks and pointer events inside the menu from propagating to Phaser canvas underneath
+  menu.addEventListener('pointerdown', (e) => e.stopPropagation())
+  menu.addEventListener('mousedown', (e) => e.stopPropagation())
+  menu.addEventListener('mouseup', (e) => e.stopPropagation())
+  menu.addEventListener('click', (e) => e.stopPropagation())
+
+  // Position near cursor, ensuring it stays fully within window viewport
+  const left = Math.max(10, Math.min(at.clientX, window.innerWidth - 230))
+  const top = Math.max(10, Math.min(at.clientY, window.innerHeight - 60 - options.length * 52))
+  menu.style.left = `${left}px`
+  menu.style.top = `${top}px`
   ui().append(menu)
   open = menu
 
@@ -54,14 +77,16 @@ export function verbMenu(title: string, at: MouseEvent, options: VerbOption[]): 
   }
   keyListener = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
+      e.stopPropagation()
       closeVerbMenu()
     }
   }
 
+  // Defer attaching dismiss listener to next frame so the opening click doesn't dismiss it
   setTimeout(() => {
     if (open === menu) {
-      if (dismissListener) window.addEventListener('pointerdown', dismissListener)
-      if (keyListener) window.addEventListener('keydown', keyListener)
+      if (dismissListener) window.addEventListener('pointerdown', dismissListener, true)
+      if (keyListener) window.addEventListener('keydown', keyListener, true)
     }
-  }, 0)
+  }, 10)
 }

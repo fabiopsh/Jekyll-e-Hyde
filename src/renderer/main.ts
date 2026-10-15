@@ -6,10 +6,27 @@ import { Presenter } from './presenter'
 import { Session } from './session'
 import { h, toast, ui } from './ui/dom'
 import { mainMenu } from './ui/screens'
+import { playClickSound, playMusic } from './audio'
 
 declare global {
   interface Window { api: Api }
 }
+
+// Global tactile click SFX on interactive UI elements
+window.addEventListener(
+  'click',
+  (e) => {
+    const target = e.target as HTMLElement | null
+    if (!target) return
+    const interactive = target.closest(
+      'button, .choice, .tab, .menu-btn, .menu-item, .history-item, .pause-btn, a, select',
+    )
+    if (interactive) {
+      playClickSound()
+    }
+  },
+  { capture: true },
+)
 
 async function loadContent(): Promise<Content> {
   const { json, errors } = await window.api.content()
@@ -47,6 +64,7 @@ async function main(): Promise<void> {
       ui().append(h('div', { class: 'screen' }, h('p', {}, 'Nessun capitolo in content/chapters.')))
       return
     }
+    playMusic('audio/music/mus_menu_theme.mp3')
     const choice = await mainMenu(content)
     const session = choice.kind === 'new' ? await Session.create(content) : await Session.resume(content, choice.id)
     window.addEventListener('beforeunload', () => void session.save())

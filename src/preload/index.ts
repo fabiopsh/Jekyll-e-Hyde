@@ -16,6 +16,11 @@ const api: Api = {
     generate: (id, job) => ipcRenderer.invoke(CHANNELS.llmGenerate, id, job),
     cancel: (id) => ipcRenderer.invoke(CHANNELS.llmCancel, id),
   },
+  app: {
+    quit: () => ipcRenderer.invoke(CHANNELS.appQuit),
+  },
 }
 
 contextBridge.exposeInMainWorld('api', api)
+
+
