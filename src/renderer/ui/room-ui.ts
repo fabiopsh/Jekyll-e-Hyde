@@ -18,10 +18,22 @@ export function hoverLabel(text: string | null): void {
 }
 
 let open: HTMLElement | null = null
+let dismissListener: ((e: PointerEvent) => void) | null = null
+let keyListener: ((e: KeyboardEvent) => void) | null = null
 
 export function closeVerbMenu(): void {
-  open?.remove()
-  open = null
+  if (dismissListener) {
+    window.removeEventListener('pointerdown', dismissListener)
+    dismissListener = null
+  }
+  if (keyListener) {
+    window.removeEventListener('keydown', keyListener)
+    keyListener = null
+  }
+  if (open) {
+    open.remove()
+    open = null
+  }
 }
 
 export function verbMenu(title: string, at: MouseEvent, options: VerbOption[]): void {
@@ -33,5 +45,23 @@ export function verbMenu(title: string, at: MouseEvent, options: VerbOption[]): 
   menu.style.left = `${Math.min(at.clientX, window.innerWidth - 220)}px`
   menu.style.top = `${Math.min(at.clientY, window.innerHeight - 60 - options.length * 52)}px`
   ui().append(menu)
-  setTimeout(() => window.addEventListener('pointerdown', (e) => { if (!menu.contains(e.target as Node)) closeVerbMenu() }, { once: true }), 0)
+  open = menu
+
+  dismissListener = (e: PointerEvent) => {
+    if (!menu.contains(e.target as Node)) {
+      closeVerbMenu()
+    }
+  }
+  keyListener = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      closeVerbMenu()
+    }
+  }
+
+  setTimeout(() => {
+    if (open === menu) {
+      if (dismissListener) window.addEventListener('pointerdown', dismissListener)
+      if (keyListener) window.addEventListener('keydown', keyListener)
+    }
+  }, 0)
 }

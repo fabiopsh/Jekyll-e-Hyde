@@ -24,35 +24,45 @@ Aggiornato: 2026-10-15. Chi lavora qui aggiorna questo file a fine sessione (ved
 - **Test**: `npm test`, 17 test: regole, director, e un giro completo del capitolo 1 sui contenuti veri
   (`tests/content-playthrough.test.ts`, da estendere a ogni capitolo).
 - In sviluppo la console del renderer arriva nel terminale di `npm run dev` (righe `[renderer:...]`).
+- **Bug fix finestre d'azione**: corretto il ciclo di vita del menu contestuale (`src/renderer/ui/room-ui.ts`,
+  `RoomScene.ts`, `presenter.ts`). Ora la finestra si chiude correttamente su clic opzione, clic fuori, tasto Esc,
+  apertura diario o cambio scena. Non è più possibile aprire finestre multiple sovrapposte.
+- **Pipeline asset capitolo 1 completata e integrata**:
+  - Aggiunti e generati con GPU (SDXL + Pixel Art XL LoRA) sprite e ritratto di `enfield`.
+  - Animazioni idle/walk e atlas Phaser generati per Utterson ed Enfield (`animate.py`).
+  - Creati script `tools/assets/export.py` e `tools/assets/contact_sheet.py`.
+  - Asset esportati nella cartella di gioco `assets/` (`backgrounds/`, `characters/`, `portraits/`, `items/`)
+    con `assets/manifest.json`.
+  - Ricalibrate le coordinate di hotspot, camminata e NPC in `content/scenes/loc_by_street.yaml` sullo sfondo reale.
 
 ## In corso
 
-- `tools/assets/`: pipeline SDXL + Pixel Art XL, prima prova su stradina, Utterson, chiave.
+- Verifica manuale di Fabio sul capitolo 1 con grafica reale e bug fix menu.
 
 ## Prossimi passi
 
-1. Prova manuale di Fabio sul capitolo 1 (sotto) e correzioni.
-2. Asset del capitolo 1 approvati da Fabio → `palette.hex` definitiva; ritarare le coordinate degli hotspot
-   di `content/scenes/loc_by_street.yaml` sullo sfondo vero.
-3. Capitolo 2 (`docs/DESIGN.md` §3), poi 3-8, poi i flashback 9-10. Un capitolo per volta, ognuno con il suo
+1. Prova manuale di Fabio sul capitolo 1 con grafica reale (passi sotto) e riscontro.
+2. Capitolo 2 (`docs/DESIGN.md` §3), poi 3-8, poi i flashback 9-10. Un capitolo per volta, ognuno con il suo
    giro in `tests/content-playthrough.test.ts`.
-4. Pacchetto desktop (electron-builder, modello in `resources/models/`, binari CPU + Vulkan).
+3. Pacchetto desktop (electron-builder, modello in `resources/models/`, binari CPU + Vulkan).
 
 ## Da provare a mano (Fabio)
 
-Capitolo 1. Senza asset lo sfondo è un riquadro grigio con il nome del file e i personaggi sono sagome.
+Capitolo 1 giocabile con asset grafici reali (sfondo stradina, sprite camminata Utterson ed Enfield, ritratto Enfield nei dialoghi).
 1. `npm run dev` → *Nuova partita*. Quattro cartoline narrate (clic o Spazio).
-2. Nella stradina: clic sul pavimento per camminare; passando sugli oggetti compare il nome in basso.
-   Botteghe (sinistra), edificio (centro in alto), porta (centro), cortile (destra).
-3. Clic sulla porta → *Osserva*: parte il racconto di Enfield.
-4. Clic su Enfield → *Parla*: le domande compaiono una alla volta nell'ordine del libro, fino al patto.
-5. Clic su Enfield → *Conversa*: chat libera. La prima risposta può richiedere 5-10 s (caricamento del
-   modello); poi 1-2 s. Provare: domande sulla storia, una domanda fuori tema, chiedere chi ha firmato l'assegno.
-6. Tasto J: diario con obiettivo, *Un suggerimento*, fatti scoperti.
-7. Dopo il patto: "Fine" → menu → *Storico partite*: la partita con fatti, scelte e conversazioni.
+2. Nella stradina: verificare lo sfondo disegnato `loc_by_street.png` e i personaggi Utterson ed Enfield animati.
+3. Clic su pavimento: Utterson cammina correttamente.
+4. **Verifica bug finestra**: fare clic sulla porta o su Enfield per aprire il menu delle azioni.
+   - Verificare che cliccando fuori o premendo Esc la finestra si chiuda.
+   - Verificare che cliccando un'azione la finestra si chiuda immediatamente.
+   - Verificare che cliccando su un altro oggetto non si accumulino finestre aperte.
+5. Clic sulla porta → *Osserva*: parte il racconto di Enfield (verificare posizionamento del punto d'interazione porta).
+6. Clic su Enfield → *Parla*: le domande compaiono una alla volta nell'ordine del libro, fino al patto; durante il dialogo compare il ritratto di Enfield.
+7. Clic su Enfield → *Conversa*: chat libera con LLM locale (Qwen / Ollama).
+8. Tasto J: diario con obiettivo e fatti.
+9. Dopo il patto: "Fine" → menu → *Storico partite*.
 
-Da riportare: testi troppo piccoli o lenti, punti cliccabili sbagliati, risposte di Enfield fuori personaggio
-(copiare il testo), errori a schermo o nel terminale.
+Da riportare: testi troppo piccoli o lenti, coordinate di clic imperfette sullo sfondo, animazioni o risposte LLM fuori tono.
 
 ## Problemi aperti
 

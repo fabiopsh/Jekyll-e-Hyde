@@ -5,7 +5,7 @@ import type { Effect, Scene as SceneData } from '../../shared/content-schema'
 import { check } from '../../game/rules'
 import type { Session } from '../session'
 import { isModal } from '../ui/dom'
-import { hoverLabel, verbMenu, type VerbOption } from '../ui/room-ui'
+import { closeVerbMenu, hoverLabel, verbMenu, type VerbOption } from '../ui/room-ui'
 
 export const GAME_WIDTH = 480
 export const GAME_HEIGHT = 270
@@ -101,6 +101,7 @@ export class RoomScene extends Phaser.Scene {
       zone.on('pointerout', () => hoverLabel(null))
       zone.on('pointerdown', (p: Phaser.Input.Pointer) => {
         if (isModal() || p.rightButtonDown()) return
+        closeVerbMenu()
         const target = this.nearestWalkable({ x: ex.shape.x + ex.shape.w / 2, y: ex.shape.y + ex.shape.h })
         this.walkTo(target, () => {
           if (check(ex.when, this.session.state)) this.cb.run([{ goto: ex.to, ...(ex.at ? { at: ex.at } : {}) }])
@@ -114,9 +115,15 @@ export class RoomScene extends Phaser.Scene {
     // click on empty floor: walk
     this.input.on('pointerdown', (p: Phaser.Input.Pointer, over: unknown[]) => {
       if (isModal() || over.length || p.rightButtonDown()) return
+      closeVerbMenu()
       this.walkTo(this.nearestWalkable({ x: p.worldX, y: p.worldY }))
     })
     this.input.mouse?.disableContextMenu()
+
+    this.events.once('shutdown', () => {
+      closeVerbMenu()
+      hoverLabel(null)
+    })
 
     // on_enter: every matching interaction runs once per visit
     const enter = this.room.on_enter.filter((i) => check(i.when, s)).flatMap((i) => i.effects)
@@ -193,8 +200,8 @@ export class RoomScene extends Phaser.Scene {
       if (isModal()) return
       const { at, options } = menu()
       const look = options.find((o) => o.label === 'Osserva')
-      if (p.rightButtonDown()) { if (look) this.walkTo(at, look.run); return }
-      if (options.length === 1) this.walkTo(at, options[0].run)
+      if (p.rightButtonDown()) { if (look) { closeVerbMenu(); this.walkTo(at, look.run); } return }
+      if (options.length === 1) { closeVerbMenu(); this.walkTo(at, options[0].run); }
       else verbMenu(name, p.event as MouseEvent, options.map((o) => ({ ...o, run: () => this.walkTo(at, o.run) })))
     })
   }

@@ -62,3 +62,10 @@ ai domestici. Dettagli nel glossario di `story/bible.md`.
 
 **D14 — Battute interrotte da un inciso: si uniscono con `…`.** (agente)
 Permette il controllo automatico `npm run check:story` (ogni `en:` deve stare nel testo originale).
+
+**D15 — Pipeline asset: script `export.py` e fogli `contact_sheet.py`.** (agente)
+Gli asset approvati in `data/selections.yaml` vengono copiati nella cartella radice `assets/`
+(`backgrounds/`, `characters/` con spritesheet PNG + JSON atlas Phaser generato da `animate.py`,
+`portraits/`, `items/`) e tracciati in `assets/manifest.json`. `contact_sheet.py` genera fogli
+di confronto in `output/sheets/` con la variante scelta evidenziata.
+

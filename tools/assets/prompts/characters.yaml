@@ -26,3 +26,20 @@ utterson:
   anim:
     chest: 0.30
     hip: 0.62
+
+enfield:
+  book:
+    - "the young man (ch. 1, r. 220)"
+    - "well-known man about town (ch. 1, r. 30)"
+  period:
+    - "young gentleman in his late twenties or early thirties (age not given in ch. 1)"
+    - "fashionable light grey frock coat, pale waistcoat, dark trousers, top hat (clothes not given in ch. 1)"
+    - "clean-shaven, well-groomed dark hair, lively face (scenery choice for consistency)"
+  appearance: >-
+    young elegant victorian gentleman, handsome clean-shaven lively face, well-groomed dark hair,
+    tailored light grey frock coat, light waistcoat, dark trousers, black top hat, black shoes
+  negative_extra: "beard, moustache, old, elderly, ragged, poor, smile, smiling, grin"
+  anim:
+    chest: 0.30
+    hip: 0.60
+

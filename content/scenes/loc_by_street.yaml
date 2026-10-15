@@ -3,29 +3,29 @@
 id: loc_by_street
 name: La stradina
 background: backgrounds/loc_by_street
-walkable: [[0, 206], [480, 206], [480, 268], [0, 268]]
-scale: { far_y: 206, far: 0.9, near_y: 268, near: 1.1 }
+walkable: [[0, 195], [480, 195], [480, 268], [0, 268]]
+scale: { far_y: 195, far: 0.9, near_y: 268, near: 1.1 }
 entries:
-  west: [40, 240]
+  west: [40, 230]
 hotspots:
   - id: shops
     name: Le botteghe
-    shape: { x: 0, y: 50, w: 200, h: 150 }
+    shape: { x: 0, y: 30, w: 175, h: 155 }
     verbs:
       look:
         - effects:
             - narrate: "La strada era piccola e quella che si dice quieta, ma nei giorni feriali faceva affari floridi. Le botteghe sembravano file di commesse sorridenti; anche di domenica la via risaltava nel vicinato squallido come un fuoco in una foresta."
   - id: building
     name: L'edificio senza finestre
-    shape: { x: 240, y: 20, w: 140, h: 120 }
+    shape: { x: 178, y: 15, w: 152, h: 95 }
     verbs:
       look:
         - effects:
             - narrate: "Un edificio sinistro spingeva in avanti il frontone sulla strada: due piani, nessuna finestra, soltanto una porta al pianterreno e sopra una fronte cieca di muro scolorito. Portava in ogni tratto i segni di una lunga e sordida incuria."
   - id: door
     name: La porta
-    shape: { x: 290, y: 140, w: 44, h: 64 }
-    walk_to: [312, 214]
+    shape: { x: 236, y: 110, w: 46, h: 72 }
+    walk_to: [259, 205]
     verbs:
       look:
         - when: { not: { flag: c1_door_story } }
@@ -37,14 +37,14 @@ hotspots:
             - narrate: "Non c'è campanello, né battente. E Utterson non è uomo da bussare alle porte altrui."
   - id: court
     name: L'ingresso del cortile
-    shape: { x: 386, y: 100, w: 70, h: 104 }
+    shape: { x: 288, y: 115, w: 42, h: 67 }
     verbs:
       look:
         - effects:
             - narrate: "Proprio accanto all'edificio, la fila delle case è interrotta dall'ingresso di un cortile."
 npcs:
   - npc: enfield
-    at: [86, 238]
+    at: [90, 230]
     facing: right
     talk: d01_enfield
     chat: true

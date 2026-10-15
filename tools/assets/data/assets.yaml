@@ -54,3 +54,21 @@ assets:
     source: "story/chapters/01-storia-della-porta.md, Oggetti e indizi: obj_door_key (r. 123, 217-218)"
     # The book only says "a key": the look is a generic period choice.
     subject: "one antique iron door key, round bow, long shank, simple bit, dark worn iron"
+
+  - id: enfield
+    kind: character
+    variants: 4
+    source: "story/chapters/01-storia-della-porta.md, Profili personaggio: enfield"
+    character: enfield
+    pose: base
+    layout: layouts/pose_profile_right.png
+    strength: 0.75
+    noise: 6
+
+  - id: enfield_neutral
+    kind: portrait
+    variants: 4
+    source: "story/chapters/01-storia-della-porta.md, Profili personaggio: enfield"
+    character: enfield
+    mood: neutral
+

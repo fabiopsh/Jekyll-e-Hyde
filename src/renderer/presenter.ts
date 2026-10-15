@@ -9,6 +9,7 @@ import { narrate, playDialogue } from './ui/story-panels'
 import { openChat } from './ui/chat'
 import { journal } from './ui/screens'
 import { isModal, toast } from './ui/dom'
+import { closeVerbMenu } from './ui/room-ui'
 
 export class Presenter {
   private queue: Command[] = []
@@ -18,7 +19,7 @@ export class Presenter {
   constructor(private readonly game: Phaser.Game, private readonly session: Session) {
     session.onCommands((cmds) => this.enqueue(cmds))
     window.addEventListener('keydown', (e) => {
-      if ((e.key === 'j' || e.key === 'J') && !isModal()) void journal(session)
+      if ((e.key === 'j' || e.key === 'J') && !isModal()) { closeVerbMenu(); void journal(session) }
     })
   }
 
@@ -46,6 +47,7 @@ export class Presenter {
   }
 
   private async exec(c: Command): Promise<void> {
+    closeVerbMenu()
     const { content } = this.session
     switch (c.kind) {
       case 'narrate': return narrate([c.text])
@@ -74,6 +76,7 @@ export class Presenter {
     const callbacks: RoomCallbacks = {
       run: (effects) => { this.session.run(effects) },
       talk: (npcId, dialogue, chat) => {
+        closeVerbMenu()
         const npc = this.session.content.npcs[npcId]
         if (chat && npc) void openChat(this.session, npc)
         else if (dialogue) this.enqueue([{ kind: 'dialogue', id: dialogue }])
