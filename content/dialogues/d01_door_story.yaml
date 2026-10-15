@@ -12,6 +12,7 @@ nodes:
         it: "Erano sull'altro lato della stradina; quando giunsero all'altezza dell'ingresso, Enfield alzò il bastone e indicò."
       - speaker: enfield
         src: D01.2.1
+        image: illustrations/ill_c1_door_closeup
         emotion: curious_question
         it: "Ha mai fatto caso a quella porta?"
       - speaker: narrator
@@ -30,6 +31,7 @@ nodes:
     lines:
       - speaker: enfield
         src: D01.3.1
+        image: illustrations/ill_c1_lamps
         emotion: storytelling_calm
         it: "Ecco, andò così. Stavo tornando a casa da un posto in capo al mondo, verso le tre di una nera mattina d’inverno, e la mia strada attraversava una zona della città dove letteralmente non c’era niente da vedere se non lampioni."
       - speaker: enfield
@@ -38,6 +40,7 @@ nodes:
         it: "Strada dopo strada, e tutta la gente addormentata — strada dopo strada, illuminate a giorno come per una processione e vuote come una chiesa — finché alla fine arrivai a quello stato d’animo in cui uno ascolta e ascolta e comincia a desiderare la vista di un poliziotto."
       - speaker: enfield
         src: D01.3.2
+        image: illustrations/ill_c1_corner
         emotion: sudden_event
         it: "All’improvviso vidi due figure: una era un ometto che camminava a gran passo verso est, e l’altra una ragazzina di otto o dieci anni che correva più forte che poteva lungo una traversa."
       - speaker: enfield
@@ -50,6 +53,7 @@ nodes:
     lines:
       - speaker: enfield
         src: D01.3.2
+        image: illustrations/ill_c1_crowd
         emotion: indignation_and_chill
         it: "Gridai un paio di volte, mi misi a correre, afferrai per il bavero il mio signore e lo riportai dove c’era già un bel gruppo intorno alla bambina che urlava. Era perfettamente freddo e non oppose resistenza, ma mi lanciò uno sguardo così brutto che mi fece uscire il sudore addosso come una corsa."
       - speaker: enfield
@@ -86,10 +90,12 @@ nodes:
         it: "Ebbene, lo facemmo salire fino a cento sterline per la famiglia della bambina; è chiaro che avrebbe voluto tirarla per le lunghe; ma c’era in tutti noi qualcosa che prometteva guai, e alla fine cedette."
       - speaker: enfield
         src: D01.3.6
+        image: illustrations/ill_c1_door_key
         emotion: mystery_of_the_door
         it: "La cosa successiva fu procurarsi il denaro; e dove pensa che ci portò, se non a quel luogo con la porta? — tirò fuori una chiave, entrò, e poco dopo tornò con circa dieci sterline in oro e un assegno per il saldo su Coutts’s, pagabile al portatore e firmato con un nome che non posso dire, benché sia uno dei punti della mia storia, ma era un nome comunque notissimo e spesso stampato."
       - speaker: enfield
         src: D01.3.6
+        image: illustrations/ill_c1_cheque
         emotion: incredulous_suspicion
         it: "La cifra era alta; ma la firma valeva più di così, se solo era autentica. Mi presi la libertà di far notare al mio signore che tutta la faccenda aveva l’aria di una falsità, e che un uomo non entra, nella vita reale, da una porta di cantina alle quattro del mattino per uscirne con l’assegno di un altro uomo di quasi cento sterline. Ma lui era del tutto a suo agio e sprezzante."
       - speaker: enfield
@@ -98,6 +104,7 @@ nodes:
         it: "«Stia tranquillo», dice lui, «resterò con voi finché le banche non aprono e incasserò io stesso l’assegno.»"
       - speaker: enfield
         src: D01.3.9
+        image: illustrations/ill_c1_bank
         emotion: bank_astonishment
         it: "Così ci mettemmo tutti in cammino, il dottore, il padre della bambina, il nostro amico e io, e passammo il resto della notte nelle mie stanze; e il giorno dopo, fatta colazione, andammo in corpo alla banca. Presentai io stesso l’assegno, e dissi che avevo ogni ragione di credere che fosse un falso. Niente affatto. L’assegno era autentico."
     effects: [{ learn: F01.8 }, { learn: F01.9 }, { learn: F01.11 }]
@@ -114,6 +121,7 @@ nodes:
         it: "Vedo che la pensa come me. Sì, è una brutta storia. Perché il mio uomo era uno con cui nessuno poteva avere a che fare, un uomo davvero esecrabile; e la persona che ha firmato l’assegno è il modello stesso delle convenienze, per di più famosa, e (il che peggiora le cose) uno di quei tipi che fanno quello che chiamano del bene."
       - speaker: enfield
         src: D01.4.3
+        image: illustrations/ill_c1_door_closeup
         emotion: reflective_conclusion
         it: "Ricatto, suppongo; un uomo onesto che paga a caro prezzo certe bravate della gioventù. Casa del Ricatto è come chiamo il luogo con la porta, di conseguenza. Anche se perfino questo, sa, è ben lontano dallo spiegare tutto."
       - speaker: narrator

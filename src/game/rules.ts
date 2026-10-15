@@ -18,7 +18,7 @@ export function check(cond: Condition | undefined, s: GameState): boolean {
 export type Command =
   | { kind: 'goto'; scene: string; at: string | null }
   | { kind: 'dialogue'; id: string }
-  | { kind: 'narrate'; text: string }
+  | { kind: 'narrate'; text: string; image?: string }
   | { kind: 'learned'; fact: string }
   | { kind: 'got'; item: string }
   | { kind: 'objective'; id: string }
@@ -50,7 +50,7 @@ export function apply(effects: Effect[], state: GameState, content: Content): Ou
       s = { ...s, scene: e.goto, entry: e.at ?? null }
       commands.push({ kind: 'goto', scene: e.goto, at: e.at ?? null })
     } else if ('dialogue' in e) commands.push({ kind: 'dialogue', id: e.dialogue })
-    else if ('narrate' in e) commands.push({ kind: 'narrate', text: e.narrate })
+    else if ('narrate' in e) commands.push({ kind: 'narrate', text: e.narrate, image: e.image })
     else if ('journal' in e) s = { ...s, journal: [...s.journal, { chapter: s.chapter, text: e.journal }] }
     else if ('complete' in e) s = completeObjective(s, e.complete, commands)
     else if ('chapter' in e) s = startChapter(s, e.chapter, content, commands)

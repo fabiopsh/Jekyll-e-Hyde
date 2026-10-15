@@ -11,7 +11,7 @@ const poole: Npc = {
 
 const content: Content = {
   chapters: [{
-    number: 2, title: 'due', player: 'utterson', start_scene: 'hall', intro: [],
+    number: 2, title: 'due', player: 'utterson', start_scene: 'hall', intro: [], ending: [],
     objectives: [{ id: 'ask_poole', text: 'parla con Poole', done_when: { knows: 'F02.1' }, hints: ['vago', 'medio', 'preciso'] }],
     next_when: { knows: 'F02.1' },
     banned_words: ['pozione'],

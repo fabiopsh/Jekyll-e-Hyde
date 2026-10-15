@@ -6,6 +6,9 @@ import { RunStore } from './saves/runs'
 import { LlmService } from './llm'
 
 
+// Screenshot runs (scripts/shot.ts) use a throwaway profile so they never touch the real play history.
+if (process.env.JH_USER_DATA) app.setPath('userData', process.env.JH_USER_DATA)
+
 // In dev the project root holds content/ and story/; in a packaged build they are copied to resources/.
 const root = app.isPackaged ? process.resourcesPath : process.cwd()
 

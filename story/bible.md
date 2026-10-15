@@ -159,8 +159,8 @@ non dà l'anno: "18—").
   r. 28). Quando la trasformazione lo coglie con gli abiti di Jekyll: stoffa ricca e sobria, enormemente
   troppo grande: pantaloni cadenti e rimboccati, vita della giacca sotto i fianchi, colletto largo sulle
   spalle (cap. 9 r. 153-158; cap. 8 r. 353-354; cap. 10 r. 427-428, 476). Scelta di disegno per i
-  capitoli 1-4: abiti scuri, semplici, senza dettagli che lo rendano riconoscibile; mai un cappello o un
-  accessorio "da cattivo".
+  capitoli 1-4: abiti scuri, semplici, senza dettagli che lo rendano riconoscibile; un cilindro semplice da
+  gentiluomo va bene (cap. 9: abiti "ricchi e sobri"); mai un cappello o un accessorio "da cattivo".
 - **Regola di disegno.** Nessuna malformazione precisa (gobba, cicatrice, zanne ecc.): il testo la
   esclude ("no nameable malformation"). L'effetto va reso con postura, piccolezza, movimento e reazione
   degli altri.

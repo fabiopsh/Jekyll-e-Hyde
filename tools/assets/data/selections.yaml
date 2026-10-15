@@ -12,3 +12,19 @@ selections:
   enfield_neutral: 3
   utterson_neutral: 1
 
+  # 2026-10-16, chosen by the agent from output/sheets/<id>.png (to be confirmed by Fabio).
+  # Same day, after the night colours of palette.hex: loc_by_street_night, ill_c1_cheque, ill_c1_door_key
+  # and ill_c1_door_closeup redone (new variants); lamps, corner and crowd only re-quantized.
+  loc_by_street_night: 0
+  ill_c1_utterson_alone: 4
+  ill_c1_sunday_walk: 3
+  ill_c1_lamps: 7
+  ill_c1_corner: 1
+  ill_c1_crowd: 3
+  ill_c1_door_key: 0
+  ill_c1_cheque: 0
+  ill_c1_bank: 1
+  ill_c1_court: 1
+  ill_c1_door_closeup: 0
+  ill_c1_shops: 0
+  ill_c1_handshake: 3

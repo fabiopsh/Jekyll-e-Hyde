@@ -94,3 +94,39 @@ pulsanti, scelte e hotspot (`playClickSound`). Volumi di musica ed effetti regol
 Completano la stessa fase: puntatore a guanto vittoriano in pixel art (`assets/ui/cursor_*.png`, normale e su
 elementi cliccabili), menu di pausa con Riprendi, Diario, Torna al menu ed Esci, e la correzione del menu dei verbi
 che si spostava al primo clic sulla porta.
+
+## 2026-10-16
+
+**D20 — Illustrazioni nel riquadro a destra.** (Fabio)
+Quando il testo descrive qualcosa (narrazione, battute del racconto di Enfield, descrizioni degli oggetti), a
+destra compare un'illustrazione in pixel art di ciò che si legge, con una lenta panoramica e dissolvenza tra una
+e l'altra. Formato: 160×200 (4:5), mostrata a multipli interi. Nei contenuti: campo `image` su una battuta,
+su un effetto `narrate` o su una cartolina dell'intro (`illustrations/<id>`). La violenza resta fuori campo e Hyde
+è sempre una silhouette senza volto (`story/bible.md`, questioni aperte).
+
+**D21 — Rifinitura del capitolo 1 prima del capitolo 2.** (Fabio)
+Scelte: illustrazioni (D20), Enfield che accompagna Utterson, animazione del patto e pagina di fine capitolo,
+titolo animato, menu a forma di libro, cartoline di capitolo, taccuino che si sfoglia, ritratti vivi, cursore che
+mostra l'azione, impostazioni (velocità e dimensione del testo, schermo intero), ambiente vivo. Non scelti per ora:
+deduzioni nel taccuino, flashback giocabile di Enfield, filtro visivo.
+
+**D22 — Screenshot automatici con Playwright per Electron.** (agente)
+`npm run shot` avvia l'app costruita, esegue una sequenza di clic e salva screenshot in `out/shots/`. Serve agli
+agenti per vedere l'interfaccia senza chiedere ogni volta una prova manuale a Fabio, che resta la prova finale.
+
+**D23 — Riquadro delle illustrazioni senza panoramica.** (agente, corregge D20)
+Una panoramica lenta sposta la pixel art di frazioni di pixel e la fa tremolare. Le illustrazioni compaiono
+invece con una macchia d'inchiostro che si allarga e restano ferme, con una luce di lampada che vibra appena.
+
+**D24 — Tipo di asset `illustration` e bozzetti di composizione.** (agente)
+Illustrazioni generate a 896×1152, ritaglio 4:5, riduzione a 160×200, palette comune, nessuno scontorno.
+Nel soggetto `{utterson}` inserisce la scheda del personaggio (`prompts/characters.yaml`, campo `illustration`).
+Le composizioni difficili partono da bozzetti (`tools/assets/make_layouts.py`, come D18); la versione notturna
+di un luogo parte dallo sfondo diurno approvato (img2img), così l'inquadratura resta identica.
+Le 12 illustrazioni del capitolo 1 e `loc_by_street_night` sono scelte dall'agente, da confermare da Fabio.
+
+**D25 — Palette estesa a 40 colori con 8 colori notturni.** (Fabio)
+Le 32 righe di giorno di `tools/assets/palette.hex` restano fisse; le righe 33-40 aggiungono nero-blu, blu notte,
+blu lunare, blu-grigio della nebbia, due ori della luce a gas e il crema dell'alone (metodo in
+`tools/assets/README.md`). Gli asset di giorno riquantizzati cambiano tra lo 0% e il 15% dei pixel con errore
+minore; `enfield_neutral` e `ill_c1_handshake` peggioravano e restano sulla palette di giorno (`palette_size: 32`).

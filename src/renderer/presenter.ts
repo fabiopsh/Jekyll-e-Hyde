@@ -7,7 +7,7 @@ import type { Session } from './session'
 import { RoomScene, type RoomCallbacks } from './phaser/RoomScene'
 import { narrate, playDialogue } from './ui/story-panels'
 import { openChat } from './ui/chat'
-import { journal, pauseMenu } from './ui/screens'
+import { chapterCard, chapterEndPage, journal, pauseMenu } from './ui/screens'
 import { isModal, toast } from './ui/dom'
 import { closeVerbMenu, isVerbMenuOpen } from './ui/room-ui'
 import { playMusic, stopMusic } from './audio'
@@ -85,16 +85,23 @@ export class Presenter {
     closeVerbMenu()
     const { content } = this.session
     switch (c.kind) {
-      case 'narrate': return narrate([c.text])
+      case 'narrate': return narrate([{ text: c.text, image: c.image }])
       case 'dialogue': return playDialogue(this.session, content.dialogues[c.id])
       case 'learned': return toast(`Nel diario: ${content.facts[c.fact]?.text ?? c.fact}`, 'fact')
       case 'got': return toast(`Preso: ${content.items[c.item]?.name ?? c.item}`, 'item')
       case 'objective': return toast('Obiettivo completato', 'objective')
-      case 'chapter': return this.chapterIntro(c.number)
+      case 'chapter':
+        await this.chapterEnd(c.number - 1)
+        return this.chapterIntro(c.number)
       case 'goto': return this.showScene(c.scene)
       case 'end':
+        await this.chapterEnd(this.session.state.chapter)
         stopMusic()
-        await narrate(['Fine.'])
+        if (!this.session.content.chapters.some((ch) => ch.number === this.session.state.chapter + 1) && this.session.state.chapter < 10) {
+          await narrate(['Il prossimo capitolo è ancora in lavorazione.\nLa partita resta nelle Cronache delle indagini.'])
+        } else {
+          await narrate(['Fine.'])
+        }
         await this.session.save()
         this.game.scene.stop('room')
         this.cleanupKeydown?.()
@@ -102,9 +109,20 @@ export class Presenter {
     }
   }
 
+  // End-of-chapter page (summary from the journal), then the chapter's `ending` cards.
+  private async chapterEnd(n: number): Promise<void> {
+    const ch = this.session.content.chapters.find((c) => c.number === n)
+    if (!ch) return
+    closeVerbMenu()
+    await this.session.save()
+    await chapterEndPage(this.session, ch)
+    if (ch.ending.length) await narrate(ch.ending)
+  }
+
   private async chapterIntro(n: number): Promise<void> {
     const ch = chapterOf(this.session.content, n)
-    await narrate([`Capitolo ${ch.number}\n${ch.title}`, ...ch.intro])
+    await chapterCard(ch)
+    if (ch.intro.length) await narrate(ch.intro)
   }
 
   private showScene(id: string): void {

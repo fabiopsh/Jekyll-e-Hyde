@@ -1,6 +1,10 @@
 // A playable room: background, walkable polygon, player, NPCs, hotspots and exits, all from a content scene.
 // Missing art is replaced by placeholders, so content can be tested before assets exist.
 import Phaser from 'phaser'
+import { assetUrl, cursor } from '../assets'
+import { actionCursor, type CursorIcon } from '../cursors'
+import { addAmbience } from './ambience'
+import { playFootstep } from '../audio'
 import type { Effect, Scene as SceneData } from '../../shared/content-schema'
 import { check } from '../../game/rules'
 import type { Session } from '../session'
@@ -12,6 +16,8 @@ import { playClickSound } from '../audio'
 export const GAME_WIDTH = 480
 export const GAME_HEIGHT = 270
 const WALK_SPEED = 70 // px per second at scale 1
+const FOLLOW_GAP = 26 // px between a companion and the player
+const STEP_MS = 330
 
 type Pt = { x: number; y: number }
 
@@ -27,6 +33,9 @@ export class RoomScene extends Phaser.Scene {
   private session!: Session
   private cb!: RoomCallbacks
   private player!: Phaser.GameObjects.Sprite
+  private followers: Phaser.GameObjects.Sprite[] = []
+  private ambience: (time: number) => void = () => undefined
+  private lastStep = 0
   private walkable!: Phaser.Geom.Polygon
   private walkTween: Phaser.Tweens.Tween | null = null
 
@@ -36,20 +45,21 @@ export class RoomScene extends Phaser.Scene {
     this.room = args.scene
     this.session = args.session
     this.cb = args.callbacks
+    this.followers = []
   }
 
   preload(): void {
     const keys = [this.room.background, ...this.room.foreground]
-    for (const k of keys) if (!this.textures.exists(k)) this.load.image(k, `/${k}.png`)
+    for (const k of keys) if (!this.textures.exists(k)) this.load.image(k, assetUrl(`${k}.png`))
     for (const id of [this.session.state.player, ...this.room.npcs.map((n) => n.npc)]) {
       const key = this.spriteKey(id)
-      if (!this.textures.exists(key)) this.load.atlas(key, `/${key}.png`, `/${key}.json`)
+      if (!this.textures.exists(key)) this.load.atlas(key, assetUrl(`${key}.png`), assetUrl(`${key}.json`))
     }
     this.load.on('loaderror', () => undefined) // placeholders are drawn in create()
   }
 
   create(): void {
-    this.input.setDefaultCursor("url('/ui/cursor_default.png') 2 2, default")
+    this.input.setDefaultCursor(cursor('default'))
     const s = this.session.state
     this.cameras.main.fadeIn(250)
     this.addImageOrPlaceholder(this.room.background, 0)
@@ -64,13 +74,16 @@ export class RoomScene extends Phaser.Scene {
       if (!check(n.when, s)) continue
       const npc = this.makeCharacter(n.npc, n.at[0], n.at[1])
       npc.setFlipX(n.facing === 'left')
+      if (n.follow) this.followers.push(npc)
       const name = this.session.content.characters[n.npc]?.name ?? n.npc
       this.interactive(npc, name, () => {
         const opts: VerbOption[] = [{ label: 'Osserva', run: () => this.cb.run([{ narrate: `È ${name}.` }]) }]
         if (n.talk) opts.unshift({ label: 'Parla', run: () => this.cb.talk(n.npc, n.talk, false) })
         if (n.chat) opts.splice(n.talk ? 1 : 0, 0, { label: 'Conversa', run: () => this.cb.talk(n.npc, undefined, true) })
-        return { at: { x: n.at[0] + (n.facing === 'left' ? -18 : 18), y: n.at[1] }, options: opts }
-      })
+        // walk next to where the npc is now (a follower is not at its start point any more)
+        const side = npc.x >= this.player.x ? -18 : 18
+        return { at: this.nearestWalkable({ x: npc.x + side, y: npc.y }), options: opts }
+      }, 'talk')
     }
 
     // hotspots
@@ -94,12 +107,12 @@ export class RoomScene extends Phaser.Scene {
             else this.cb.nothing()
           },
         })),
-      }))
+      }), hs.verbs.talk ? 'talk' : hs.verbs.take || hs.verbs.use ? 'hand' : 'look')
     }
 
     // exits
     for (const ex of this.room.exits) {
-      const zone = this.add.zone(ex.shape.x, ex.shape.y, ex.shape.w, ex.shape.h).setOrigin(0).setInteractive({ cursor: "url('/ui/cursor_pointer.png') 2 2, pointer" })
+      const zone = this.add.zone(ex.shape.x, ex.shape.y, ex.shape.w, ex.shape.h).setOrigin(0).setInteractive({ cursor: actionCursor('exit') })
       zone.on('pointerover', () => hoverLabel(`→ ${ex.name}`))
       zone.on('pointerout', () => hoverLabel(null))
       zone.on('pointerdown', (p: Phaser.Input.Pointer) => {
@@ -113,6 +126,12 @@ export class RoomScene extends Phaser.Scene {
         })
       })
     }
+
+    // read-only hook for scripts/shot.ts: where the NPCs stand now (followers move). Harmless in the game.
+    ;(window as unknown as { __jhNpcs: () => { x: number; y: number }[] }).__jhNpcs = () =>
+      this.children.list.filter((o): o is Phaser.GameObjects.Sprite => o instanceof Phaser.GameObjects.Sprite && o !== this.player).map((o) => ({ x: o.x, y: o.y }))
+
+    this.ambience = addAmbience(this, this.room, () => this.player)
 
     for (const fg of this.room.foreground) this.addImageOrPlaceholder(fg, 10_000, true)
 
@@ -134,9 +153,35 @@ export class RoomScene extends Phaser.Scene {
     if (enter.length) this.time.delayedCall(300, () => this.cb.run(enter))
   }
 
-  update(): void {
+  update(_time: number, delta: number): void {
     this.player.setDepth(this.player.y)
     this.player.setScale(this.scaleAt(this.player.y))
+    for (const f of this.followers) this.follow(f, delta)
+    this.ambience(_time)
+    // a step every STEP_MS while the player walks (the room decides if steps make a sound)
+    if (this.walkTween && _time - this.lastStep > STEP_MS) { this.lastStep = _time; playFootstep() }
+  }
+
+  // A companion keeps FOLLOW_GAP px behind the player, on the side the player comes from.
+  private follow(f: Phaser.GameObjects.Sprite, delta: number): void {
+    const behind = this.player.flipX ? FOLLOW_GAP : -FOLLOW_GAP
+    const target = this.nearestWalkable({ x: this.player.x + behind, y: this.player.y + 3 })
+    const dx = target.x - f.x
+    const dy = target.y - f.y
+    const dist = Math.hypot(dx, dy)
+    const key = f.texture.key
+    if (dist > 3) {
+      const step = Math.min(dist, (WALK_SPEED * this.scaleAt(f.y) * delta) / 1000)
+      f.x += (dx / dist) * step
+      f.y += (dy / dist) * step
+      if (Math.abs(dx) > 1) f.setFlipX(dx < 0)
+      if (this.anims.exists(`${key}:walk`) && f.anims.currentAnim?.key !== `${key}:walk`) f.play(`${key}:walk`)
+    } else {
+      f.setFlipX(this.player.x < f.x) // face Utterson when standing
+      if (this.anims.exists(`${key}:idle`) && f.anims.currentAnim?.key !== `${key}:idle`) f.play(`${key}:idle`)
+    }
+    f.setDepth(f.y)
+    f.setScale(this.scaleAt(f.y))
   }
 
   // ---- helpers -------------------------------------------------------------------------------
@@ -196,8 +241,9 @@ export class RoomScene extends Phaser.Scene {
     obj: Phaser.GameObjects.Zone | Phaser.GameObjects.Sprite,
     name: string,
     menu: () => { at: Pt; options: VerbOption[] },
+    icon: CursorIcon,
   ): void {
-    obj.setInteractive({ cursor: "url('/ui/cursor_pointer.png') 2 2, pointer" })
+    obj.setInteractive({ cursor: actionCursor(icon) })
     obj.on('pointerover', () => hoverLabel(name))
     obj.on('pointerout', () => hoverLabel(null))
     obj.on('pointerdown', (p: Phaser.Input.Pointer) => {

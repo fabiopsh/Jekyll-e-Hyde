@@ -56,6 +56,7 @@ nodes:
         it: "Una regola ottima, anche questa."
       - speaker: enfield
         src: D01.5.8
+        image: illustrations/ill_c1_court
         emotion: architectural_curiosity
         it: "Ma il posto l’ho studiato per conto mio. Sembra a malapena una casa. Non c’è un’altra porta, e nessuno entra o esce da quella se non, molto di rado, il signore della mia avventura."
       - speaker: enfield
@@ -135,10 +136,8 @@ nodes:
     lines:
       - speaker: utterson
         src: D01.7.9
+        image: illustrations/ill_c1_handshake
         emotion: warm_gentleman_pact
         it: "Con tutto il cuore. Ci stringo la mano sopra, Richard."
-      - speaker: narrator
-        emotion: chapter_conclusion
-        it: "Fine del primo capitolo. I capitoli successivi sono in lavorazione."
     effects: [{ learn: F01.19 }, { set: c1_bargain }]
     next: null

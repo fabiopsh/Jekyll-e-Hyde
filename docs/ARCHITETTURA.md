@@ -147,7 +147,18 @@ runs/<runId>/log.jsonl     eventi in ordine: scena, dialogo, scelta, fatto, ogge
   sostituire uno generato senza toccare codice.
 - Movimento: punta-e-clicca con percorso dentro il poligono calpestabile; scala del personaggio in base a y.
 
-Pipeline asset: vedi `tools/assets/README.md` (creata nella fase asset).
+- Illustrazioni (D20): riquadro a destra, 160×200 mostrato a multipli interi, con comparsa a macchia
+  d'inchiostro (`src/renderer/ui/illustration.ts`). Nei contenuti: `image` su una battuta (resta fino alla
+  prossima immagine o alla fine del dialogo), su un effetto `narrate` o su una cartolina di `intro`/`ending`.
+- Ambiente (campo `ambience` della scena): fumo dai camini, uccelli che volano via quando ci si avvicina, suoni
+  (`src/renderer/phaser/ambience.ts`). Un NPC con `follow: true` accompagna il giocatore.
+- Interfaccia: menu con scena del titolo animata (`content/game.yaml`, `menu_scene`) e copertina che si apre,
+  cartolina di capitolo, pagina di fine capitolo con anticipazione (`ending` del capitolo), taccuino a due pagine
+  (tasto J), cursore con l'icona dell'azione (`src/renderer/cursors.ts`), impostazioni di lettura
+  (`src/renderer/settings.ts`: velocità e dimensione del testo, schermo intero).
+- Percorsi degli asset sempre relativi (`assetUrl()` in `src/renderer/assets.ts`): l'app costruita si apre da disco.
+
+Pipeline asset: vedi `tools/assets/README.md`.
 
 ## 7b. Audio
 
@@ -164,5 +175,6 @@ Il gioco **non ha voci** (D19): i personaggi parlano con il testo.
 npm run dev        avvia il gioco in sviluppo
 npm run validate   valida tutti i contenuti (schemi + riferimenti)
 npm test           test della logica
+npm run shot       app costruita guidata da Playwright: screenshot in out/shots/<scenario>/ (c1, c1full)
 npm run build      pacchetto desktop
 ```

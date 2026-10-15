@@ -6,10 +6,17 @@ start_scene: loc_by_street
 start_at: west
 intro:
   # S 01.1, narrazione chiave (r. 3-6, 10-12, 27-28) and Utterson's saying D01.1.1-2
-  - "Utterson, l’avvocato, era un uomo dal volto rude, che nessun sorriso illuminava mai; freddo, avaro di parole e impacciato nel discorso; restio al sentimento; magro, lungo, polveroso, tetro, eppure in qualche modo simpatico."
-  - "Era austero con se stesso; beveva gin quando era solo, per mortificare il gusto dei vini pregiati; e, benché amasse il teatro, da vent’anni non ne varcava la soglia."
-  - "«Io propendo per l’eresia di Caino», soleva dire. «Lascio che mio fratello vada al diavolo a modo suo.»"
-  - "I suoi affetti, come l’edera, erano frutto del tempo. Così era legato a Richard Enfield, suo lontano parente, noto uomo di mondo. La domenica passeggiavano insieme, quasi senza parlarsi; eppure quelle passeggiate erano per entrambi il gioiello della settimana."
+  - text: "Utterson, l’avvocato, era un uomo dal volto rude, che nessun sorriso illuminava mai; freddo, avaro di parole e impacciato nel discorso; restio al sentimento; magro, lungo, polveroso, tetro, eppure in qualche modo simpatico."
+    image: illustrations/ill_c1_utterson_alone
+  - text: "Era austero con se stesso; beveva gin quando era solo, per mortificare il gusto dei vini pregiati; e, benché amasse il teatro, da vent’anni non ne varcava la soglia."
+    image: illustrations/ill_c1_utterson_alone
+  - text: "«Io propendo per l’eresia di Caino», soleva dire. «Lascio che mio fratello vada al diavolo a modo suo.»"
+    image: illustrations/ill_c1_utterson_alone
+  - text: "I suoi affetti, come l’edera, erano frutto del tempo. Così era legato a Richard Enfield, suo lontano parente, noto uomo di mondo. La domenica passeggiavano insieme, quasi senza parlarsi; eppure quelle passeggiate erano per entrambi il gioiello della settimana."
+    image: illustrations/ill_c1_sunday_walk
+# After the end-of-chapter page: the first line of chapter 2 (story/chapters/02-ricerca-di-hyde.md, S 02.1, r. 3-4)
+ending:
+  - "Quella sera Utterson tornò alla sua casa da scapolo di umore cupo e sedette a cena senza appetito."
 objectives:
   - id: c1_hear_story
     text: Passeggia con Enfield lungo la stradina.

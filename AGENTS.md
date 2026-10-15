@@ -35,7 +35,9 @@ LLM locale tenuto sotto controllo dal gioco. Proprietario: Fabio (fa i test manu
 ```
 npm install
 npm run dev          gioco in sviluppo (Electron)
-npm run validate     validazione contenuti
+npm run validate     validazione contenuti (e asset mancanti, come avvisi)
+npm run shot         screenshot automatici dell'app (scenari in scripts/shot.ts): guardali dopo ogni
+                     modifica all'interfaccia, prima di chiedere la prova manuale a Fabio
 npm test             test della logica
 ```
 Asset: `tools/assets/README.md`.

@@ -8,7 +8,7 @@
     ],
     "seed": 451003,
     "prompt": "pixel art, adventure game background, victorian london 1880s, empty street on a sunny sunday, cobblestone road in the foreground, across the road neat shops with polished brass, in the center a gloomy two storey house with a blank brick wall and one shabby door, archway beside it, blue sky, flat colors, muted browns and dark greens",
-    "exported_at": "2026-10-15T17:15:18+00:00"
+    "exported_at": "2026-10-15T22:47:52+00:00"
   },
   {
     "id": "utterson",
@@ -21,7 +21,7 @@
     ],
     "seed": 5965402,
     "prompt": "pixel art, full body character sprite, tall lean middle-aged gentleman, long rugged unsmiling face, clean-shaven, greying hair, dusty dark grey frock coat, charcoal trousers, black top hat, black shoes, side view facing right, standing upright, arms at sides, full figure, single character, plain white background, flat colors, dark outline",
-    "exported_at": "2026-10-15T17:15:18+00:00"
+    "exported_at": "2026-10-15T22:47:52+00:00"
   },
   {
     "id": "obj_door_key",
@@ -32,7 +32,7 @@
     ],
     "seed": 9342701,
     "prompt": "pixel art, game inventory icon, one antique iron door key, round bow, long shank, simple bit, dark worn iron, single object isolated on plain white background, centered, flat colors, dark outline",
-    "exported_at": "2026-10-15T17:15:18+00:00"
+    "exported_at": "2026-10-15T22:47:52+00:00"
   },
   {
     "id": "enfield",
@@ -45,7 +45,7 @@
     ],
     "seed": 7422702,
     "prompt": "pixel art, full body character sprite, young elegant victorian gentleman, handsome clean-shaven lively face, well-groomed dark hair, tailored light grey frock coat, light waistcoat, dark trousers, black top hat, black shoes, side view facing right, standing upright, arms at sides, full figure, single character, plain white background, flat colors, dark outline",
-    "exported_at": "2026-10-15T18:09:06+00:00"
+    "exported_at": "2026-10-15T22:47:52+00:00"
   },
   {
     "id": "enfield_neutral",
@@ -67,6 +67,149 @@
     ],
     "seed": 3774401,
     "prompt": "pixel art, portrait, head and shoulders, whole hat visible, tall lean middle-aged gentleman, long rugged unsmiling face, clean-shaven, greying hair, dusty dark grey frock coat, charcoal trousers, black top hat, black shoes, calm neutral expression, plain dark brown backdrop, flat colors, dark outline",
-    "exported_at": "2026-10-15T21:39:15+00:00"
+    "exported_at": "2026-10-15T22:47:52+00:00"
+  },
+  {
+    "id": "loc_by_street_night",
+    "kind": "background",
+    "variant": 0,
+    "files": [
+      "backgrounds/loc_by_street_night.png"
+    ],
+    "seed": 5443100,
+    "prompt": "pixel art, adventure game background, victorian london 1880s, the same quiet street at night, deep blue night sky, light bluish fog, lit gas street lamp with golden light, shops closed and dark, blank gable wall, the shabby door in deep shadow, flat colors, muted browns and dark greens",
+    "exported_at": "2026-10-15T22:59:07+00:00"
+  },
+  {
+    "id": "ill_c1_utterson_alone",
+    "kind": "illustration",
+    "variant": 4,
+    "files": [
+      "illustrations/ill_c1_utterson_alone.png"
+    ],
+    "seed": 5301404,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, tall lean middle-aged gentleman, long rugged unsmiling face, clean-shaven, greying hair, dark grey frock coat, medium shot, sitting alone at night in his study, holding a small glass of gin, shelves of law books, one oil lamp, dramatic lighting, flat colors",
+    "exported_at": "2026-10-15T22:59:07+00:00"
+  },
+  {
+    "id": "ill_c1_sunday_walk",
+    "kind": "illustration",
+    "variant": 3,
+    "files": [
+      "illustrations/ill_c1_sunday_walk.png"
+    ],
+    "seed": 4476003,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, two gentlemen seen from behind walking side by side in silence down a quiet street on sunday, the taller one in a black frock coat, the other in a pale light grey frock coat, top hats, dramatic lighting, flat colors",
+    "exported_at": "2026-10-15T22:59:07+00:00"
+  },
+  {
+    "id": "ill_c1_lamps",
+    "kind": "illustration",
+    "variant": 7,
+    "files": [
+      "illustrations/ill_c1_lamps.png"
+    ],
+    "seed": 8736507,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, empty streets at three o'clock of a black winter night, long rows of lit gas street lamps as if for a procession, dark sleeping houses, nobody about, dramatic lighting, flat colors",
+    "exported_at": "2026-10-15T22:59:07+00:00"
+  },
+  {
+    "id": "ill_c1_corner",
+    "kind": "illustration",
+    "variant": 1,
+    "files": [
+      "illustrations/ill_c1_corner.png"
+    ],
+    "seed": 278001,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, street corner at night under a gas lamp, a small man, only a black faceless silhouette, walking fast towards the corner, a little girl, a small dark silhouette, running down the cross street, dramatic lighting, flat colors",
+    "exported_at": "2026-10-15T22:59:07+00:00"
+  },
+  {
+    "id": "ill_c1_crowd",
+    "kind": "illustration",
+    "variant": 3,
+    "files": [
+      "illustrations/ill_c1_crowd.png"
+    ],
+    "seed": 4868303,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, night street under gas lamps, a circle of hostile people, furious women, a doctor, a gentleman in a top hat, around a small man in the middle who is only a black faceless silhouette, dramatic lighting, flat colors",
+    "exported_at": "2026-10-15T22:59:07+00:00"
+  },
+  {
+    "id": "ill_c1_door_key",
+    "kind": "illustration",
+    "variant": 0,
+    "files": [
+      "illustrations/ill_c1_door_key.png"
+    ],
+    "seed": 9476500,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, at night, close-up of the lock of a blistered stained wooden door, a hand in a dark leather glove turning a brass key in the keyhole, dark coat sleeve, gas light from the left, dramatic lighting, flat colors",
+    "exported_at": "2026-10-15T22:59:07+00:00"
+  },
+  {
+    "id": "ill_c1_cheque",
+    "kind": "illustration",
+    "variant": 0,
+    "files": [
+      "illustrations/ill_c1_cheque.png"
+    ],
+    "seed": 9403300,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, top-down view at dawn of a dark wooden table, ten large gold sovereign coins and a folded blank victorian cheque of plain paper, pale pink dawn light, dramatic lighting, flat colors",
+    "exported_at": "2026-10-15T22:59:07+00:00"
+  },
+  {
+    "id": "ill_c1_bank",
+    "kind": "illustration",
+    "variant": 1,
+    "files": [
+      "illustrations/ill_c1_bank.png"
+    ],
+    "seed": 9692101,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, interior of a victorian bank in the morning, long mahogany counter, a clerk behind a brass grille, tall windows with pale morning light, dramatic lighting, flat colors",
+    "exported_at": "2026-10-15T22:59:07+00:00"
+  },
+  {
+    "id": "ill_c1_court",
+    "kind": "illustration",
+    "variant": 1,
+    "files": [
+      "illustrations/ill_c1_court.png"
+    ],
+    "seed": 3675001,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, a closed court between old buildings packed together, on the first floor three shut clean windows, blank wall below, a chimney with smoke, grey sky, dramatic lighting, flat colors",
+    "exported_at": "2026-10-15T22:59:07+00:00"
+  },
+  {
+    "id": "ill_c1_door_closeup",
+    "kind": "illustration",
+    "variant": 0,
+    "files": [
+      "illustrations/ill_c1_door_closeup.png"
+    ],
+    "seed": 4162300,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, close-up of an old wooden door with no bell and no knocker, blistered and stained paint, knife cuts on the mouldings, burnt matches on the stone steps, dingy wall, dramatic lighting, flat colors",
+    "exported_at": "2026-10-15T22:59:07+00:00"
+  },
+  {
+    "id": "ill_c1_shops",
+    "kind": "illustration",
+    "variant": 0,
+    "files": [
+      "illustrations/ill_c1_shops.png"
+    ],
+    "seed": 1598600,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, a clean cheerful little street of victorian shop fronts closed on sunday, freshly painted shutters, well-polished brass, empty pavement, bright morning, dramatic lighting, flat colors",
+    "exported_at": "2026-10-15T22:59:07+00:00"
+  },
+  {
+    "id": "ill_c1_handshake",
+    "kind": "illustration",
+    "variant": 3,
+    "files": [
+      "illustrations/ill_c1_handshake.png"
+    ],
+    "seed": 6060003,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, close-up of a handshake between two gentlemen, one hand in a black glove, the other hand in a pale grey glove, white shirt cuffs, plain dark backdrop, dramatic lighting, flat colors",
+    "exported_at": "2026-10-15T22:59:07+00:00"
   }
 ]

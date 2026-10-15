@@ -31,9 +31,10 @@ SHEETS_DIR = OUTPUT_DIR / "sheets"        # contact sheets for manual choice
 
 GAME_ASSETS_DIR = REPO / "assets"
 GAME_MANIFEST = GAME_ASSETS_DIR / "manifest.json"
-GAME_FOLDERS = {"background": "backgrounds", "character": "characters", "portrait": "portraits", "item": "items"}
+GAME_FOLDERS = {"background": "backgrounds", "character": "characters", "portrait": "portraits", "item": "items",
+                "illustration": "illustrations"}
 
-KINDS = ("background", "character", "portrait", "item")
+KINDS = ("background", "character", "portrait", "item", "illustration")
 
 # Image generation
 BASE_MODEL = "stabilityai/stable-diffusion-xl-base-1.0"
@@ -50,6 +51,7 @@ BACKGROUND_SIZE = (480, 270)
 CHARACTER_HEIGHT = 64
 PORTRAIT_SIZE = (128, 160)
 ITEM_SIZE = (32, 32)
+ILLUSTRATION_SIZE = (160, 200)  # 4:5, right-hand panel of the game (docs/DECISIONI.md D20)
 PALETTE_COLORS = 32
 
 

@@ -63,42 +63,44 @@ Aggiornato: 2026-10-15. Chi lavora qui aggiorna questo file a fine sessione (ved
   inquadrati dal cappello alle spalle. Nuovi `assets/portraits/utterson_neutral.png` (variante 1) ed
   `enfield_neutral.png` (variante 3); le altre varianti in `tools/assets/output/sheets/`.
 
+- **Capitolo 1 rifinito (2026-10-16, D20-D22)**:
+  - riquadro delle illustrazioni a destra durante intro, racconto di Enfield, domande, descrizioni;
+  - Enfield accompagna Utterson; pagina di fine capitolo con il taccuino e anticipazione del capitolo 2;
+  - titolo animato (stradina di notte, nebbia, lampione, ombra alla porta) e copertina che si apre;
+    cartolina di capitolo; citazione di copertina dal cap. 1 (quella del cap. 10 anticipava il segreto);
+  - taccuino a due pagine con appunti che si scrivono; ritratti che respirano; cursore con l'azione;
+    impostazioni di lettura; fumo dal camino, piccioni, vento, campane, passi;
+  - `npm run shot` (Playwright): ha trovato tre bug ora corretti: immagini non caricate nell'app costruita
+    (percorsi assoluti), riquadro invisibile che bloccava i clic a destra, notifiche sovrapposte.
+
 ## In corso
 
-- Verifica finale delle nuove funzionalità classiche e del capitolo 1 con Fabio.
+- Nulla in esecuzione. Palette notturna (D25) applicata; rifatti sfondo notturno, assegno, chiave, porta da vicino;
+  lampioni, angolo e folla riquantizzati. Scelte dell'agente da confermare sul foglio
+  `tools/assets/output/sheets/c1_illustrations.png`. Limiti noti: l'assegno sembra un foglio bianco, nella
+  chiave la porta è sfocata, nello sfondo notturno le facciate sono molto scure.
 
 ## Prossimi passi
 
-1. Prova manuale completa di Fabio del capitolo 1 con audio classico, cursore a tema, menu di pausa, fix porta
-   e i nuovi ritratti (ora anche Utterson ha il suo nei dialoghi).
-2. Predisposizione dei contenuti per il Capitolo 2 (*Search for Mr. Hyde* / *Alla ricerca di Mr Hyde*).
+1. Prova manuale di Fabio del capitolo 1 (sotto).
+2. Correzioni dalla prova; poi capitolo 2 (*Ricerca di Mr. Hyde*), con il suo giro in
+   `tests/content-playthrough.test.ts` e uno scenario in `scripts/shot.ts`.
 
 ## Da provare a mano (Fabio)
 
-Capitolo 1 completo con stile classico avventura grafica (LucasArts/Pentiment):
-1. Esegui `npm run dev`.
-2. **Puntatore a tema**:
-   - Sposta il mouse: nota il cursore con guanto vittoriano avorio e polsino d'epoca dorato.
-   - Passa il mouse su pulsanti, botteghe, porta, uscite o su Enfield: il cursore diventa un guanto in oro brillante radioso.
-3. **Effetti sonori sui click**:
-   - Clicca su qualsiasi pulsante del menu o scelta: ascolta il feedback sonoro tattile meccanico d'epoca.
-4. **Dialoghi in stile classico (Talk-blip)**:
-   - Inizia una partita: nella narrazione d'apertura il testo scorre con il ritmico ticchettio vintage della macchina da scrivere.
-   - Clic sulla porta → *Osserva*:
-     - **Fix menu porta**: il menu non si sposta, il primo click su "Osserva" avvia immediatamente il dialogo!
-     - Mentre Utterson parla, il testo scorre accompagnato dal suo caratteristico tono baritonale grave.
-     - Quando parla Enfield, il tono vocale diventa un tenore brillante e giovanile.
-     - Un clic/Spazio mostra subito il testo completo, il successivo avanza.
-5. **Menu di Pausa (ESC)**:
-   - Durante l'esplorazione, premi `ESC`.
-   - Si apre il Menu di Pausa vittoriano:
-     - Regola i volumi (Musica e Effetti Sonori): muovendo lo slider degli effetti senti il click al volume selezionato.
-     - Prova i pulsanti: *Diario (J)*, *Riprendi*, o *Torna al Menu Principale* (salva e torna al libro).
-6. **Chat libera LLM**:
-   - Clic su Enfield → *Conversa*:
-     - Digita una domanda (es. *"Chi abita in quella casa?"*).
-     - Quando Enfield risponde, il testo scorre con il suo blip vocale ritmico. Premi `ESC` per chiudere la chat in qualsiasi momento.
+1. `npm run dev`. Nel menu: la stradina di notte dietro la copertina; aspetta 20-30 secondi: il lampione si
+   abbassa e alla porta compare per un attimo un'ombra. *Impostazioni*: velocità e dimensione del testo.
+2. *Comincia la lettura*: la copertina si apre, cartolina "Capitolo I", intro con illustrazioni a destra.
+3. Nella stradina: Enfield ti segue; i piccioni si alzano quando ti avvicini; fumo dal camino; passi, vento,
+   campane ogni tanto. Il cursore cambia: lente sugli oggetti, fumetto su Enfield.
+4. Porta → *Osserva*: il racconto di Enfield con le illustrazioni che cambiano.
+5. Tasto J: il taccuino; gli appunti nuovi si scrivono uno dopo l'altro.
+6. Enfield → *Parla* tre volte (firmatario, nome, chiave) → stretta di mano → pagina di fine capitolo →
+   anticipazione del capitolo 2 → ritorno al menu con il segnalibro *Riprendi*.
+7. ESC: menu di pausa con volumi e impostazioni.
 
+Da riportare: testi poco leggibili, illustrazioni che non corrispondono al testo, animazioni fastidiose o lente,
+punti cliccabili sbagliati.
 
 ## Problemi aperti
 

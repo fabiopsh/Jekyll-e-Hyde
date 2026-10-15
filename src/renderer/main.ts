@@ -7,6 +7,9 @@ import { Session } from './session'
 import { h, toast, ui } from './ui/dom'
 import { mainMenu } from './ui/screens'
 import { playClickSound, playMusic } from './audio'
+import { applySettings } from './settings'
+
+applySettings()
 
 declare global {
   interface Window { api: Api }

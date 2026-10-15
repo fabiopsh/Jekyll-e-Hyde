@@ -5,6 +5,9 @@
 # and are only generic choices of the 1880s. When story/bible.md is ready, `book` must match it.
 # Never put the character's name, or any film, actor, illustrator, comic or game, into `appearance`.
 #
+# `illustration` (optional) is the text used for `{<id>}` in an illustration subject (data/assets.yaml):
+# the same look as `appearance` without what he would not wear in the scene (hat and shoes indoors), shorter
+# so that the scene fits in the 77 CLIP tokens. Without it, `appearance` is used.
 # `negative_extra` (optional) is appended to the negative prompt of every image of that character.
 # `anim` (optional) tunes animate.py: row fractions from the top of the 64 px figure.
 #   chest: rows above it sink by 1 px in idle_1 (breathing)
@@ -21,6 +24,9 @@ utterson:
   appearance: >-
     tall lean middle-aged gentleman, long rugged unsmiling face, clean-shaven, greying hair,
     dusty dark grey frock coat, charcoal trousers, black top hat, black shoes
+  illustration: >-
+    tall lean middle-aged gentleman, long rugged unsmiling face, clean-shaven, greying hair,
+    dark grey frock coat
   # "never lighted by a smile"; no beard so that every image shows the same face
   negative_extra: "smile, smiling, grin, beard, moustache"
   anim:

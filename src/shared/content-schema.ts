@@ -37,7 +37,8 @@ export const Effect = z.union([
   z.strictObject({ learn: factId }),
   z.strictObject({ goto: id, at: id.optional() }),
   z.strictObject({ dialogue: id }),
-  z.strictObject({ narrate: z.string().min(1) }),
+  // `image`: illustration shown on the right while the text is read (docs/DECISIONI.md D20)
+  z.strictObject({ narrate: z.string().min(1), image: z.string().optional() }),
   z.strictObject({ journal: z.string().min(1) }),
   z.strictObject({ complete: id }),
   z.strictObject({ chapter: z.number().int().min(1).max(10) }),
@@ -108,6 +109,7 @@ export const NpcPlacement = z.strictObject({
   when: When,
   talk: id.optional(), // scripted dialogue started by "talk"
   chat: z.boolean().default(true), // free LLM chat allowed
+  follow: z.boolean().default(false), // walks along with the player (a companion, e.g. Enfield on the walk)
 })
 
 export const Scene = z.strictObject({
@@ -123,6 +125,12 @@ export const Scene = z.strictObject({
   npcs: z.array(NpcPlacement).default([]),
   on_enter: z.array(Interaction).default([]),
   music: z.string().optional(),
+  // life in the room, drawn and played by the engine: chimney smoke, birds on the ground, ambient sounds
+  ambience: z.strictObject({
+    smoke: z.array(Point).default([]), // chimney tops, game pixels
+    birds: z.strictObject({ area: Rect, count: z.number().int().min(1).max(12) }).optional(), // they fly off when the player comes near
+    sounds: z.array(z.enum(['wind', 'bells', 'footsteps'])).default([]),
+  }).optional(),
 })
 export type Scene = z.infer<typeof Scene>
 
@@ -133,6 +141,7 @@ const Line = z.strictObject({
   it: z.string().min(1),
   src: bookLineId.optional(), // the book line this comes from (story/chapters/)
   emotion: z.string().optional(),
+  image: z.string().optional(), // illustration shown on the right from this line on (D20)
 })
 
 const Choice = z.strictObject({
@@ -159,6 +168,8 @@ export type Dialogue = z.infer<typeof Dialogue>
 
 // ---- chapters ----------------------------------------------------------------------------------
 
+const NarrationCard = z.union([z.string(), z.strictObject({ text: z.string(), image: z.string().optional() })])
+
 export const Objective = z.strictObject({
   id,
   text: z.string(), // shown in the journal
@@ -172,7 +183,10 @@ export const Chapter = z.strictObject({
   player: id, // utterson, lanyon, jekyll, hyde
   start_scene: id,
   start_at: id.optional(),
-  intro: z.array(z.string()).default([]), // narration cards shown at chapter start
+  // narration cards shown at chapter start; a card can carry an illustration
+  intro: z.array(NarrationCard).default([]),
+  // cards shown after the end-of-chapter page (e.g. the first line of the next chapter, as a teaser)
+  ending: z.array(NarrationCard).default([]),
   objectives: z.array(Objective).min(1),
   next_when: Condition, // when true, the chapter ends
   // Words no NPC may say in this chapter (case-insensitive substrings): the LLM knows the novel and
@@ -242,5 +256,14 @@ export interface Content {
 // content/game.yaml: settings of the whole game that are content, not code.
 export const GameSettings = z.strictObject({
   menu_music: z.string().optional(),
+  // animated title behind the menu: a background, its lamp (flickers) and its door (a shadow appears there)
+  menu_scene: z.strictObject({
+    background: z.string(), // asset key of a 480x270 background
+    fallback: z.string().optional(), // shown darkened while `background` does not exist yet
+    lamp: Point.optional(), // game pixels of the lamp light
+    door: Point.optional(), // game pixels where the shadow's feet stand
+    figure: z.string().optional(), // character sprite whose silhouette (black, smaller) is the shadow
+  }).optional(),
+  menu_quote: z.string().optional(), // line under the menu buttons
 })
 export type GameSettings = z.infer<typeof GameSettings>

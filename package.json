@@ -12,12 +12,14 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
     "validate": "tsx scripts/validate-content.ts",
-    "check:story": "tsx scripts/check-story.ts"
+    "check:story": "tsx scripts/check-story.ts",
+    "shot": "tsx scripts/shot.ts"
   },
   "devDependencies": {
     "@types/node": "^24.19.2",
     "electron": "^44.7.2",
     "electron-vite": "^6.0.0",
+    "playwright-core": "^1.64.1",
     "tsx": "^4.23.15",
     "typescript": "^5.9.3",
     "vite": "^8.3.4",

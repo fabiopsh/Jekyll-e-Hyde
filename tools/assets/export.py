@@ -6,6 +6,7 @@ Copies:
   character  -> assets/characters/<id>.png, assets/characters/<id>.json (from output/anim/)
   portrait   -> assets/portraits/<id>.png
   item       -> assets/items/<id>.png
+  illustration -> assets/illustrations/<id>.png
 """
 
 from __future__ import annotations

@@ -1,15 +1,21 @@
 # Asset requests. Each entry:
 #   id        file name in assets/ (loc_* backgrounds, obj_* items, character id, <character>_<mood> portraits)
-#   kind      background | character | portrait | item
+#   kind      background | character | portrait | item | illustration
 #   variants  how many variants to generate (generate.py --variants overrides it)
 #   source    where the description comes from (story/ chapter file and lines)
-#   subject   (background, item) what to draw, in the book's words plus generic period choices
+#   subject   (background, item, illustration) what to draw, in the book's words plus generic period
+#             choices; in an illustration `{utterson}` becomes that sheet of prompts/characters.yaml
+#   negative_extra (optional) words added to the negative prompt of this request
 #   character (character, portrait) key in prompts/characters.yaml
 #   pose      (character) "base" = side view used by animate.py
 #   mood      (portrait) key of prompts/style.yaml -> portrait.moods
-#   layout    (optional) composition sketch in data/layouts/, repainted by SDXL (img2img)
+#   layout    (optional) composition sketch in data/layouts/, repainted by SDXL (img2img); or an approved
+#             image of the repository (assets/backgrounds/<id>.png), e.g. for a night version
+#   layout_crop (optional, with layout) [x0, y0, x1, y1] box of the layout image to start from
+#   layout_grade (optional, with layout) [r, g, b] factors applied to the layout colours before img2img
 #   strength  (optional, with layout) 0.5 keeps the sketch almost as is, 1.0 ignores it; default 0.8
 #   noise     (optional, with layout) grain added to the sketch, 0-255 scale; default 24
+#   palette_size (optional) use only the first N colours of palette.hex (32 = day palette, see README)
 #   regions   (optional, with layout) boxes [x0, y0, x1, y1] in pixels of the generated image, repainted
 #             again (inpainting) with their own subject, negative_extra and strength
 
@@ -68,6 +74,7 @@ assets:
   - id: enfield_neutral
     kind: portrait
     variants: 4
+    palette_size: 32   # the night colours (2026-10-16) made the face yellow: palette_check.py
     source: "story/chapters/01-storia-della-porta.md, Profili personaggio: enfield"
     character: enfield
     mood: neutral
@@ -78,3 +85,163 @@ assets:
     source: "story/chapters/01-storia-della-porta.md, Profili personaggio: utterson; story/bible.md, Personaggi"
     character: utterson
     mood: neutral
+
+  # ---- Title screen ------------------------------------------------------------------------------------
+  # The by-street of loc_by_street at night, same composition: img2img from the exported day background.
+  # Its layout (make_layouts.py) is that PNG at the generation size, darkened towards blue, with the gas lamp
+  # lit, a light haze and the door in deeper shadow: from the day image alone SDXL gave dusk with unlit lamps
+  # (strength 0.5) or lost the composition (strength 0.55 on a darkened copy).
+  - id: loc_by_street_night
+    kind: background
+    variants: 8
+    layout: layouts/loc_by_street_night.png
+    strength: 0.45   # at 0.5 the variant chosen on 2026-10-16 had a window on the blind gable
+    noise: 6
+    source: >-
+      story/bible.md, Luoghi: loc_by_street (night: cap. 2 r. 121-133, shops closed, lamps;
+      "fogged city moon", cap. 2 r. 123-124); title screen, not a scene of the story
+    subject: >-
+      the same quiet street at night, deep blue night sky, light bluish fog, lit gas street lamp with golden
+      light, shops closed and dark, blank gable wall, the shabby door in deep shadow
+    negative_extra: "daylight, sunny, blue sky, sun"
+
+  # ---- Illustrations of chapter 1 (right-hand panel, docs/DECISIONI.md D20) ------------------------------
+  # 896x1152, centre crop 4:5, 160x200. Hyde never has a face: only a black silhouette. No violence shown.
+  # Line numbers (r.) refer to book/chapters/01-storia-della-porta.txt.
+  - id: ill_c1_utterson_alone
+    kind: illustration
+    variants: 4
+    source: "cap. 1 r. 3-12 (drank gin when alone, austere with himself); prompts/characters.yaml utterson"
+    subject: >-
+      {utterson}, medium shot, sitting alone at night in his study, holding a small glass of gin,
+      shelves of law books, one oil lamp
+
+  - id: ill_c1_sunday_walk
+    kind: illustration
+    variants: 4
+    source: "cap. 1 r. 32-38 (the Sunday walks, saying nothing); prompts/characters.yaml utterson, enfield"
+    # Without a sketch both coats came out dark (8 of 8): the sketch gives Enfield his light grey coat (D18).
+    layout: layouts/ill_c1_sunday_walk.png   # make_layouts.py
+    strength: 0.75
+    noise: 12
+    subject: >-
+      two gentlemen seen from behind walking side by side in silence down a quiet street on sunday,
+      the taller one in a black frock coat, the other in a pale light grey frock coat, top hats
+    negative_extra: "face, front view, crowd, carriage"
+
+  - id: ill_c1_lamps
+    kind: illustration
+    variants: 4
+    source: "cap. 1 r. 77-84 (black winter morning, nothing to be seen but lamps, as empty as a church)"
+    subject: >-
+      empty streets at three o'clock of a black winter night, long rows of lit gas street lamps
+      as if for a procession, dark sleeping houses, nobody about
+    negative_extra: "people, person, figure, crowd, carriage, moon"
+
+  - id: ill_c1_corner
+    kind: illustration
+    variants: 4
+    # Before the collision (r. 84-87): nothing of what follows is shown.
+    source: "cap. 1 r. 84-87 (a little man stumping along eastward, a girl running down a cross street)"
+    layout: layouts/ill_c1_corner.png   # make_layouts.py
+    strength: 0.62
+    noise: 12
+    subject: >-
+      street corner at night under a gas lamp, a small man, only a black faceless silhouette, walking fast
+      towards the corner, a little girl, a small dark silhouette, running down the cross street
+    negative_extra: "face, fallen, lying, collision, crowd, monster"
+
+  - id: ill_c1_crowd
+    kind: illustration
+    variants: 4
+    source: "cap. 1 r. 93-97, 110-116 (the family, the doctor, a circle of hateful faces, the man in the middle)"
+    layout: layouts/ill_c1_crowd.png   # make_layouts.py
+    strength: 0.62
+    noise: 12
+    subject: >-
+      night street under gas lamps, a circle of hostile people, furious women, a doctor, a gentleman in a top hat,
+      around a small man in the middle who is only a black faceless silhouette
+    negative_extra: "monster, horns, claws, hunchback, fighting"
+
+  - id: ill_c1_door_key
+    kind: illustration
+    source: "cap. 1 r. 59-60, 122-123 (the blistered door; whipped out a key, went in)"
+    # Redone 2026-10-16: the lock of the loc_by_street door (make_layouts.py LOCK_BOX), a gloved hand drawn in.
+    layout: layouts/ill_c1_door_key.png   # make_layouts.py
+    strength: 0.45   # at 0.6 the hand disappeared in 8 of 8 variants
+    noise: 6
+    variants: 8
+    subject: >-
+      at night, close-up of the lock of a blistered stained wooden door, a hand in a dark leather glove
+      turning a brass key in the keyhole, dark coat sleeve, gas light from the left
+    negative_extra: "face, person, knocker, bell, bare hand, padlock, extra fingers"
+
+  - id: ill_c1_cheque
+    kind: illustration
+    # The name on the cheque is not told (r. 125-126): nothing readable.
+    source: "cap. 1 r. 123-127 (ten pounds in gold and a cheque)"
+    # Redone 2026-10-16 with a sketch (make_layouts.py): big coins and a folded blank cheque, at dawn
+    # (the bank opens after the night spent in Enfield's chambers, r. 133-137).
+    layout: layouts/ill_c1_cheque.png   # make_layouts.py
+    strength: 0.5    # at 0.6 the paper got a grain that looks like writing
+    noise: 4
+    variants: 8
+    subject: >-
+      top-down view at dawn of a dark wooden table, ten large gold sovereign coins and a folded blank
+      victorian cheque of plain paper, pale pink dawn light
+    negative_extra: "numbers, banknote, hand, person, book, cookies, biscuits, food, plate, tray, bowl"
+
+  - id: ill_c1_bank
+    kind: illustration
+    variants: 4
+    # The bank is not described in the book (story/bible.md, loc_bank): generic period choice.
+    source: "cap. 1 r. 136-140 (next day, when we had breakfasted, went to the bank); story/bible.md loc_bank"
+    subject: >-
+      interior of a victorian bank in the morning, long mahogany counter, a clerk behind a brass grille,
+      tall windows with pale morning light
+    negative_extra: "sign, crowd"
+
+  - id: ill_c1_court
+    kind: illustration
+    variants: 4
+    source: "cap. 1 r. 172-180 (three windows on the first floor, none below, a chimney generally smoking)"
+    layout: layouts/ill_c1_court.png   # make_layouts.py
+    strength: 0.72
+    noise: 12
+    subject: >-
+      a closed court between old buildings packed together, on the first floor three shut clean windows,
+      blank wall below, a chimney with smoke, grey sky
+    negative_extra: "door, ground floor windows, shop, people"
+
+  - id: ill_c1_door_closeup
+    kind: illustration
+    source: "cap. 1 r. 58-64 (neither bell nor knocker, blistered and distained, knife on the mouldings, matches)"
+    # Redone 2026-10-16: the same rectangular door as assets/backgrounds/loc_by_street.png, from a box of it
+    # (make_layouts.py DOOR_BOX) with steps, matches and knife cuts drawn in.
+    layout: layouts/ill_c1_door_closeup.png   # make_layouts.py
+    strength: 0.45   # at 0.55 a round window or a ring appeared on the door in most variants
+    noise: 6
+    variants: 8
+    subject: >-
+      close-up of an old wooden door with no bell and no knocker, blistered and stained paint, knife cuts
+      on the mouldings, burnt matches on the stone steps, dingy wall
+    negative_extra: "knocker, door knocker, ring, doorbell, bell, round window, sign, house number, person"
+
+  - id: ill_c1_shops
+    kind: illustration
+    variants: 4
+    source: "cap. 1 r. 41-51 (shop fronts, freshly painted shutters, well-polished brasses, cleanliness and gaiety)"
+    subject: >-
+      a clean cheerful little street of victorian shop fronts closed on sunday, freshly painted shutters,
+      well-polished brass, empty pavement, bright morning
+    negative_extra: "people, crowd, carriage, sign lettering"
+
+  - id: ill_c1_handshake
+    kind: illustration
+    variants: 4
+    palette_size: 32   # the night colours (2026-10-16) turned the pale grey glove blue: palette_check.py
+    source: "cap. 1 r. 222-226 (a bargain never to refer to this again; I shake hands on that)"
+    subject: >-
+      close-up of a handshake between two gentlemen, one hand in a black glove, the other hand in a
+      pale grey glove, white shirt cuffs, plain dark backdrop
+    negative_extra: "face, extra fingers, bare hands"

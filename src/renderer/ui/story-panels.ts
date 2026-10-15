@@ -5,31 +5,44 @@ import { check } from '../../game/rules'
 import type { Session } from '../session'
 import { h, modal, typeText, ui, waitAdvance } from './dom'
 import { playMusic } from '../audio'
+import { assetUrl } from '../assets'
+import { hideIllustration, showIllustration } from './illustration'
 
 export function speakerName(content: Content, id: string): string {
   return content.characters[id]?.name ?? id
 }
 
-export function narrate(texts: string[]): Promise<void> {
+export type Card = string | { text: string; image?: string }
+
+// Narration cards, one after the other; a card with an image shows it in the frame on the right.
+export function narrate(cards: Card[]): Promise<void> {
   return modal(async () => {
     const box = h('div', { class: 'narration' })
     ui().append(box)
-    for (const t of texts) {
-      const p = h('p', { class: 'narration-text' })
-      const advance = h('div', { class: 'advance' }, 'clic o Spazio per continuare')
-      box.replaceChildren(p, advance)
-      await typeText(p, t, box, advance, 'typewriter')
+    try {
+      for (const card of cards) {
+        const { text, image } = typeof card === 'string' ? { text: card, image: undefined } : card
+        showIllustration(image)
+        const p = h('p', { class: 'narration-text' })
+        const advance = h('div', { class: 'advance' }, 'clic o Spazio per continuare')
+        box.replaceChildren(p, advance)
+        await typeText(p, text, box, advance, 'typewriter')
+      }
+    } finally {
+      box.remove()
+      hideIllustration()
     }
-    box.remove()
   })
 }
 
 function portraitFor(content: Content, speaker: string): HTMLElement | null {
   const key = content.characters[speaker]?.portrait
   if (!key) return null
-  const img = h('img', { class: 'portrait', src: `/${key}.png`, alt: '' })
-  img.onerror = () => img.remove() // portrait not generated yet
-  return img
+  // the frame breathes slowly and the lamp light on it wavers (CSS), so the speaker looks alive
+  const img = h('img', { class: 'portrait', src: assetUrl(`${key}.png`), alt: '' })
+  const frame = h('div', { class: 'portrait-frame' }, img, h('div', { class: 'portrait-light' }))
+  img.onerror = () => frame.remove() // portrait not generated yet
+  return frame
 }
 
 // Plays a scripted dialogue node by node. Choices run their effects through the session.
@@ -44,6 +57,7 @@ export function playDialogue(session: Session, dialogue: Dialogue): Promise<void
       while (nodeId) {
         const node: Dialogue['nodes'][string] = dialogue.nodes[nodeId]
         for (const line of node.lines) {
+          if (line.image) showIllustration(line.image) // stays until the next image or the end
           const name = speakerName(session.content, line.speaker)
           const p = h('p', { class: line.speaker === 'narrator' ? 'line narrator' : 'line' })
           const advance = h('div', { class: 'advance' }, '▸')
@@ -81,6 +95,7 @@ export function playDialogue(session: Session, dialogue: Dialogue): Promise<void
       }
     } finally {
       box.remove()
+      hideIllustration()
       if (dialogue.music) {
         const sceneMusic = session.content.scenes[session.state.scene]?.music
         if (sceneMusic) playMusic(sceneMusic)

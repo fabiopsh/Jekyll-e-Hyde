@@ -6,7 +6,7 @@ import { newGameState } from '../src/game/state'
 const content: Content = {
   chapters: [
     {
-      number: 1, title: 'one', player: 'utterson', start_scene: 'a', intro: [],
+      number: 1, title: 'one', player: 'utterson', start_scene: 'a', intro: [], ending: [],
       objectives: [
         { id: 'o1', text: 'hear the story', done_when: { knows: 'F01.1' }, hints: ['h1', 'h2', 'h3'] },
         { id: 'o2', text: 'go home', done_when: { flag: 'home' }, hints: ['h1', 'h2', 'h3'] },
@@ -15,7 +15,7 @@ const content: Content = {
       banned_words: [],
     },
     {
-      number: 2, title: 'two', player: 'utterson', start_scene: 'b', intro: [],
+      number: 2, title: 'two', player: 'utterson', start_scene: 'b', intro: [], ending: [],
       objectives: [{ id: 'o3', text: 'x', done_when: { flag: 'never' }, hints: ['h1', 'h2', 'h3'] }],
       next_when: { flag: 'never' },
       banned_words: [],

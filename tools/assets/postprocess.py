@@ -8,9 +8,12 @@ Two stages for every raw image output/raw/<kind>/<id>_v<n>.png:
    portrait    keeps its backdrop (no cut-out); the rembg mask only frames the shot: 4:5 box from just
                above the hat, centred on the head, down to the chest; grid reduction to 128x160
    item        background removal, crop, fit into 32x32 (1 px margin)
+   illustration no cut-out: centre crop to 4:5, grid reduction to 160x200
    The full-size cutout of characters, portraits and items is kept in output/cutout/<kind>/.
 2. palette -> output/processed/<kind>/<id>_v<n>.png
    every opaque pixel takes the nearest colour of palette.hex (CIELAB distance, no dithering).
+   A request with `palette_size: 32` uses only the first 32 colours (the day palette, before the night
+   colours were added): for the approved assets that the new colours made worse (palette_check.py).
 
 "Grid reduction": the image is resized to CELL times the final size, then every CELL x CELL block becomes one
 pixel with the per-channel median of its opaque pixels (sharper edges than an average); a block is opaque
@@ -19,6 +22,11 @@ when at least half of its pixels are.
 --make-palette builds palette.hex (PALETTE_COLORS colours) from the reduced backgrounds: k-means in CIELAB
 over all their pixels. Backgrounds with a choice in data/selections.yaml contribute only the chosen variant.
 With --sprite-share 0.15 the chosen characters, portraits and items weigh 15% (see make_palette).
+
+--extend-palette 8 appends 8 colours to palette.hex and keeps the existing ones: k-means in CIELAB over the
+reduced images of --ids (only the chosen variant where there is a choice) in which the old colours are fixed
+centres and only the new ones move, so they settle where the old palette is far from those pixels
+(used on 2026-10-16 for the night colours, see README).
 
 Examples:
     uv run postprocess.py                          # everything not processed yet
@@ -45,6 +53,7 @@ CELL = 4                    # grid reduction: each final pixel comes from a CELL
 KEEP_FRACTION = 0.10        # cutout fragments smaller than 10% of the main body are removed
 BACKGROUND_TOLERANCE = 60   # summed RGB distance under which an enclosed pixel counts as background
 OPENING_MAX_ALPHA = 16      # rembg alpha under which a background-coloured hole is a real opening
+NO_CUTOUT = ("background", "illustration")  # kinds that never load rembg
 
 
 # ---- colour ---------------------------------------------------------------------------------------------
@@ -116,13 +125,18 @@ def grid_reduce(image: Image.Image, size: tuple[int, int], cell: int = CELL) -> 
     return Image.fromarray(out, "RGBA")
 
 
-def crop_16_9(image: Image.Image) -> Image.Image:
+def crop_aspect(image: Image.Image, aspect_w: int, aspect_h: int) -> Image.Image:
+    """Largest centred crop with the aspect ratio aspect_w:aspect_h."""
     w, h = image.size
-    if w * 9 > h * 16:  # too wide
-        new_w = h * 16 // 9
+    if w * aspect_h > h * aspect_w:  # too wide
+        new_w = h * aspect_w // aspect_h
         return image.crop(((w - new_w) // 2, 0, (w - new_w) // 2 + new_w, h))
-    new_h = w * 9 // 16
+    new_h = w * aspect_h // aspect_w
     return image.crop((0, (h - new_h) // 2, w, (h - new_h) // 2 + new_h))
+
+
+def crop_16_9(image: Image.Image) -> Image.Image:
+    return crop_aspect(image, 16, 9)
 
 
 # ---- cutout (same approach as ASE-Tamer-Project/tools/monster-gen) ------------------------------------
@@ -228,6 +242,8 @@ def reduce(kind: str, raw: Image.Image, session) -> tuple[Image.Image, Image.Ima
     """-> (reduced image, full-size cutout or None)."""
     if kind == "background":
         return grid_reduce(crop_16_9(raw.convert("RGBA")), config.BACKGROUND_SIZE), None
+    if kind == "illustration":
+        return grid_reduce(crop_aspect(raw.convert("RGBA"), 4, 5), config.ILLUSTRATION_SIZE), None
     cutout, subject = cut_out(raw, session)
     if kind == "portrait":
         return frame_portrait(raw, cutout.getchannel("A")), cutout
@@ -250,6 +266,33 @@ def apply_palette(image: Image.Image, palette: np.ndarray | None) -> Image.Image
         palette = np.array(pal.getpalette()[: 3 * config.PALETTE_COLORS], dtype=np.uint8).reshape(-1, 3)
     px[opaque, :3] = nearest_palette(px[opaque, :3], palette)
     return Image.fromarray(px, "RGBA")
+
+
+def extend_palette(paths: list, colors: int, iterations: int = 40) -> np.ndarray:
+    """Constrained k-means: the current palette.hex colours are fixed centres, `colors` new centres move.
+    New centres start k-means++ style from the pixels farthest from every centre so far (fixed seed)."""
+    old = np.array(config.load_palette(), dtype=np.uint8)
+    pixels = np.concatenate([np.asarray(Image.open(p).convert("RGB")).reshape(-1, 3) for p in paths])
+    lab = srgb_to_lab(pixels)
+    fixed = srgb_to_lab(old)
+    rng = np.random.default_rng(0)
+    centres = list(fixed)
+    for _ in range(colors):
+        d = np.min([((lab - c) ** 2).sum(axis=1) for c in centres], axis=0)
+        centres.append(lab[rng.choice(len(lab), p=d / d.sum())])
+    centres = np.array(centres)
+    for _ in range(iterations):
+        labels = ((lab[:, None, :] - centres[None]) ** 2).sum(axis=2).argmin(axis=1)
+        for k in range(len(fixed), len(centres)):
+            members = lab[labels == k]
+            if len(members):
+                centres[k] = members.mean(axis=0)
+    labels = ((lab[:, None, :] - centres[None]) ** 2).sum(axis=2).argmin(axis=1)
+    new = lab_to_srgb(centres[len(fixed):])
+    for k, rgb in enumerate(new):
+        share = (labels == len(fixed) + k).mean()
+        print(f"  new colour {rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}: {share:.1%} of the source pixels")
+    return new
 
 
 def make_palette(colors: int, sprite_share: float) -> None:
@@ -299,6 +342,10 @@ def main() -> None:
     parser.add_argument("--force", action="store_true", help="redo the reduce stage too")
     parser.add_argument("--make-palette", action="store_true", help="rebuild palette.hex from the backgrounds")
     parser.add_argument("--colors", type=int, default=config.PALETTE_COLORS, help="colours for --make-palette")
+    parser.add_argument("--extend-palette", type=int, metavar="N",
+                        help="append N colours to palette.hex from the reduced images of --ids (k-means)")
+    parser.add_argument("--dry-palette", action="store_true",
+                        help="with --extend-palette: print the colours, do not write palette.hex")
     parser.add_argument("--sprite-share", type=float, default=0.0,
                         help="with --make-palette: weight of the chosen sprites in the palette, e.g. 0.15")
     args = parser.parse_args()
@@ -317,7 +364,7 @@ def main() -> None:
         reduced_path = config.REDUCED_DIR / kind / raw_path.name
         if reduced_path.exists() and not args.force:
             continue
-        if kind != "background" and session is None:
+        if kind not in NO_CUTOUT and session is None:
             from rembg import new_session
 
             session = new_session(config.REMBG_MODEL)
@@ -337,6 +384,20 @@ def main() -> None:
 
     if args.make_palette:
         make_palette(args.colors, args.sprite_share)
+    if args.extend_palette:
+        selections = config.load_selections()
+        sources = []
+        for raw_path in raws:
+            asset_id, variant = config.parse_file_name(raw_path)
+            if asset_id in selections and selections[asset_id]["variant"] != variant:
+                continue
+            sources.append(config.REDUCED_DIR / raw_path.parent.name / raw_path.name)
+        print(f"extending palette.hex by {args.extend_palette} colours from {', '.join(p.name for p in sources)}")
+        new = extend_palette(sources, args.extend_palette)
+        if args.dry_palette:
+            return
+        with config.PALETTE_FILE.open("a", encoding="utf-8") as f:
+            f.write("".join(f"{r:02x}{g:02x}{b:02x}\n" for r, g, b in new))
     palette = config.load_palette()
     if palette is None:
         print("WARNING: no palette.hex, each image gets its own palette (run with --make-palette)")
@@ -350,7 +411,8 @@ def main() -> None:
             continue
         out = config.PROCESSED_DIR / kind / raw_path.name
         out.parent.mkdir(parents=True, exist_ok=True)
-        apply_palette(Image.open(reduced_path), palette).save(out)
+        size = requests[config.parse_file_name(raw_path)[0]].get("palette_size")
+        apply_palette(Image.open(reduced_path), palette[:size] if size and palette is not None else palette).save(out)
     print(f"done in {time.perf_counter() - start:.1f}s -> {config.PROCESSED_DIR}")
 
 

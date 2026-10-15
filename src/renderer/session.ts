@@ -9,6 +9,7 @@ type Listener = (commands: Command[]) => void
 
 export class Session {
   private pending: LogEvent[] = []
+  journalSeen = 0 // notes already shown in the notebook (new ones are written when it opens)
   private listeners: Listener[] = []
   private clockStart = performance.now()
 
@@ -25,7 +26,9 @@ export class Session {
 
   static async resume(content: Content, id: string): Promise<Session> {
     const { meta, state } = await window.api.runs.load(id)
-    return new Session(content, meta, state)
+    const s = new Session(content, meta, state)
+    s.journalSeen = state.journal.length // a resumed game: old notes are not new
+    return s
   }
 
   onCommands(fn: Listener): () => void {

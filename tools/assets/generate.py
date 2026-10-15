@@ -1,11 +1,14 @@
 """Generate raw images with SDXL + Pixel Art XL LoRA.
 
 Input:  data/assets.yaml (requests), prompts/style.yaml, prompts/characters.yaml
+        Kinds: background, character, portrait, item, illustration (a full scene, see style.yaml;
+        `{<character>}` in its subject becomes that character's sheet).
 Output: output/raw/<kind>/<id>_v<n>.png and one line per image in output/raw/manifest.jsonl
         (prompt, seed, sampler settings, seconds taken).
 
 A request with `layout: layouts/<id>.png` starts from that composition sketch (img2img, `strength` in
-assets.yaml, default 0.8) instead of pure noise. Each of its `regions` (box in pixels of the generated image)
+assets.yaml, default 0.8) instead of pure noise. The layout can also be an approved game image
+(`layout: assets/backgrounds/<id>.png`, see load_layout), e.g. to make a night version of a background. Each of its `regions` (box in pixels of the generated image)
 is then repainted alone (inpainting) with its own subject and extra negative words.
 
 Seeds are fixed (config.seed_for: CRC32 of the id, times 100, plus the variant number), so a variant can be
@@ -41,8 +44,17 @@ def build_prompt(request: dict, style: dict, characters: dict) -> tuple[str, str
     kind = request["kind"]
     block = style[kind]
     sheet = {}
-    if kind in ("background", "item"):
+    extra_negative = [request.get("negative_extra", "")]
+    if kind in ("background", "item", "illustration"):
         subject = request["subject"]
+        # Illustrations may show a character: `{utterson}` in the subject becomes that character's sheet
+        # (`illustration` text if present, else `appearance`) and its negative_extra is added.
+        for key, other in characters.items():
+            if "{" + key + "}" in subject:
+                subject = subject.replace("{" + key + "}", other.get("illustration", other["appearance"]))
+                extra_negative.append(other.get("negative_extra", ""))
+        if "{" in subject:
+            raise SystemExit(f"{request['id']}: unknown character placeholder in subject: {subject!r}")
     else:
         sheet = characters.get(request["character"])
         if sheet is None:
@@ -59,6 +71,7 @@ def build_prompt(request: dict, style: dict, characters: dict) -> tuple[str, str
     negative = block["negative"]
     if kind in ("character", "portrait") and sheet.get("negative_extra"):
         negative = f"{negative}, {sheet['negative_extra']}"
+    negative = ", ".join(x.strip() for x in [negative, *extra_negative] if x and x.strip())
     return " ".join(prompt.split()), " ".join(negative.split())
 
 
@@ -77,6 +90,43 @@ def add_noise(sketch, seed: int, sigma: float):
     pixels = np.asarray(sketch).astype(np.float32)
     pixels += rng.normal(0, sigma, pixels.shape)
     return Image.fromarray(np.clip(pixels, 0, 255).astype(np.uint8))
+
+
+def load_layout(request: dict, size: tuple[int, int]):
+    """Layout sketch at the generation size.
+
+    `layout` is a path under data/ (layouts/<id>.png) or, if not found there, under the repository (e.g.
+    assets/backgrounds/loc_by_street.png, to repaint an approved image). A layout with another aspect ratio
+    is scaled to fit and padded by repeating its edges, so that the post-processing crop gives back exactly
+    its framing (a 480x270 background becomes 1344x756 plus 6 rows above and below). `layout_crop`
+    [x0, y0, x1, y1] first cuts a box of the layout (pixels of the layout file), e.g. one door of a
+    background for its close-up; give it the 4:5 shape of an illustration to keep the framing. `layout_grade`
+    [r, g, b] multiplies its colours, e.g. [0.35, 0.4, 0.6] to start a night version from a day image.
+    """
+    import numpy as np
+    from PIL import Image
+
+    path = config.DATA_DIR / request["layout"]
+    if not path.exists():
+        path = config.REPO / request["layout"]
+    sketch = Image.open(path).convert("RGB")
+    if request.get("layout_crop"):
+        sketch = sketch.crop(tuple(request["layout_crop"]))
+    width, height = size
+    if abs(sketch.width / sketch.height - width / height) < 0.005:
+        sketch = sketch.resize(size, Image.Resampling.LANCZOS)
+    else:
+        scale = min(width / sketch.width, height / sketch.height)
+        inner = (round(sketch.width * scale), round(sketch.height * scale))
+        px = np.asarray(sketch.resize(inner, Image.Resampling.LANCZOS))
+        top, left = (height - inner[1]) // 2, (width - inner[0]) // 2
+        px = np.pad(px, ((top, height - inner[1] - top), (left, width - inner[0] - left), (0, 0)), mode="edge")
+        sketch = Image.fromarray(px)
+    grade = request.get("layout_grade")
+    if grade:
+        px = np.asarray(sketch).astype(np.float32) * np.array(grade, dtype=np.float32)
+        sketch = Image.fromarray(np.clip(px, 0, 255).astype(np.uint8))
+    return sketch
 
 
 def load_tokenizer():
@@ -193,8 +243,7 @@ def main() -> None:
                     # Same modules, no copy. (from_pipe re-cast them here: VRAM full, >10x slower.)
                     img2img = StableDiffusionXLImg2ImgPipeline(**pipe.components)
                     img2img.set_progress_bar_config(disable=True)
-                sketch = Image.open(config.DATA_DIR / layout).convert("RGB").resize(
-                    (block["width"], block["height"]), Image.Resampling.LANCZOS)
+                sketch = load_layout(request, (block["width"], block["height"]))
                 noise = request.get("noise", LAYOUT_NOISE)
                 image = img2img(image=add_noise(sketch, seed, noise), strength=strength, **common).images[0]
                 for region in request.get("regions", []):
@@ -231,6 +280,8 @@ def main() -> None:
                 "steps": steps, "guidance": guidance, "lora_weight": lora_weight,
                 "width": block["width"], "height": block["height"],
                 "layout": layout, "strength": strength if layout else None,
+                "noise": request.get("noise", LAYOUT_NOISE) if layout else None,
+                "layout_grade": request.get("layout_grade") if layout else None,
                 "regions": request.get("regions") if layout else None, "seconds": round(seconds, 1),
                 "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             }) + "\n")

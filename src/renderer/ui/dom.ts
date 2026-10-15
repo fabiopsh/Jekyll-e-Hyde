@@ -1,5 +1,6 @@
 // Tiny DOM helpers shared by every UI panel. No framework on purpose (docs/DECISIONI.md D7).
 import { playTalkBlip } from '../audio'
+import { speedFactor } from '../settings'
 import type { Blip } from '../../shared/content-schema'
 
 export const ui = (): HTMLElement => document.getElementById('ui')!
@@ -69,6 +70,7 @@ export function typeText(
 
     const nextChar = () => {
       if (!typing) return
+      if (speedFactor() === 0) return complete() // setting: show the whole text at once
       if (index < text.length) {
         index++
         target.textContent = text.slice(0, index)
@@ -79,7 +81,7 @@ export function typeText(
         let delay = 20
         if (char === '.' || char === '!' || char === '?') delay = 180
         else if (char === ',' || char === ';' || char === ':') delay = 85
-        timer = window.setTimeout(nextChar, delay)
+        timer = window.setTimeout(nextChar, delay * speedFactor())
       } else {
         complete()
       }
@@ -145,6 +147,7 @@ export function streamText(
 
     const nextChar = () => {
       if (!typing) return
+      if (speedFactor() === 0) return complete() // setting: show the whole text at once
       if (index < text.length) {
         index++
         target.textContent = text.slice(0, index)
@@ -155,7 +158,7 @@ export function streamText(
         let delay = 18
         if (char === '.' || char === '!' || char === '?') delay = 150
         else if (char === ',' || char === ';' || char === ':') delay = 60
-        timer = window.setTimeout(nextChar, delay)
+        timer = window.setTimeout(nextChar, delay * speedFactor())
       } else {
         complete()
       }
@@ -182,16 +185,21 @@ let modalCount = 0
 export const isModal = () => modalCount > 0
 export async function modal<T>(fn: () => Promise<T>): Promise<T> {
   modalCount++
+  document.body.classList.add('modal-open') // CSS hides room-only overlays (hover label)
   try {
     return await fn()
   } finally {
     modalCount--
+    if (!modalCount) document.body.classList.remove('modal-open')
   }
 }
 
 export function toast(text: string, kind: 'fact' | 'item' | 'objective' | 'info' = 'info'): void {
+  // one column at the top right: several notifications stack instead of covering each other
+  let column = document.querySelector<HTMLElement>('#ui > .toasts')
+  if (!column) { column = h('div', { class: 'toasts' }); ui().append(column) }
   const el = h('div', { class: `toast toast-${kind}` }, text)
-  ui().append(el)
+  column.append(el)
   setTimeout(() => el.classList.add('out'), 3500)
   setTimeout(() => el.remove(), 4200)
 }

@@ -55,6 +55,18 @@ item:
     multiple objects, many, pile, hand, person, table, scenery, shadow, cut off, out of frame, text,
     watermark, blurry, realistic, photo, 3d render
 
+illustration:
+  width: 896
+  height: 1152
+  # Pictures for the right-hand panel (docs/DECISIONI.md D20): full scene, no cut-out, centre crop 4:5,
+  # reduced to 160x200. Rules of the book: Hyde only as a faceless black silhouette, violence off screen,
+  # no readable writing.
+  prefix: "pixel art, adventure game illustration, victorian london 1880s"
+  suffix: "dramatic lighting, flat colors"
+  negative: >-
+    text, letters, writing, words, caption, signature, watermark, speech bubble, frame, border, panels,
+    blood, gore, violence, weapon, modern, blurry, photo, realistic, 3d render
+
 # Sampler settings: (steps, guidance, Pixel Art XL weight)
 sampler:
   standard: {steps: 30, guidance: 7.0, lora_weight: 1.0}
