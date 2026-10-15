@@ -1,0 +1,28 @@
+# Appearance sheet per character: the same `appearance` text goes into every prompt of that character
+# (base pose in scene, portraits), so the design stays the same.
+#
+# `book` lists what the text says (with the source); `period` lists the choices that are NOT in the book
+# and are only generic choices of the 1880s. When story/bible.md is ready, `book` must match it.
+# Never put the character's name, or any film, actor, illustrator, comic or game, into `appearance`.
+#
+# `negative_extra` (optional) is appended to the negative prompt of every image of that character.
+# `anim` (optional) tunes animate.py: row fractions from the top of the 64 px figure.
+#   chest: rows above it sink by 1 px in idle_1 (breathing)
+#   hip:   the legs start here; below it the figure is sheared for the walk
+
+utterson:
+  book:
+    - "rugged countenance that was never lighted by a smile (ch. 1, r. 3-4)"
+    - "lean, long, dusty, dreary and yet somehow lovable (ch. 1, r. 5-6)"
+  period:
+    - "middle-aged (age not given in ch. 1)"
+    - "dark lawyer's clothes of the 1880s, top hat (clothes not given in ch. 1)"
+    - "clean-shaven, greying hair (not in the book; chosen so sprite and portraits stay consistent)"
+  appearance: >-
+    tall lean middle-aged gentleman, long rugged unsmiling face, clean-shaven, greying hair,
+    dusty dark grey frock coat, charcoal trousers, black top hat, black shoes
+  # "never lighted by a smile"; no beard so that every image shows the same face
+  negative_extra: "smile, smiling, grin, beard, moustache"
+  anim:
+    chest: 0.30
+    hip: 0.62

@@ -1,0 +1,79 @@
+# Facts of the story (ids and sources in story/chapters/). `text` is what the journal shows, written as
+# Utterson knows it. `known_by` = NPCs who may tell it in free chat; `reveal_when` keeps the book's order.
+
+# ---- chapter 1 ----
+- id: F01.4
+  text: "Nella stradina c'è un edificio senza finestre, con una sola porta senza campanello né battente, trascurata da anni."
+  chapter: 1
+  known_by: [enfield]
+- id: F01.5
+  text: "Alle tre di una notte d'inverno, Enfield vide un ometto calpestare con calma una bambina a un angolo di strada."
+  chapter: 1
+  known_by: [enfield]
+  reveal_when: { flag: c1_door_story }
+- id: F01.6
+  text: "Enfield riportò l'uomo sul posto; il medico disse che la bambina era più spaventata che ferita."
+  chapter: 1
+  known_by: [enfield]
+  reveal_when: { flag: c1_door_story }
+- id: F01.7
+  text: "Tutti provarono per quell'uomo un'avversione immediata; il medico avrebbe voluto ucciderlo."
+  chapter: 1
+  known_by: [enfield]
+  reveal_when: { flag: c1_door_story }
+- id: F01.8
+  text: "Minacciato di scandalo, l'uomo accettò di pagare cento sterline alla famiglia della bambina."
+  chapter: 1
+  known_by: [enfield]
+  reveal_when: { flag: c1_door_story }
+- id: F01.9
+  text: "L'uomo aprì la porta con una chiave e tornò con dieci sterline in oro e un assegno firmato da un nome notissimo, che Enfield non vuole dire."
+  chapter: 1
+  known_by: [enfield]
+  reveal_when: { flag: c1_door_story }
+- id: F01.10
+  text: "Chi ha firmato l'assegno abita in una qualche piazza; Enfield lo descrive come rispettabile, celebre e benefico."
+  chapter: 1
+  known_by: [enfield]
+  reveal_when: { flag: c1_asked_signer }
+- id: F01.11
+  text: "La mattina dopo, in banca, l'assegno risultò autentico."
+  chapter: 1
+  known_by: [enfield]
+  reveal_when: { flag: c1_door_story }
+- id: F01.12
+  text: "Enfield sospetta un ricatto e chiama quel luogo «Casa del Ricatto», ma ammette che non spiega tutto."
+  chapter: 1
+  known_by: [enfield]
+  reveal_when: { flag: c1_door_story }
+- id: F01.13
+  text: "Enfield, per regola, non fa domande: «più la cosa ha l'aria di una faccenda losca, meno chiedo»."
+  chapter: 1
+  known_by: [enfield]
+  reveal_when: { flag: c1_door_story }
+- id: F01.14
+  text: "L'edificio sembra a malapena una casa: una sola porta, tre finestre chiuse ma pulite sul cortile, un camino che fuma."
+  chapter: 1
+  known_by: [enfield]
+  reveal_when: { flag: c1_asked_signer }
+- id: F01.15
+  text: "L'uomo della storia di Enfield si chiama Hyde."
+  chapter: 1
+  known_by: [enfield]
+  reveal_when: { flag: c1_asked_signer }
+- id: F01.16
+  text: "Hyde dà una forte sensazione di deformità, ma nessuno sa dire dove: Enfield non riesce a descriverlo."
+  chapter: 1
+  known_by: [enfield]
+  reveal_when: { knows: F01.15 }
+- id: F01.17
+  text: "Conoscevo già il nome di Hyde prima del racconto di Enfield."
+  chapter: 1
+- id: F01.18
+  text: "Hyde ha ancora la chiave di quella porta: Enfield gliel'ha vista usare meno di una settimana fa."
+  chapter: 1
+  known_by: [enfield]
+  reveal_when: { knows: F01.15 }
+- id: F01.19
+  text: "Enfield e io abbiamo fatto un patto: non parlare mai più di questa storia."
+  chapter: 1

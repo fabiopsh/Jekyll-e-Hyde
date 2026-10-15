@@ -1,0 +1,13 @@
+node_modules/
+out/
+dist/
+release/
+*.log
+.env
+.env.*
+# asset pipeline: raw generations are not versioned
+tools/assets/.venv/
+tools/assets/output/
+# local LLM models
+models/
+__pycache__/

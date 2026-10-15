@@ -1,0 +1,37 @@
+# Chapter 1 — STORY OF THE DOOR. Story: story/chapters/01-storia-della-porta.md. Design: docs/DESIGN.md §3.
+number: 1
+title: Storia della porta
+player: utterson
+start_scene: loc_by_street
+start_at: west
+intro:
+  # S 01.1, narrazione chiave (r. 3-6, 10-12, 27-28) and Utterson's saying D01.1.1-2
+  - "Utterson, l’avvocato, era un uomo dal volto rude, che nessun sorriso illuminava mai; freddo, avaro di parole e impacciato nel discorso; restio al sentimento; magro, lungo, polveroso, tetro, eppure in qualche modo simpatico."
+  - "Era austero con se stesso; beveva gin quando era solo, per mortificare il gusto dei vini pregiati; e, benché amasse il teatro, da vent’anni non ne varcava la soglia."
+  - "«Io propendo per l’eresia di Caino», soleva dire. «Lascio che mio fratello vada al diavolo a modo suo.»"
+  - "I suoi affetti, come l’edera, erano frutto del tempo. Così era legato a Richard Enfield, suo lontano parente, noto uomo di mondo. La domenica passeggiavano insieme, quasi senza parlarsi; eppure quelle passeggiate erano per entrambi il gioiello della settimana."
+objectives:
+  - id: c1_hear_story
+    text: Passeggia con Enfield lungo la stradina.
+    done_when: { flag: c1_door_story }
+    hints:
+      - "Enfield sembra interessato a qualcosa lungo questa strada."
+      - "C'è un edificio senza finestre, con una porta strana."
+      - "Osserva la porta senza campanello dell'edificio cieco."
+  - id: c1_learn_name
+    text: Chiedi a Enfield dell'uomo della storia.
+    done_when: { knows: F01.15 }
+    hints:
+      - "La storia di Enfield ha lasciato in sospeso più di una domanda."
+      - "Parla con Enfield: chi ha firmato l'assegno abita lì? E chi era quell'uomo?"
+      - "Parla con Enfield e chiedi il nome dell'uomo che ha calpestato la bambina."
+  - id: c1_bargain
+    text: Concludi la passeggiata con Enfield.
+    done_when: { flag: c1_bargain }
+    hints:
+      - "Utterson ha un ultimo dubbio, che riguarda la porta."
+      - "Chiedi a Enfield della chiave."
+      - "Parla con Enfield e chiedi se è sicuro che l'uomo abbia usato una chiave."
+next_when: { flag: c1_bargain }
+# Chapter 1 never names Jekyll, the signer of the cheque, or anything that comes later (story/bible.md §7).
+banned_words: [jekyll, henry, lanyon, poole, carew, pozion, trasform, sostanza, testament, dottor j, doppia, sdoppia]

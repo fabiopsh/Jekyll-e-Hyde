@@ -1,0 +1,56 @@
+# Asset requests. Each entry:
+#   id        file name in assets/ (loc_* backgrounds, obj_* items, character id, <character>_<mood> portraits)
+#   kind      background | character | portrait | item
+#   variants  how many variants to generate (generate.py --variants overrides it)
+#   source    where the description comes from (story/ chapter file and lines)
+#   subject   (background, item) what to draw, in the book's words plus generic period choices
+#   character (character, portrait) key in prompts/characters.yaml
+#   pose      (character) "base" = side view used by animate.py
+#   mood      (portrait) key of prompts/style.yaml -> portrait.moods
+#   layout    (optional) composition sketch in data/layouts/, repainted by SDXL (img2img)
+#   strength  (optional, with layout) 0.5 keeps the sketch almost as is, 1.0 ignores it; default 0.8
+#   noise     (optional, with layout) grain added to the sketch, 0-255 scale; default 24
+#   regions   (optional, with layout) boxes [x0, y0, x1, y1] in pixels of the generated image, repainted
+#             again (inpainting) with their own subject, negative_extra and strength
+
+assets:
+  - id: loc_by_street
+    kind: background
+    variants: 4
+    layout: layouts/loc_by_street.png
+    strength: 0.75
+    source: "story/chapters/01-storia-della-porta.md, Luoghi: loc_by_street (r. 40-51), loc_door_building (r. 53-64)"
+    # Seen from the other side of the by-street, as Enfield and Utterson see it (r. 66-68).
+    subject: >-
+      empty street on a sunny sunday, cobblestone road in the foreground, across the road neat shops with
+      polished brass, in the center a gloomy two storey house with a blank brick wall and one shabby door,
+      archway beside it, blue sky
+    regions:
+      # The sinister building: "blind forehead of discoloured wall", one door "equipped with neither bell
+      # nor knocker", "blistered and distained" (r. 55-60), entry of the court beside it (r. 53-54).
+      # Said in the negative ("without windows") SDXL draws windows: here "windows" is a negative word.
+      - box: [496, 24, 912, 512]
+        strength: 0.8
+        subject: >-
+          sinister two storey house with a gable, blank discoloured stone wall, one blistered stained
+          wooden door at street level, dark arched passage to a court on its right
+        negative_extra: "window, windows, shop, sign, bell, knocker, balcony"
+
+  - id: utterson
+    kind: character
+    variants: 4
+    source: "story/chapters/01-storia-della-porta.md, Profili personaggio: utterson"
+    character: utterson
+    pose: base
+    # SDXL alone never drew a true profile (4 of 4 front or three-quarter views): the pose comes from a
+    # sketch of a figure in profile facing right (top hat, frock coat), little grain on the white ground.
+    layout: layouts/pose_profile_right.png
+    strength: 0.75
+    noise: 6
+
+  - id: obj_door_key
+    kind: item
+    variants: 2
+    source: "story/chapters/01-storia-della-porta.md, Oggetti e indizi: obj_door_key (r. 123, 217-218)"
+    # The book only says "a key": the look is a generic period choice.
+    subject: "one antique iron door key, round bow, long shank, simple bit, dark worn iron"

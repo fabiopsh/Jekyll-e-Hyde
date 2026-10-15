@@ -1,0 +1,29 @@
+[project]
+name = "jekyll-assets"
+version = "0.1.0"
+description = "Pixel-art asset pipeline (SDXL + Pixel Art XL LoRA) for the Jekyll e Hyde adventure game"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "torch==2.11.0",
+    "diffusers>=0.41.0",
+    "transformers>=5.19.0",
+    "accelerate>=1.15.0",
+    "peft>=0.21.2",
+    "rembg>=2.0.85",
+    "onnxruntime>=1.31.0",
+    "pillow>=12.0",
+    "numpy>=2.0",
+    "pyyaml>=6.0",
+]
+
+[tool.uv]
+package = false
+
+# CUDA 12.8 build of torch (same as ASE-Tamer-Project/tools/monster-gen on this PC).
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }

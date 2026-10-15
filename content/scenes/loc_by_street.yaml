@@ -1,0 +1,50 @@
+# S 01.2 — the by-street on a Sunday (story/bible.md: loc_by_street). Coordinates are in the 480x270 game frame
+# and must be retuned on the final background (assets/backgrounds/loc_by_street.png).
+id: loc_by_street
+name: La stradina
+background: backgrounds/loc_by_street
+walkable: [[0, 206], [480, 206], [480, 268], [0, 268]]
+scale: { far_y: 206, far: 0.9, near_y: 268, near: 1.1 }
+entries:
+  west: [40, 240]
+hotspots:
+  - id: shops
+    name: Le botteghe
+    shape: { x: 0, y: 50, w: 200, h: 150 }
+    verbs:
+      look:
+        - effects:
+            - narrate: "La strada era piccola e quella che si dice quieta, ma nei giorni feriali faceva affari floridi. Le botteghe sembravano file di commesse sorridenti; anche di domenica la via risaltava nel vicinato squallido come un fuoco in una foresta."
+  - id: building
+    name: L'edificio senza finestre
+    shape: { x: 240, y: 20, w: 140, h: 120 }
+    verbs:
+      look:
+        - effects:
+            - narrate: "Un edificio sinistro spingeva in avanti il frontone sulla strada: due piani, nessuna finestra, soltanto una porta al pianterreno e sopra una fronte cieca di muro scolorito. Portava in ogni tratto i segni di una lunga e sordida incuria."
+  - id: door
+    name: La porta
+    shape: { x: 290, y: 140, w: 44, h: 64 }
+    walk_to: [312, 214]
+    verbs:
+      look:
+        - when: { not: { flag: c1_door_story } }
+          effects: [{ dialogue: d01_door_story }]
+        - effects:
+            - narrate: "La porta, priva di campanello e di battente, era screpolata e macchiata. Nessuno, da quasi una generazione, era venuto a scacciare i vagabondi o a riparare i guasti."
+      use:
+        - effects:
+            - narrate: "Non c'è campanello, né battente. E Utterson non è uomo da bussare alle porte altrui."
+  - id: court
+    name: L'ingresso del cortile
+    shape: { x: 386, y: 100, w: 70, h: 104 }
+    verbs:
+      look:
+        - effects:
+            - narrate: "Proprio accanto all'edificio, la fila delle case è interrotta dall'ingresso di un cortile."
+npcs:
+  - npc: enfield
+    at: [86, 238]
+    facing: right
+    talk: d01_enfield
+    chat: true

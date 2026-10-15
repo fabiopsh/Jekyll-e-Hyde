@@ -1,0 +1,32 @@
+{
+  "name": "jekyll-e-hyde",
+  "version": "0.1.0",
+  "description": "Avventura grafica in pixel art da The Strange Case of Dr Jekyll and Mr Hyde",
+  "private": true,
+  "type": "module",
+  "main": "out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "validate": "tsx scripts/validate-content.ts",
+    "check:story": "tsx scripts/check-story.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "electron": "^44.7.2",
+    "electron-vite": "^6.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5"
+  },
+  "dependencies": {
+    "node-llama-cpp": "^3.22.1",
+    "phaser": "^3.90.0",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.7"
+  }
+}

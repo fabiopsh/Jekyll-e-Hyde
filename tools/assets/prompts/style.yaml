@@ -1,0 +1,60 @@
+# Style prefixes and suffixes, one block per asset kind. The prompt sent to SDXL is
+#   prefix, <subject>, suffix
+# where <subject> is the request text from data/assets.yaml (backgrounds, items) or the appearance sheet
+# from prompts/characters.yaml plus pose/mood (characters, portraits).
+#
+# Originality rule (tools/assets/README.md): describe only what the book says plus generic choices of the
+# period (Victorian London, 1880s). Never name films, actors, illustrators, comics, games or other
+# adaptations, and never use the characters' names as a visual reference. Genre words such as
+# "pixel art" or "game background" are allowed: they name a technique, not a work.
+#
+# SDXL reads at most 77 CLIP tokens per prompt: `generate.py --dry-run` prints the count of each prompt.
+
+background:
+  width: 1344
+  height: 768
+  prefix: "pixel art, adventure game background, victorian london 1880s"
+  suffix: "flat colors, muted browns and dark greens"
+  negative: >-
+    people, person, figure, crowd, horse, carriage, car, modern, text, letters, writing, sign lettering,
+    watermark, signature, frame, border, blurry, photo, realistic, 3d render, fisheye, tilted
+
+character:
+  width: 832
+  height: 1216
+  prefix: "pixel art, full body character sprite"
+  # default pose for `pose: base`; a request can override it with its own `pose_text`
+  pose: "side view facing right, standing upright, arms at sides, full figure"
+  suffix: "single character, plain white background, flat colors, dark outline"
+  negative: >-
+    multiple views, character sheet, turnaround, two people, crowd, front view, back view, three quarter view,
+    cut off, cropped, out of frame, shadow, floor, scenery, walking stick, umbrella, bag, text, watermark,
+    blurry, realistic, photo, 3d render
+
+portrait:
+  width: 896
+  height: 1152
+  prefix: "pixel art, character portrait, head and shoulders"
+  suffix: "plain white background, flat colors, dark outline"
+  # mood id -> expression words; the file name is <character>_<mood>.png
+  moods:
+    neutral: "calm neutral expression"
+    worried: "worried frown"
+    stern: "stern severe look"
+  negative: >-
+    multiple views, two people, full body, hands, cut off, out of frame, shadow, scenery, text, watermark,
+    blurry, realistic, photo, 3d render, smile
+
+item:
+  width: 1024
+  height: 1024
+  prefix: "pixel art, game inventory icon"
+  suffix: "single object isolated on plain white background, centered, flat colors, dark outline"
+  negative: >-
+    multiple objects, many, pile, hand, person, table, scenery, shadow, cut off, out of frame, text,
+    watermark, blurry, realistic, photo, 3d render
+
+# Sampler settings: (steps, guidance, Pixel Art XL weight)
+sampler:
+  standard: {steps: 30, guidance: 7.0, lora_weight: 1.0}
+  lcm: {steps: 8, guidance: 1.5, lora_weight: 1.2}

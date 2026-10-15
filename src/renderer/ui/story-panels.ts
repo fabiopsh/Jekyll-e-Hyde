@@ -1,0 +1,77 @@
+// Narration cards and scripted dialogues (the book's lines). Both are modal and await the player.
+import type { Content, Dialogue } from '../../shared/content-schema'
+import { check } from '../../game/rules'
+import type { Session } from '../session'
+import { h, modal, ui, waitAdvance } from './dom'
+
+export function speakerName(content: Content, id: string): string {
+  if (id === 'narrator') return ''
+  return content.npcs[id]?.name ?? id.charAt(0).toUpperCase() + id.slice(1)
+}
+
+export function narrate(texts: string[]): Promise<void> {
+  return modal(async () => {
+    const box = h('div', { class: 'narration' })
+    ui().append(box)
+    for (const t of texts) {
+      box.replaceChildren(h('p', {}, t), h('div', { class: 'advance' }, 'clic o Spazio per continuare'))
+      await waitAdvance(box)
+    }
+    box.remove()
+  })
+}
+
+function portraitFor(content: Content, speaker: string): HTMLElement | null {
+  const key = content.npcs[speaker]?.portrait
+  if (!key) return null
+  const img = h('img', { class: 'portrait', src: `/${key}.png`, alt: '' })
+  img.onerror = () => img.remove() // portrait not generated yet
+  return img
+}
+
+// Plays a scripted dialogue node by node. Choices run their effects through the session.
+export function playDialogue(session: Session, dialogue: Dialogue): Promise<void> {
+  return modal(async () => {
+    session.log('dialogue', { id: dialogue.id })
+    const box = h('div', { class: 'dialogue panel' })
+    ui().append(box)
+    let nodeId: string | null = dialogue.start
+    while (nodeId) {
+      const node: Dialogue['nodes'][string] = dialogue.nodes[nodeId]
+      for (const line of node.lines) {
+        const name = speakerName(session.content, line.speaker)
+        box.replaceChildren(
+          ...[portraitFor(session.content, line.speaker)].filter((x): x is HTMLElement => !!x),
+          h('div', { class: 'dialogue-body' },
+            name ? h('div', { class: 'speaker' }, name) : null,
+            h('p', { class: line.speaker === 'narrator' ? 'line narrator' : 'line' }, line.it),
+            h('div', { class: 'advance' }, '▸'),
+          ),
+        )
+        await waitAdvance(box)
+      }
+      session.run(node.effects)
+      const choices = (node.choices ?? []).filter((c) => check(c.when, session.state))
+      if (choices.length) {
+        const picked = await new Promise<(typeof choices)[number]>((resolve) => {
+          box.replaceChildren(
+            h('div', { class: 'choices' },
+              ...choices.map((c, i) => h('button', { class: 'choice', onclick: () => resolve(c) }, `${i + 1}. ${c.text}`)),
+            ),
+          )
+          const key = (e: KeyboardEvent) => {
+            const i = Number(e.key) - 1
+            if (choices[i]) { window.removeEventListener('keydown', key); resolve(choices[i]) }
+          }
+          window.addEventListener('keydown', key)
+        })
+        session.log('choice', { dialogue: dialogue.id, node: nodeId, text: picked.text })
+        session.run(picked.effects)
+        nodeId = picked.next
+      } else {
+        nodeId = node.next ?? null
+      }
+    }
+    box.remove()
+  })
+}

@@ -1,0 +1,50 @@
+# S 01.2-01.4: Enfield points at the door and tells his story. Lines from story/chapters/01-storia-della-porta.md;
+# segments of the same speaker split by a narrator tag are shown as one line with the src of the first segment.
+id: d01_door_story
+start: point
+nodes:
+  point:
+    effects: [{ learn: F01.4 }]
+    lines:
+      - { speaker: narrator, it: "Erano sull'altro lato della stradina; quando giunsero all'altezza dell'ingresso, Enfield alzò il bastone e indicò." }
+      - { speaker: enfield, src: D01.2.1, it: "Ha mai fatto caso a quella porta?" }
+      - { speaker: narrator, it: "Utterson rispose di sì." }
+      - { speaker: enfield, src: D01.2.2, it: "Nella mia mente è legata a una storia molto strana." }
+      - { speaker: utterson, src: D01.2.4, emotion: grave, it: "Davvero? E quale sarebbe?" }
+    next: night
+  night:
+    lines:
+      - { speaker: enfield, src: D01.3.1, it: "Ecco, andò così. Stavo tornando a casa da un posto in capo al mondo, verso le tre di una nera mattina d’inverno, e la mia strada attraversava una zona della città dove letteralmente non c’era niente da vedere se non lampioni." }
+      - { speaker: enfield, src: D01.3.2, it: "Strada dopo strada, e tutta la gente addormentata — strada dopo strada, illuminate a giorno come per una processione e vuote come una chiesa — finché alla fine arrivai a quello stato d’animo in cui uno ascolta e ascolta e comincia a desiderare la vista di un poliziotto." }
+      - { speaker: enfield, src: D01.3.2, it: "All’improvviso vidi due figure: una era un ometto che camminava a gran passo verso est, e l’altra una ragazzina di otto o dieci anni che correva più forte che poteva lungo una traversa." }
+      - { speaker: enfield, src: D01.3.2, it: "Ebbene, signore, i due si scontrarono, com’era naturale, all’angolo; e poi venne la parte orribile della faccenda: l’uomo calpestò con calma il corpo della bambina e la lasciò a terra che urlava. A sentirlo non sembra niente, ma a vederlo era infernale. Non sembrava un uomo; sembrava un maledetto Juggernaut." }
+    effects: [{ learn: F01.5 }]
+    next: crowd
+  crowd:
+    lines:
+      - { speaker: enfield, src: D01.3.2, it: "Gridai un paio di volte, mi misi a correre, afferrai per il bavero il mio signore e lo riportai dove c’era già un bel gruppo intorno alla bambina che urlava. Era perfettamente freddo e non oppose resistenza, ma mi lanciò uno sguardo così brutto che mi fece uscire il sudore addosso come una corsa." }
+      - { speaker: enfield, src: D01.3.2, it: "Le persone accorse erano la famiglia stessa della bambina; e poco dopo arrivò il dottore, per il quale lei era stata mandata. Ebbene, la bambina non stava molto peggio, più spaventata che altro, secondo il Segaossa; e si sarebbe potuto supporre che finisse lì." }
+      - { speaker: enfield, src: D01.3.2, it: "Ma ci fu una circostanza curiosa. Io avevo concepito un’avversione per il mio signore a prima vista. Così la famiglia della bambina, il che era naturale. Ma a colpirmi fu il caso del dottore. Era il solito speziale tutto d’un pezzo, senza età né colore particolari, con un forte accento di Edimburgo e emotivo quanto una cornamusa." }
+      - { speaker: enfield, src: D01.3.2, it: "Ebbene, signore, era come tutti noi: ogni volta che guardava il mio prigioniero, vedevo quel Segaossa diventare livido e bianco dalla voglia di ucciderlo. Io sapevo cosa gli passava per la testa, proprio come lui sapeva cosa passava nella mia; e, essendo fuori questione uccidere, facemmo la cosa migliore dopo quella." }
+      - { speaker: enfield, src: D01.3.2, it: "Dicemmo all’uomo che potevamo e volevamo fare di questa storia uno scandalo tale da far puzzare il suo nome da un capo all’altro di Londra. Se aveva amici o credito, ci impegnammo a fargliene perdere. E per tutto il tempo tenevamo le donne lontane da lui meglio che potevamo, perché erano furiose come arpie." }
+      - { speaker: enfield, src: D01.3.2, it: "Non ho mai visto un cerchio di facce così odiose; e in mezzo c’era l’uomo, con una specie di nera freddezza sprezzante — spaventato anche, lo vedevo —, ma che la sosteneva, signore, proprio come Satana." }
+      - { speaker: enfield, src: D01.3.3, it: "«Se volete far soldi con questo incidente», disse lui, «io sono naturalmente indifeso. Non c’è gentiluomo che non voglia evitare una scenata. Dite la vostra cifra.»" }
+    effects: [{ learn: F01.6 }, { learn: F01.7 }]
+    next: cheque
+  cheque:
+    lines:
+      - { speaker: enfield, src: D01.3.6, it: "Ebbene, lo facemmo salire fino a cento sterline per la famiglia della bambina; è chiaro che avrebbe voluto tirarla per le lunghe; ma c’era in tutti noi qualcosa che prometteva guai, e alla fine cedette." }
+      - { speaker: enfield, src: D01.3.6, it: "La cosa successiva fu procurarsi il denaro; e dove pensa che ci portò, se non a quel luogo con la porta? — tirò fuori una chiave, entrò, e poco dopo tornò con circa dieci sterline in oro e un assegno per il saldo su Coutts’s, pagabile al portatore e firmato con un nome che non posso dire, benché sia uno dei punti della mia storia, ma era un nome comunque notissimo e spesso stampato." }
+      - { speaker: enfield, src: D01.3.6, it: "La cifra era alta; ma la firma valeva più di così, se solo era autentica. Mi presi la libertà di far notare al mio signore che tutta la faccenda aveva l’aria di una falsità, e che un uomo non entra, nella vita reale, da una porta di cantina alle quattro del mattino per uscirne con l’assegno di un altro uomo di quasi cento sterline. Ma lui era del tutto a suo agio e sprezzante." }
+      - { speaker: enfield, src: D01.3.7, it: "«Stia tranquillo», dice lui, «resterò con voi finché le banche non aprono e incasserò io stesso l’assegno.»" }
+      - { speaker: enfield, src: D01.3.9, it: "Così ci mettemmo tutti in cammino, il dottore, il padre della bambina, il nostro amico e io, e passammo il resto della notte nelle mie stanze; e il giorno dopo, fatta colazione, andammo in corpo alla banca. Presentai io stesso l’assegno, e dissi che avevo ogni ragione di credere che fosse un falso. Niente affatto. L’assegno era autentico." }
+    effects: [{ learn: F01.8 }, { learn: F01.9 }, { learn: F01.11 }]
+    next: blackmail
+  blackmail:
+    lines:
+      - { speaker: utterson, src: D01.4.1, it: "Tsk, tsk!" }
+      - { speaker: enfield, src: D01.4.2, it: "Vedo che la pensa come me. Sì, è una brutta storia. Perché il mio uomo era uno con cui nessuno poteva avere a che fare, un uomo davvero esecrabile; e la persona che ha firmato l’assegno è il modello stesso delle convenienze, per di più famosa, e (il che peggiora le cose) uno di quei tipi che fanno quello che chiamano del bene." }
+      - { speaker: enfield, src: D01.4.3, it: "Ricatto, suppongo; un uomo onesto che paga a caro prezzo certe bravate della gioventù. Casa del Ricatto è come chiamo il luogo con la porta, di conseguenza. Anche se perfino questo, sa, è ben lontano dallo spiegare tutto." }
+      - { speaker: narrator, it: "E con queste parole Enfield cadde in una vena meditativa." }
+    effects: [{ learn: F01.12 }, { set: c1_door_story }]
+    next: null
