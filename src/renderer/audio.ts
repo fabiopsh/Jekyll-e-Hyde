@@ -1,5 +1,6 @@
 // Background music & classic adventure game procedural sound manager (LucasArts / Monkey Island style).
-// Provides seamless music crossfading, tactile UI click SFX, and distinct character voice blips.
+// Provides seamless music crossfading, tactile UI click SFX, and per-character text blips (no voices: D19).
+import type { Blip } from '../shared/content-schema'
 
 let audioCtx: AudioContext | null = null
 
@@ -167,13 +168,15 @@ export function playClickSound(): void {
   }
 }
 
+// Used when a speaker has no `blip` in content/characters.yaml.
+const DEFAULT_BLIP: Blip = { freq: 175, wave: 'sine', cutoff: 600 }
+
 /**
- * Character-specific voice talk-blip emitted as text streams (Monkey Island / Pentiment style).
- * - Utterson: deep, warm, solemn barrister baritone blip (~125 Hz)
- * - Enfield: bright, lively gentleman tenor blip (~260 Hz)
- * - Narrator: vintage typewriter mechanical clack
+ * Blip played while a character's text is typed (Monkey Island / Pentiment style).
+ * The timbre comes from the character's `blip` in content/characters.yaml; 'typewriter' is a key strike.
  */
-export function playTalkBlip(speaker = 'narrator'): void {
+export function playTalkBlip(blip?: Blip): void {
+  const voice = blip ?? DEFAULT_BLIP
   if (masterSfxVolume <= 0) return
   const nowMs = performance.now()
   // Throttle blips so they sound rhythmic and don't muddy together
@@ -184,7 +187,7 @@ export function playTalkBlip(speaker = 'narrator'): void {
     const ctx = getAudioContext()
     const now = ctx.currentTime
 
-    if (speaker === 'narrator') {
+    if (voice === 'typewriter') {
       // Typewriter key strike / paper ribbon tap
       const bufferSize = ctx.sampleRate * 0.02
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
@@ -219,28 +222,11 @@ export function playTalkBlip(speaker = 'narrator'): void {
     const gain = ctx.createGain()
     const filter = ctx.createBiquadFilter()
 
-    let baseFreq = 180
-    let wave: OscillatorType = 'triangle'
-
-    if (speaker === 'utterson') {
-      // Gabriel John Utterson: Grave, resonant Victorian lawyer
-      baseFreq = 118 + Math.random() * 18
-      wave = 'sawtooth'
-      filter.type = 'lowpass'
-      filter.frequency.setValueAtTime(380, now)
-    } else if (speaker === 'enfield') {
-      // Richard Enfield: Lighter, animated young gentleman
-      baseFreq = 245 + Math.random() * 30
-      wave = 'triangle'
-      filter.type = 'lowpass'
-      filter.frequency.setValueAtTime(800, now)
-    } else {
-      // General NPC
-      baseFreq = 175 + Math.random() * 25
-      wave = 'sine'
-      filter.type = 'lowpass'
-      filter.frequency.setValueAtTime(600, now)
-    }
+    // a little random spread keeps a long line from sounding mechanical
+    const baseFreq = voice.freq * (1 + Math.random() * 0.15)
+    const wave: OscillatorType = voice.wave
+    filter.type = 'lowpass'
+    filter.frequency.setValueAtTime(voice.cutoff, now)
 
     osc.type = wave
     osc.frequency.setValueAtTime(baseFreq, now)

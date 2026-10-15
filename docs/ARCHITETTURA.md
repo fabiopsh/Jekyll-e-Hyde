@@ -42,9 +42,11 @@ content/              contenuti di gioco, YAML
   chapters/           un file per capitolo: personaggio giocato, scena iniziale, obiettivi, suggerimenti
   scenes/             un file per scena: sfondo, area calpestabile, hotspot, uscite, NPC presenti
   dialogues/          dialoghi scritti (dal libro): nodi, battute, scelte, condizioni, effetti
+  characters.yaml     ogni personaggio: nome a schermo, sprite, ritratto, timbro del blip (anche giocatore e narratore)
   npcs/               scheda di ogni NPC per l'LLM: persona, voce, conoscenze per capitolo, battute canoniche
   items.yaml          oggetti dell'inventario
   facts.yaml          fatti della storia (ID FNN.k di story/), chi li conosce e da quando
+  game.yaml           impostazioni del gioco che sono contenuto (musica del menu)
 src/
   main/               processo Electron main: finestra, salvataggi, LLM
     llm/              provider (embedded, ollama), coda richieste
@@ -146,6 +148,15 @@ runs/<runId>/log.jsonl     eventi in ordine: scena, dialogo, scelta, fatto, ogge
 - Movimento: punta-e-clicca con percorso dentro il poligono calpestabile; scala del personaggio in base a y.
 
 Pipeline asset: vedi `tools/assets/README.md` (creata nella fase asset).
+
+## 7b. Audio
+
+Il gioco **non ha voci** (D19): i personaggi parlano con il testo.
+- Musica: generata con `tools/audio/` (MusicGen), MP3 in `assets/audio/music/`. Ogni scena e ogni dialogo
+  dichiara la sua traccia nel campo `music`; il menu in `content/game.yaml`. Dissolvenze in `src/renderer/audio.ts`.
+- Blip: mentre il testo appare lettera per lettera, ogni 2 caratteri un breve suono con il timbro del personaggio
+  (`blip` in `content/characters.yaml`: frequenza, forma d'onda, filtro; `typewriter` per il narratore).
+- Effetti: clic su pulsanti, scelte e hotspot. Volumi di musica ed effetti nel menu di pausa (ESC).
 
 ## 8. Comandi
 

@@ -2,12 +2,13 @@
 #   id: 2                          variant 2
 #   id: {variant: 2, flip: true}   variant 2, mirrored left-right (characters must face right)
 # Choices of 2026-10-15 made by the agent during the first test, to be confirmed by Fabio
-# on the contact sheets in output/sheets/.
+# on the contact sheets in output/sheets/. Portraits redone the same day with a backdrop and no cut-out.
 
 selections:
   loc_by_street: 3
   utterson: 2
   obj_door_key: 1
   enfield: 2
-  enfield_neutral: 2
+  enfield_neutral: 3
+  utterson_neutral: 1
 

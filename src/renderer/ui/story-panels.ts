@@ -7,8 +7,7 @@ import { h, modal, typeText, ui, waitAdvance } from './dom'
 import { playMusic } from '../audio'
 
 export function speakerName(content: Content, id: string): string {
-  if (id === 'narrator') return ''
-  return content.npcs[id]?.name ?? id.charAt(0).toUpperCase() + id.slice(1)
+  return content.characters[id]?.name ?? id
 }
 
 export function narrate(texts: string[]): Promise<void> {
@@ -19,14 +18,14 @@ export function narrate(texts: string[]): Promise<void> {
       const p = h('p', { class: 'narration-text' })
       const advance = h('div', { class: 'advance' }, 'clic o Spazio per continuare')
       box.replaceChildren(p, advance)
-      await typeText(p, t, box, advance, 'narrator')
+      await typeText(p, t, box, advance, 'typewriter')
     }
     box.remove()
   })
 }
 
 function portraitFor(content: Content, speaker: string): HTMLElement | null {
-  const key = content.npcs[speaker]?.portrait
+  const key = content.characters[speaker]?.portrait
   if (!key) return null
   const img = h('img', { class: 'portrait', src: `/${key}.png`, alt: '' })
   img.onerror = () => img.remove() // portrait not generated yet
@@ -56,7 +55,7 @@ export function playDialogue(session: Session, dialogue: Dialogue): Promise<void
               advance,
             ),
           )
-          await typeText(p, line.it, box, advance, line.speaker)
+          await typeText(p, line.it, box, advance, session.content.characters[line.speaker]?.blip)
         }
         session.run(node.effects)
         const choices = (node.choices ?? []).filter((c) => check(c.when, session.state))

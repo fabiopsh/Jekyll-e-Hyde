@@ -64,7 +64,7 @@ export class RoomScene extends Phaser.Scene {
       if (!check(n.when, s)) continue
       const npc = this.makeCharacter(n.npc, n.at[0], n.at[1])
       npc.setFlipX(n.facing === 'left')
-      const name = this.session.content.npcs[n.npc]?.name ?? n.npc
+      const name = this.session.content.characters[n.npc]?.name ?? n.npc
       this.interactive(npc, name, () => {
         const opts: VerbOption[] = [{ label: 'Osserva', run: () => this.cb.run([{ narrate: `È ${name}.` }]) }]
         if (n.talk) opts.unshift({ label: 'Parla', run: () => this.cb.talk(n.npc, n.talk, false) })
@@ -142,7 +142,7 @@ export class RoomScene extends Phaser.Scene {
   // ---- helpers -------------------------------------------------------------------------------
 
   private spriteKey(id: string): string {
-    return this.session.content.npcs[id]?.sprite ?? `characters/${id}`
+    return this.session.content.characters[id]?.sprite ?? `characters/${id}`
   }
 
   private addImageOrPlaceholder(key: string, depth: number, optional = false): void {

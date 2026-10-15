@@ -88,7 +88,7 @@ export function systemPrompt(ctx: TurnContext, facts: string[], canHint: boolean
   const { npc, state, content } = ctx
   const chapter = npc.per_chapter[String(state.chapter)]
   const lines = npc.canonical_lines.map((id) => bookLineText(content, id)).filter(Boolean)
-  const player = content.npcs[state.player]?.name ?? state.player
+  const player = content.characters[state.player]?.name ?? state.player
   const known = state.facts.map((id) => `- ${content.facts[id]?.text}`).join('\n') || '- (niente di rilevante)'
   const revealable = facts.map((id) => `- ${id}: ${content.facts[id].text}`).join('\n')
   const obj = currentObjective(state, content)

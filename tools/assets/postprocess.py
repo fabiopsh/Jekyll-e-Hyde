@@ -5,7 +5,8 @@ Two stages for every raw image output/raw/<kind>/<id>_v<n>.png:
 1. reduce -> output/reduced/<kind>/<id>_v<n>.png (final size, original colours)
    background  centre crop to 16:9, grid reduction to 480x270
    character   background removal (rembg), crop to the figure, grid reduction to 64 px of height
-   portrait    background removal, crop, fit into 128x160 (bottom centre)
+   portrait    keeps its backdrop (no cut-out); the rembg mask only frames the shot: 4:5 box from just
+               above the hat, centred on the head, down to the chest; grid reduction to 128x160
    item        background removal, crop, fit into 32x32 (1 px margin)
    The full-size cutout of characters, portraits and items is kept in output/cutout/<kind>/.
 2. palette -> output/processed/<kind>/<id>_v<n>.png
@@ -197,17 +198,43 @@ def fit(subject: Image.Image, box: tuple[int, int], canvas: tuple[int, int], anc
     return out
 
 
+PORTRAIT_TOP_MARGIN = 0.05  # space above the hat, as a share of the image height
+PORTRAIT_DEPTH = 0.82       # how much of the figure below the hat top enters the frame (head + shoulders)
+
+
+def frame_portrait(raw: Image.Image, alpha: Image.Image) -> Image.Image:
+    """Portraits keep the generated backdrop: cutting them out ate pale clothes on pale grounds (the first
+    Enfield portrait lost a shoulder). The mask is used only to find the hat top and the head centre."""
+    width, height = raw.size
+    mask = np.asarray(alpha) >= config.ALPHA_THRESHOLD
+    rows = np.flatnonzero(mask.any(axis=1))
+    top = int(rows[0]) if rows.size else 0
+    head = mask[top: top + max(1, (height - top) // 4)]  # top quarter of the figure: hat and head
+    cols = np.flatnonzero(head.any(axis=0))
+    centre = (cols[0] + cols[-1]) / 2 if cols.size else width / 2
+
+    aspect = config.PORTRAIT_SIZE[0] / config.PORTRAIT_SIZE[1]
+    y0 = max(0, top - round(PORTRAIT_TOP_MARGIN * height))
+    h = min(height - y0, round((height - top) * PORTRAIT_DEPTH) + (top - y0))
+    w = round(h * aspect)
+    if w > width:
+        w = width
+        h = round(w / aspect)
+    x0 = int(min(max(0, centre - w / 2), width - w))
+    return grid_reduce(raw.convert("RGBA").crop((x0, y0, x0 + w, y0 + h)), config.PORTRAIT_SIZE)
+
+
 def reduce(kind: str, raw: Image.Image, session) -> tuple[Image.Image, Image.Image | None]:
     """-> (reduced image, full-size cutout or None)."""
     if kind == "background":
         return grid_reduce(crop_16_9(raw.convert("RGBA")), config.BACKGROUND_SIZE), None
     cutout, subject = cut_out(raw, session)
+    if kind == "portrait":
+        return frame_portrait(raw, cutout.getchannel("A")), cutout
     if kind == "character":
         height = config.CHARACTER_HEIGHT
         width = max(1, round(subject.width * height / subject.height))
         return remove_stray_pixels(grid_reduce(subject, (width, height))), cutout
-    if kind == "portrait":
-        return fit(subject, config.PORTRAIT_SIZE, config.PORTRAIT_SIZE, "bottom"), cutout
     inner = (config.ITEM_SIZE[0] - 2, config.ITEM_SIZE[1] - 2)
     return fit(subject, inner, config.ITEM_SIZE, "centre"), cutout
 

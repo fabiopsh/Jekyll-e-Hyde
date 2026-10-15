@@ -7,7 +7,7 @@ Aggiornato: 2026-10-15. Chi lavora qui aggiorna questo file a fine sessione (ved
 - **Libro**: testo Gutenberg #43 in `book/source/`, diviso in 10 capitoli in `book/chapters/`.
 - **Storia estratta**: 10 schede in `story/chapters/` (scene, battute inglese + italiano, oggetti, fatti,
   profili). `npm run check:story` verifica che tutte le 395 battute inglesi siano nel testo originale: 0 problemi.
-- **Documenti**: `docs/ARCHITETTURA.md`, `docs/DESIGN.md`, `docs/DECISIONI.md` (D1-D14), `AGENTS.md`.
+- **Documenti**: `docs/ARCHITETTURA.md`, `docs/DESIGN.md`, `docs/DECISIONI.md` (D1-D19), `AGENTS.md`.
 - **Spike LLM**: `docs/spikes/2026-10-15-llm-embedded.md`. Qwen 3.5 4B gira dentro l'app (node-llama-cpp).
 - **Motore** (TypeScript; si avvia fino al menu senza errori, non ancora provato a mano):
   - `src/shared/`: schemi dei contenuti (Zod), loader con controllo dei riferimenti, contratto IPC;
@@ -41,13 +41,8 @@ Aggiornato: 2026-10-15. Chi lavora qui aggiorna questo file a fine sessione (ved
     - `mus_by_street`: atmosfera della stradina di domenica (archi gentili, pizzicato, quiete con mistero).
     - `mus_sinister_story`: tema cupo per la storia della porta (violoncello grave, tremolo d'archi e carillon sinistro).
   - Gestore audio disaccoppiato `src/renderer/audio.ts`: transizioni fluide in dissolvenza (crossfade), sblocco autoplay su primo clic, arresto a fine partita e cambio musica automatico nei dialoghi drammatici (es. `d01_door_story` attiva `mus_sinister_story` e ripristina la musica della scena all'uscita).
-- **Audio classico delle avventure grafiche (LucasArts / Pentiment)**:
-  - Eliminato il TTS neurale su decisione di Fabio (voci sintetiche inadatte al tono recitativo del romanzo).
-  - Implementati talk-blip procedurali a latenza zero tramite Web Audio API durante l'animazione typewriter:
-    - Utterson: timbro grave baritonale (~125 Hz a dente di sega con filtro passa-basso).
-    - Enfield: timbro tenore brillante e vivace (~260 Hz a triangolo).
-    - Narratore: ticchettio meccanico d'epoca di tasti e nastro da macchina da scrivere antica.
-  - Rimossa tutta l'infrastruttura TTS (script Python, IPC, dipendenze residue).
+- **Audio senza voci** (D19): blip di testo per personaggio, ticchettio per il narratore, clic, volumi nel
+  menu di pausa.
 - **Puntatore vittoriano a tema in pixel art**:
   - `assets/ui/cursor_default.png`: guanto vittoriano in pelle avorio con polsino in ottone dorato, gemma e bordo scuro ad alto contrasto.
   - `assets/ui/cursor_pointer.png`: guanto d'oro radioso con aura ambrata attivo sull'hover di hotspot, uscite, pulsanti, scelte e link.
@@ -60,13 +55,22 @@ Aggiornato: 2026-10-15. Chi lavora qui aggiorna questo file a fine sessione (ved
 - **Risolto bug menu esamina porta**:
   - Cliccando sul pulsante "Osserva" della porta, il menu non si sposta più: bloccata la propagazione degli eventi pointerdown/mousedown/mouseup/click al canvas Phaser e introdotta la guardia `isVerbMenuOpen()`.
 
+- **Pulizia del 2026-10-15 sera**: tolta ogni traccia delle voci sintetiche (script, file di prova, dipendenze,
+  README, voci del registro decisioni rinumerato D17-D19). Nuovo `content/characters.yaml`: nome, sprite,
+  ritratto e blip di ogni personaggio, giocatore e narratore compresi; il codice non contiene più nomi di
+  personaggi né brani musicali (`content/game.yaml` per la musica del menu).
+- **Ritratti rifatti**: con fondale e senza scontorno (lo scontorno aveva mangiato una spalla di Enfield),
+  inquadrati dal cappello alle spalle. Nuovi `assets/portraits/utterson_neutral.png` (variante 1) ed
+  `enfield_neutral.png` (variante 3); le altre varianti in `tools/assets/output/sheets/`.
+
 ## In corso
 
 - Verifica finale delle nuove funzionalità classiche e del capitolo 1 con Fabio.
 
 ## Prossimi passi
 
-1. Prova manuale completa di Fabio del capitolo 1 con audio classico, cursore a tema, menu di pausa e fix porta.
+1. Prova manuale completa di Fabio del capitolo 1 con audio classico, cursore a tema, menu di pausa, fix porta
+   e i nuovi ritratti (ora anche Utterson ha il suo nei dialoghi).
 2. Predisposizione dei contenuti per il Capitolo 2 (*Search for Mr. Hyde* / *Alla ricerca di Mr Hyde*).
 
 ## Da provare a mano (Fabio)

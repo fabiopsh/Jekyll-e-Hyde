@@ -1,0 +1,19 @@
+# Every character that speaks or appears: name on screen, sprite, portrait, and the blip played while their
+# text is typed (no voices, docs/DECISIONI.md D19). LLM personas of NPCs live in content/npcs/<id>.yaml.
+# blip: 'typewriter' or { freq: Hz, wave: sine|triangle|sawtooth|square, cutoff: low-pass Hz }.
+
+- id: narrator
+  name: ""
+  blip: typewriter
+
+- id: utterson
+  name: Utterson
+  sprite: characters/utterson
+  portrait: portraits/utterson_neutral
+  blip: { freq: 118, wave: sawtooth, cutoff: 380 } # grave, measured
+
+- id: enfield
+  name: Enfield
+  sprite: characters/enfield
+  portrait: portraits/enfield_neutral
+  blip: { freq: 245, wave: triangle, cutoff: 800 } # brighter, lively

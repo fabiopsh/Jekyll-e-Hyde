@@ -22,7 +22,7 @@ degli altri è un design originale di questo progetto.
 | Sfondo di scena | `assets/backgrounds/<loc_id>.png` | 480×270 | SDXL 1344×768 → ritaglio 16:9 → riduzione a griglia → palette comune |
 | Primo piano (opz.) | `assets/backgrounds/<loc_id>_fg.png` | 480×270, trasparente | ritaglio a mano o maschera dallo sfondo |
 | Personaggio in scena | `assets/characters/<id>.png` + `.json` | fotogrammi alti ~64 px | posa base generata → fotogrammi derivati (sotto) |
-| Ritratto | `assets/portraits/<id>_<umore>.png` | 128×160 | SDXL busto → scontorno → riduzione → palette |
+| Ritratto | `assets/portraits/<id>_<umore>.png` | 128×160, con fondale | SDXL busto su fondale scuro → inquadratura 4:5 dal cappello alle spalle (la maschera serve solo a trovare la testa, niente scontorno) → riduzione → palette |
 | Oggetto | `assets/items/<obj_id>.png` | 32×32 | SDXL oggetto isolato → scontorno → riduzione |
 
 Ogni PNG finale ha accanto la sua voce in `assets/manifest.json` (prompt, seed, variante scelta, data):

@@ -64,7 +64,7 @@ async function main(): Promise<void> {
       ui().append(h('div', { class: 'screen' }, h('p', {}, 'Nessun capitolo in content/chapters.')))
       return
     }
-    playMusic('audio/music/mus_menu_theme.mp3')
+    playMusic(content.game.menu_music)
     const choice = await mainMenu(content)
     const session = choice.kind === 'new' ? await Session.create(content) : await Session.resume(content, choice.id)
     window.addEventListener('beforeunload', () => void session.save())

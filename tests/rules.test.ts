@@ -28,6 +28,8 @@ const content: Content = {
   facts: { 'F01.1': { id: 'F01.1', text: 'Hyde ha la chiave', chapter: 1, known_by: [] } },
   bookLines: new Set(),
   bookLineText: {},
+  characters: {},
+  game: {},
 }
 
 describe('conditions', () => {

@@ -50,12 +50,23 @@
   {
     "id": "enfield_neutral",
     "kind": "portrait",
-    "variant": 2,
+    "variant": 3,
     "files": [
       "portraits/enfield_neutral.png"
     ],
-    "seed": 7282002,
-    "prompt": "pixel art, character portrait, head and shoulders, young elegant victorian gentleman, handsome clean-shaven lively face, well-groomed dark hair, tailored light grey frock coat, light waistcoat, dark trousers, black top hat, black shoes, calm neutral expression, plain white background, flat colors, dark outline",
-    "exported_at": "2026-10-15T17:15:18+00:00"
+    "seed": 7282003,
+    "prompt": "pixel art, portrait, head and shoulders, whole hat visible, young elegant victorian gentleman, handsome clean-shaven lively face, well-groomed dark hair, tailored light grey frock coat, light waistcoat, dark trousers, black top hat, black shoes, calm neutral expression, plain dark brown backdrop, flat colors, dark outline",
+    "exported_at": "2026-10-15T21:39:15+00:00"
+  },
+  {
+    "id": "utterson_neutral",
+    "kind": "portrait",
+    "variant": 1,
+    "files": [
+      "portraits/utterson_neutral.png"
+    ],
+    "seed": 3774401,
+    "prompt": "pixel art, portrait, head and shoulders, whole hat visible, tall lean middle-aged gentleman, long rugged unsmiling face, clean-shaven, greying hair, dusty dark grey frock coat, charcoal trousers, black top hat, black shoes, calm neutral expression, plain dark brown backdrop, flat colors, dark outline",
+    "exported_at": "2026-10-15T21:39:15+00:00"
   }
 ]

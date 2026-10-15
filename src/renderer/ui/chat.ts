@@ -24,17 +24,18 @@ export const ipcProvider: LlmProvider = {
 }
 
 export function openChat(session: Session, npc: Npc): Promise<void> {
+  const name = session.content.characters[npc.id]?.name ?? npc.id
   return modal(
     () =>
       new Promise<void>((resolve) => {
         const history: ChatTurn[] = []
         const log = h('div', { class: 'chat-log' })
-        const input = h('input', { class: 'chat-input', type: 'text', maxlength: '300', placeholder: `Scrivi a ${npc.name}…` })
+        const input = h('input', { class: 'chat-input', type: 'text', maxlength: '300', placeholder: `Scrivi a ${name}…` })
         const send = h('button', {}, 'Parla')
         const close = h('button', {}, 'Congeda')
         const status = h('div', { class: 'chat-status' })
         const panel = h('div', { class: 'chat panel' },
-          h('div', { class: 'chat-title' }, `Conversazione con ${npc.name}`),
+          h('div', { class: 'chat-title' }, `Conversazione con ${name}`),
           log, status,
           h('div', { class: 'chat-row' }, input, send, close),
         )
@@ -76,9 +77,9 @@ export function openChat(session: Session, npc: Npc): Promise<void> {
           const stop = h('button', { class: 'stop', onclick: () => busy?.abort() }, 'Stop')
 
           thinkTimer = window.setInterval(() => {
-            status.replaceChildren(`${npc.name} riflette… ${((performance.now() - started) / 1000).toFixed(0)} s `, stop)
+            status.replaceChildren(`${name} riflette… ${((performance.now() - started) / 1000).toFixed(0)} s `, stop)
           }, 250)
-          status.replaceChildren(`${npc.name} riflette… 0 s `, stop)
+          status.replaceChildren(`${name} riflette… 0 s `, stop)
 
           try {
             const reply = await npcTurn(
@@ -99,12 +100,12 @@ export function openChat(session: Session, npc: Npc): Promise<void> {
             } else {
               history.push({ role: 'player', text }, { role: 'npc', text: reply.say })
               const span = h('span')
-              const p = h('p', { class: 'chat-npc' }, h('b', {}, `${npc.name}: `), span)
+              const p = h('p', { class: 'chat-npc' }, h('b', {}, `${name}: `), span)
               log.append(p)
               log.scrollTop = log.scrollHeight
 
               // Stream text into log smoothly with character voice blip
-              await streamText(span, reply.say, panel, npc.id)
+              await streamText(span, reply.say, panel, session.content.characters[npc.id]?.blip)
               log.scrollTop = log.scrollHeight
               session.run(reply.effects)
 
@@ -113,7 +114,7 @@ export function openChat(session: Session, npc: Npc): Promise<void> {
                 add('', `Suggerimento: ${reply.hint}`, 'chat-hint')
               }
               if (reply.end) {
-                add('', `${npc.name} si congeda.`, 'chat-note')
+                add('', `${name} si congeda.`, 'chat-note')
                 input.disabled = true
                 send.disabled = true
               }

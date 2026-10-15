@@ -1,5 +1,6 @@
 // Tiny DOM helpers shared by every UI panel. No framework on purpose (docs/DECISIONI.md D7).
 import { playTalkBlip } from '../audio'
+import type { Blip } from '../../shared/content-schema'
 
 export const ui = (): HTMLElement => document.getElementById('ui')!
 
@@ -47,7 +48,7 @@ export function typeText(
   text: string,
   container: HTMLElement,
   advanceIndicator?: HTMLElement,
-  speaker = 'narrator'
+  blip?: Blip
 ): Promise<void> {
   return new Promise((resolve) => {
     let index = 0
@@ -73,7 +74,7 @@ export function typeText(
         target.textContent = text.slice(0, index)
         const char = text[index - 1]
         if (char !== ' ' && index % 2 === 0) {
-          playTalkBlip(speaker)
+          playTalkBlip(blip)
         }
         let delay = 20
         if (char === '.' || char === '!' || char === '?') delay = 180
@@ -122,7 +123,7 @@ export function streamText(
   target: HTMLElement,
   text: string,
   container?: HTMLElement,
-  speaker = 'enfield'
+  blip?: Blip
 ): Promise<void> {
   return new Promise((resolve) => {
     let index = 0
@@ -149,7 +150,7 @@ export function streamText(
         target.textContent = text.slice(0, index)
         const char = text[index - 1]
         if (char !== ' ' && index % 2 === 0) {
-          playTalkBlip(speaker)
+          playTalkBlip(blip)
         }
         let delay = 18
         if (char === '.' || char === '!' || char === '?') delay = 150

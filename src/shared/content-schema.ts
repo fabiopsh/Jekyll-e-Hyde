@@ -181,13 +181,32 @@ export const Chapter = z.strictObject({
 })
 export type Chapter = z.infer<typeof Chapter>
 
-// ---- npc cards for the LLM ---------------------------------------------------------------------
+// ---- characters: how every speaker looks and sounds (content/characters.yaml) -------------------
+
+// Sound played while a character's text is typed (no voices: docs/DECISIONI.md D19).
+export const Blip = z.union([
+  z.literal('typewriter'), // key strike, used by the narrator
+  z.strictObject({
+    freq: z.number().min(40).max(2000), // base pitch in Hz
+    wave: z.enum(['sine', 'triangle', 'sawtooth', 'square']),
+    cutoff: z.number().min(100).max(8000), // low-pass filter in Hz
+  }),
+])
+export type Blip = z.infer<typeof Blip>
+
+export const Character = z.strictObject({
+  id,
+  name: z.string(), // shown above the line; empty for the narrator
+  sprite: z.string().optional(), // asset key, e.g. characters/poole (spritesheet + atlas)
+  portrait: z.string().optional(), // asset key, e.g. portraits/poole_neutral
+  blip: Blip.optional(),
+})
+export type Character = z.infer<typeof Character>
+
+// ---- npc cards for the LLM (content/npcs/<id>.yaml; the id must be a character) -----------------
 
 export const Npc = z.strictObject({
   id,
-  name: z.string(),
-  sprite: z.string(), // asset key prefix, e.g. characters/poole
-  portrait: z.string().optional(),
   persona: z.string(), // who they are, in Italian, second person ("Sei Poole, ...")
   voice: z.string(), // how they talk
   never: z.array(z.string()).default([]), // things this character must never say or do
@@ -211,9 +230,17 @@ export interface Content {
   chapters: Chapter[]
   scenes: Record<string, Scene>
   dialogues: Record<string, Dialogue>
+  characters: Record<string, Character>
   npcs: Record<string, Npc>
   items: Record<string, Item>
   facts: Record<string, Fact>
   bookLines: Set<string> // every D-id found in story/chapters, for src checks
   bookLineText: Record<string, string> // D-id -> Italian text, used as style examples for NPCs
+  game: GameSettings
 }
+
+// content/game.yaml: settings of the whole game that are content, not code.
+export const GameSettings = z.strictObject({
+  menu_music: z.string().optional(),
+})
+export type GameSettings = z.infer<typeof GameSettings>

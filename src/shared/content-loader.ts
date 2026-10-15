@@ -5,7 +5,7 @@ import { join, basename } from 'node:path'
 import { parse, parseAllDocuments } from 'yaml'
 import { z } from 'zod'
 import {
-  Chapter, Condition, Content, Dialogue, Effect, Fact, Item, Npc, Scene,
+  Chapter, Character, Condition, Content, Dialogue, Effect, Fact, GameSettings, Item, Npc, Scene,
 } from './content-schema'
 
 export interface LoadResult {
@@ -71,6 +71,10 @@ export function loadContent(root: string): LoadResult {
   const factsFile = join(dir, 'facts.yaml')
   const items = existsSync(itemsFile) ? read(itemsFile, z.array(Item), errors) ?? [] : []
   const facts = existsSync(factsFile) ? read(factsFile, z.array(Fact), errors) ?? [] : []
+  const charactersFile = join(dir, 'characters.yaml')
+  const characters = existsSync(charactersFile) ? read(charactersFile, z.array(Character), errors) ?? [] : []
+  const gameFile = join(dir, 'game.yaml')
+  const game = (existsSync(gameFile) ? read(gameFile, GameSettings, errors) : undefined) ?? {}
 
   // file name must match id, so agents find things by name
   for (const [list, sub] of [[scenes, 'scenes'], [dialogues, 'dialogues'], [npcs, 'npcs']] as const) {
@@ -85,11 +89,13 @@ export function loadContent(root: string): LoadResult {
     chapters: [...chapters].sort((a, b) => a.number - b.number),
     scenes: byId(scenes, 'scene', errors),
     dialogues: byId(dialogues, 'dialogue', errors),
+    characters: byId(characters, 'character', errors),
     npcs: byId(npcs, 'npc', errors),
     items: byId(items, 'item', errors),
     facts: byId(facts, 'fact', errors),
     bookLines: new Set(Object.keys(lineText)),
     bookLineText: lineText,
+    game,
   }
   checkReferences(content, errors)
   return { content, errors }
@@ -98,7 +104,8 @@ export function loadContent(root: string): LoadResult {
 // ---- cross references --------------------------------------------------------------------------
 
 function checkReferences(c: Content, errors: string[]): void {
-  const characters = new Set([...Object.keys(c.npcs), 'narrator', 'utterson', 'lanyon', 'jekyll', 'hyde'])
+  const characters = new Set(Object.keys(c.characters))
+  for (const n of Object.keys(c.npcs)) if (!characters.has(n)) errors.push(`npc ${n}: not in content/characters.yaml`)
   const objectiveIds = new Set(c.chapters.flatMap((ch) => ch.objectives.map((o) => o.id)))
 
   const cond = (where: string, x: Condition | undefined): void => {
@@ -126,6 +133,7 @@ function checkReferences(c: Content, errors: string[]): void {
 
   for (const ch of c.chapters) {
     const where = `chapter ${ch.number}`
+    if (!characters.has(ch.player)) errors.push(`${where}: player ${ch.player} not in content/characters.yaml`)
     const start = c.scenes[ch.start_scene]
     if (!start) errors.push(`${where}: unknown start_scene ${ch.start_scene}`)
     else if (ch.start_at && !start.entries[ch.start_at]) errors.push(`${where}: no entry ${ch.start_at} in ${ch.start_scene}`)

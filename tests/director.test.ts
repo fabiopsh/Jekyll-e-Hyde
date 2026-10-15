@@ -4,7 +4,7 @@ import { newGameState } from '../src/game/state'
 import { npcTurn, replySchema, revealableFacts, hintAllowed, STUCK_MS, type LlmProvider, type TurnContext } from '../src/game/npc/director'
 
 const poole: Npc = {
-  id: 'poole', name: 'Poole', sprite: 'characters/poole', persona: 'Sei Poole, maggiordomo.', voice: 'formale',
+  id: 'poole', persona: 'Sei Poole, maggiordomo.', voice: 'formale',
   never: [], canonical_lines: [], per_chapter: { '2': { situation: 'Il padrone è fuori.' } },
   fallback: ['Mi perdoni, signore.', 'Non saprei, signore.'],
 }
@@ -25,6 +25,8 @@ const content: Content = {
   },
   bookLines: new Set(),
   bookLineText: {},
+  characters: {},
+  game: {},
 }
 
 const fake = (out: unknown): LlmProvider => ({ name: 'fake', generate: async () => (typeof out === 'string' ? out : JSON.stringify(out)) })

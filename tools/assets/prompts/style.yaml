@@ -34,16 +34,17 @@ character:
 portrait:
   width: 896
   height: 1152
-  prefix: "pixel art, character portrait, head and shoulders"
-  suffix: "plain white background, flat colors, dark outline"
+  # Portraits are framed pictures with their own backdrop (postprocess.py frame_portrait): no cut-out.
+  prefix: "pixel art, portrait, head and shoulders, whole hat visible"
+  suffix: "plain dark brown backdrop, flat colors, dark outline"
   # mood id -> expression words; the file name is <character>_<mood>.png
   moods:
     neutral: "calm neutral expression"
     worried: "worried frown"
     stern: "stern severe look"
   negative: >-
-    multiple views, two people, full body, hands, cut off, out of frame, shadow, scenery, text, watermark,
-    blurry, realistic, photo, 3d render, smile
+    multiple views, two people, full body, hands, cut off, out of frame, cropped hat, scenery, white background,
+    text, watermark, blurry, realistic, photo, 3d render, smile
 
 item:
   width: 1024

@@ -72,3 +72,9 @@ assets:
     character: enfield
     mood: neutral
 
+  - id: utterson_neutral
+    kind: portrait
+    variants: 4
+    source: "story/chapters/01-storia-della-porta.md, Profili personaggio: utterson; story/bible.md, Personaggi"
+    character: utterson
+    mood: neutral

@@ -74,7 +74,7 @@ function describe(content: Content, e: LogEvent): string | null {
     case 'item': return `Ottenuto: ${content.items[d.id]?.name ?? d.id}`
     case 'choice': return `Scelta: «${d.text}»`
     case 'hint': return `Suggerimento usato (livello ${d.level})`
-    case 'chat': return `Conversazione con ${content.npcs[d.npc]?.name ?? d.npc}:\n` +
+    case 'chat': return `Conversazione con ${content.characters[d.npc]?.name ?? d.npc}:\n` +
       (d.turns as { role: string; text: string }[]).map((t) => `  ${t.role === 'player' ? '›' : '‹'} ${t.text}`).join('\n')
     case 'end': return '— Fine'
     default: return null
