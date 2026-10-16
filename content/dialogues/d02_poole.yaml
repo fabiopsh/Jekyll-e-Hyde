@@ -1,0 +1,90 @@
+# S 02.8-02.9, r. 256-301: Utterson asks Poole about Hyde (choices only in the book's order), then walks home
+# with his thoughts. Lines from story/chapters/02-ricerca-di-hyde.md.
+id: d02_poole
+start: ask
+nodes:
+  ask:
+    choices:
+      - text: "Dire di aver visto il signor Hyde entrare dalla vecchia porta."
+        when: { not: { knows: F02.19 } }
+        next: key
+      - text: "Parlare della fiducia del padrone in quel giovanotto."
+        when: { all: [{ knows: F02.19 }, { not: { knows: F02.20 } }] }
+        next: trust
+      - text: "Dire che non crede di aver mai incontrato il signor Hyde."
+        when: { all: [{ knows: F02.20 }, { not: { knows: F02.21 } }] }
+        next: dines
+      - text: "Augurare la buonanotte a Poole."
+        when: { knows: F02.21 }
+        next: goodnight
+      - text: "Restare ancora un momento accanto al fuoco."
+        next: null
+  key:
+    lines:
+      - speaker: utterson
+        src: D02.8.1
+        emotion: careful
+        it: "Ho visto il signor Hyde entrare dalla vecchia porta della sala di dissezione, Poole. Va bene così, quando il dottor Jekyll è fuori casa?"
+      - speaker: poole
+        src: D02.8.2
+        emotion: polite
+        it: "Va benissimo, signor Utterson, signore. Il signor Hyde ha una chiave."
+    effects: [{ learn: F02.19 }]
+    next: ask
+  trust:
+    lines:
+      - speaker: utterson
+        src: D02.8.3
+        emotion: musing
+        it: "Il tuo padrone sembra riporre molta fiducia in quel giovanotto, Poole."
+      - speaker: poole
+        src: D02.8.4
+        emotion: polite
+        it: "Sì, signore, davvero. Abbiamo tutti l'ordine di obbedirgli."
+    effects: [{ learn: F02.20 }]
+    next: ask
+  dines:
+    lines:
+      - speaker: utterson
+        src: D02.8.5
+        it: "Non credo di aver mai incontrato il signor Hyde?"
+      - speaker: poole
+        src: D02.8.6
+        emotion: polite
+        it: "Oh, no di certo, signore. Qui non cena mai. Anzi, lo vediamo pochissimo da questa parte della casa; per lo più entra ed esce dal laboratorio."
+    effects: [{ learn: F02.21 }]
+    next: ask
+  goodnight:
+    lines:
+      - speaker: utterson
+        src: D02.8.7
+        it: "Bene, buonanotte, Poole."
+      - speaker: poole
+        src: D02.8.8
+        emotion: polite
+        it: "Buonanotte, signor Utterson."
+    next: home
+  home:
+    lines:
+      - speaker: narrator
+        image: illustrations/ill_c2_walk_home
+        it: "E l'avvocato s'incamminò verso casa con il cuore molto pesante."
+      - speaker: utterson
+        src: D02.9.1
+        thought: true
+        it: "Povero Harry Jekyll, il cuore mi dice che è in acque profonde! Da giovane era scapestrato; molto tempo fa, certo; ma nella legge di Dio non c'è prescrizione. Ah, dev'essere questo: il fantasma di qualche vecchio peccato, il cancro di qualche disonore nascosto: la punizione che arriva, pede claudo, anni dopo che la memoria ha dimenticato e l'amor proprio ha perdonato la colpa."
+      - speaker: narrator
+        it: "Spaventato da quel pensiero, l'avvocato rimuginò un poco sul proprio passato, frugando in tutti gli angoli della memoria, nel timore che per caso qualche vecchia colpa vi saltasse fuori come un pupazzo a molla."
+      - speaker: narrator
+        it: "Il suo passato era abbastanza irreprensibile; pochi uomini potevano leggere i registri della propria vita con meno apprensione; eppure si sentiva umiliato fino alla polvere dal molto male che aveva fatto, e risollevato in una sobria e timorosa gratitudine dal molto che era stato sul punto di fare e aveva evitato."
+      - speaker: narrator
+        it: "Poi, tornando al suo argomento, concepì una scintilla di speranza."
+      - speaker: utterson
+        src: D02.9.2
+        thought: true
+        it: "Questo signorino Hyde, se lo si studiasse, deve avere segreti suoi; segreti neri, a giudicare dall'aspetto; segreti al confronto dei quali il peggio del povero Jekyll sarebbe come la luce del sole. Le cose non possono continuare così. Mi gela il sangue pensare a questa creatura che si insinua come un ladro al capezzale di Harry; povero Harry, che risveglio! E il pericolo; perché se questo Hyde sospetta l'esistenza del testamento, potrebbe diventare impaziente di ereditare. Ah, devo mettermi all'opera, se solo Jekyll vorrà lasciarmelo fare, se Jekyll vorrà soltanto lasciarmelo fare."
+      - speaker: narrator
+        image: illustrations/ill_c2_will
+        it: "Perché ancora una volta vedeva davanti agli occhi della mente, chiare come una trasparenza, le strane clausole del testamento."
+    effects: [{ learn: F02.22 }, { learn: F02.23 }, { set: c2_done }]
+    next: null

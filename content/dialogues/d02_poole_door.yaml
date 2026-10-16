@@ -1,0 +1,20 @@
+# S 02.7, r. 234-246: Poole opens the door and lets Utterson into the hall.
+id: d02_poole_door
+start: door
+nodes:
+  door:
+    lines:
+      - speaker: narrator
+        it: "Un servitore anziano e ben vestito aprì la porta."
+      - speaker: utterson
+        src: D02.7.1
+        it: "Il dottor Jekyll è in casa, Poole?"
+      - speaker: poole
+        src: D02.7.2
+        emotion: polite
+        it: "Vado a vedere, signor Utterson. Vuole aspettare qui accanto al fuoco, signore? Oppure devo accenderLe una luce nella sala da pranzo?"
+      - speaker: utterson
+        src: D02.7.3
+        it: "Qui, grazie."
+    effects: [{ goto: loc_jekyll_hall, at: hearth }]
+    next: null

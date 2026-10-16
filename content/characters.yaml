@@ -17,3 +17,22 @@
   sprite: characters/enfield
   portrait: portraits/enfield_neutral
   blip: { freq: 245, wave: triangle, cutoff: 800 } # brighter, lively
+
+- id: lanyon
+  name: Lanyon
+  sprite: characters/lanyon
+  portrait: portraits/lanyon_neutral
+  blip: { freq: 175, wave: triangle, cutoff: 650 } # hearty, boisterous
+
+- id: poole
+  name: Poole
+  sprite: characters/poole
+  portrait: portraits/poole_neutral
+  blip: { freq: 140, wave: sine, cutoff: 520 } # soft, respectful
+
+# "a husky, whispering and somewhat broken voice" (cap. 2 r. 215-216)
+- id: hyde
+  name: Hyde
+  sprite: characters/hyde
+  portrait: portraits/hyde_neutral
+  blip: { freq: 92, wave: square, cutoff: 260 }

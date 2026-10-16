@@ -1,0 +1,126 @@
+# S 02.5-02.6, r. 154-225: Utterson meets Hyde at the door, then stands alone in the street. Lines from
+# story/chapters/02-ricerca-di-hyde.md. The face is never drawn: the book does not say what Utterson sees in
+# those seconds (Note di fedeltà); the description comes only afterwards (r. 212-216).
+id: d02_hyde
+music: audio/music/mus_sinister_story.mp3
+start: stop
+nodes:
+  stop:
+    lines:
+      - speaker: narrator
+        it: "Utterson uscì e, mentre l'uomo gli passava accanto, gli toccò la spalla."
+      - speaker: utterson
+        src: D02.5.1
+        emotion: firm
+        it: "Il signor Hyde, se non sbaglio?"
+      - speaker: narrator
+        it: "Il signor Hyde si ritrasse con un'inspirazione sibilante. Ma la sua paura durò solo un istante; e, benché non guardasse l'avvocato in faccia, rispose con sufficiente freddezza."
+      - speaker: hyde
+        src: D02.5.2
+        emotion: cold
+        it: "Questo è il mio nome. Che cosa vuole?"
+      - speaker: utterson
+        src: D02.5.3
+        emotion: courteous
+        it: "Vedo che sta per entrare. Sono un vecchio amico del dottor Jekyll, il signor Utterson di Gaunt Street; avrà certo sentito il mio nome; e incontrandoLa così a proposito, ho pensato che potesse farmi entrare."
+      - speaker: narrator
+        it: "Il signor Hyde soffiò nella chiave."
+      - speaker: hyde
+        src: D02.5.4
+        emotion: cold
+        it: "Non troverà il dottor Jekyll; è fuori casa."
+      - speaker: narrator
+        it: "Poi, d'un tratto, ma sempre senza alzare gli occhi, domandò:"
+      - speaker: hyde
+        src: D02.5.5
+        emotion: suspicious
+        it: "Come ha fatto a riconoscermi?"
+    effects: [{ learn: F02.11 }, { learn: F02.12 }]
+    choices:
+      - text: "Invece di rispondere, chiedergli un favore."
+        next: face
+  face:
+    lines:
+      - speaker: utterson
+        src: D02.5.6
+        emotion: courteous
+        it: "Da parte Sua, vorrebbe farmi un favore?"
+      - speaker: hyde
+        src: D02.5.7
+        emotion: mocking
+        it: "Con piacere. Di che si tratta?"
+      - speaker: utterson
+        src: D02.5.8
+        emotion: firm
+        it: "Vuole lasciarmi vedere il Suo viso?"
+      - speaker: narrator
+        it: "Il signor Hyde parve esitare; poi, come per un'improvvisa riflessione, si voltò con aria di sfida; e i due si fissarono per alcuni secondi."
+      - speaker: utterson
+        src: D02.5.9
+        emotion: grave
+        it: "Adesso La riconoscerò. Potrebbe tornare utile."
+      - speaker: hyde
+        src: D02.5.10
+        emotion: cold
+        it: "Sì, è bene che ci siamo incontrati; e a proposito, dovrebbe avere il mio indirizzo."
+      - speaker: narrator
+        it: "E gli diede il numero di una strada di Soho."
+      - speaker: utterson
+        src: D02.5.11
+        thought: true
+        it: "Buon Dio! Possibile che anche lui abbia pensato al testamento?"
+      - speaker: narrator
+        it: "Ma tenne i suoi sentimenti per sé, e si limitò a grugnire per dire che aveva preso nota dell'indirizzo."
+    effects: [{ learn: F02.14 }, { learn: F02.13 }]
+    next: friends
+  friends:
+    lines:
+      - speaker: hyde
+        src: D02.5.12
+        emotion: suspicious
+        it: "E ora, come ha fatto a riconoscermi?"
+      - speaker: utterson
+        src: D02.5.13
+        it: "Dalla descrizione."
+      - speaker: hyde
+        src: D02.5.14
+        emotion: suspicious
+        it: "La descrizione di chi?"
+      - speaker: utterson
+        src: D02.5.15
+        it: "Abbiamo amici in comune."
+      - speaker: hyde
+        src: D02.5.16
+        emotion: hoarse
+        it: "Amici in comune. Chi sono?"
+      - speaker: utterson
+        src: D02.5.17
+        it: "Jekyll, per esempio."
+      - speaker: narrator
+        it: "Il signor Hyde avvampò di rabbia."
+      - speaker: hyde
+        src: D02.5.18
+        emotion: angry
+        it: "Lui non gliel'ha mai detto. Non credevo che Lei avrebbe mentito."
+      - speaker: utterson
+        src: D02.5.19
+        emotion: stern
+        it: "Via, non è un linguaggio conveniente."
+      - speaker: narrator
+        it: "L'altro ringhiò forte in una risata selvaggia; e un attimo dopo, con straordinaria rapidità, aveva aperto la porta ed era scomparso nella casa."
+    effects: [{ set: c2_met_hyde }, { learn: F02.15 }]
+    next: alone
+  alone:
+    lines:
+      - speaker: narrator
+        it: "L'avvocato rimase fermo per un po', dopo che il signor Hyde l'ebbe lasciato: il ritratto dell'inquietudine. Poi cominciò a risalire lentamente la strada, fermandosi ogni due passi e portandosi la mano alla fronte, come un uomo perplesso."
+      - speaker: narrator
+        it: "Il problema era di quelli che raramente si risolvono. Il signor Hyde era pallido e nanesco, dava un'impressione di deformità senza alcuna malformazione definibile, aveva un sorriso sgradevole, si era comportato con l'avvocato con una specie di omicida miscela di timidezza e audacia, e parlava con voce rauca, sussurrante e un po' spezzata."
+      - speaker: narrator
+        it: "Tutti punti a suo sfavore; ma nemmeno tutti insieme bastavano a spiegare il disgusto, la repulsione e la paura, finora sconosciuti, con cui Utterson lo guardava."
+      - speaker: utterson
+        src: D02.6.1
+        emotion: perplexed
+        it: "Dev'esserci dell'altro. C'è dell'altro, se solo riuscissi a trovargli un nome. Dio mi aiuti, quell'uomo sembra appena umano! Qualcosa di troglodita, diciamo? Oppure è la vecchia storia del dottor Fell? O è il semplice splendore di un'anima corrotta che traspare, e trasfigura, il suo involucro d'argilla? L'ultima, credo; perché, oh mio povero vecchio Harry Jekyll, se mai ho letto la firma di Satana su un volto, è su quello del Suo nuovo amico."
+    effects: [{ learn: F02.16 }, { learn: F02.17 }]
+    next: null

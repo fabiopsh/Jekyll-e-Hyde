@@ -68,6 +68,7 @@ function titleScene(content: Content): HTMLElement {
   const at = (p: [number, number]) => ({ left: `${(p[0] / 480) * 100}%`, top: `${(p[1] / 270) * 100}%` })
 
   const bg = h('img', { class: 'title-bg', src: assetUrl(`${cfg.background}.png`), alt: '' })
+  if (cfg.darken) stage.classList.add('fake-night') // a day picture under a night filter
   bg.onerror = () => {
     if (!cfg.fallback || bg.dataset.fallback) return
     bg.dataset.fallback = '1'
@@ -158,7 +159,7 @@ async function history(content: Content, runs: RunMeta[]): Promise<void> {
   const list = h('div', { class: 'history-list' })
   const detail = h('div', { class: 'history-detail' }, h('p', {}, 'Scegli una partita per rileggerla.'))
   const screen = h('div', { class: 'screen history' },
-    h('h2', {}, 'Storico partite'),
+    h('h2', {}, 'Cronache delle indagini'),
     h('div', { class: 'history-body' }, list, detail),
     h('button', { onclick: () => screen.remove() }, 'Indietro'),
   )

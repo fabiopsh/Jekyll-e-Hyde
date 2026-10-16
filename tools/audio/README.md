@@ -23,6 +23,12 @@ Tracce del Capitolo 1:
 - `mus_by_street`: Sottofondo della stradina di domenica (archi gentili, pizzicato, mistero calmo).
 - `mus_sinister_story`: Storia della porta (violoncello cupo, carillon sinistro, tremolo drammatico).
 
+Tracce del Capitolo 2:
+- `mus_utterson_study`: Studio di Utterson di notte (violoncello solista grave, pianoforte basso e rado, una sola candela).
+- `mus_lanyon`: Sala da pranzo del dottor Lanyon la sera (pianoforte da salotto e archi, cordiale con un lieve disagio).
+- `mus_night_watch`: Strada deserta e gelata, attesa nel silenzio (archi bassi tenuti, pizzicato come passi lontani, suspense).
+- `mus_jekyll_hall`: Atrio con camino acceso nella casa di Jekyll (archi bassi caldi che diventano inquieti, lenti, smorzati).
+
 ## 2. Integrazione nel gioco
 
 - La musica sfuma con crossfade tra menu, stanze e narrazione (`src/renderer/audio.ts`).

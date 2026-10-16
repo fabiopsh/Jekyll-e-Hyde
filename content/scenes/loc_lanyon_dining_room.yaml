@@ -1,0 +1,61 @@
+# S 02.2 — Dr Lanyon's dining room in Cavendish Square, the same Sunday evening (story/bible.md).
+# Coordinates follow the composition sketch tools/assets/data/layouts/loc_lanyon_dining_room.png.
+id: loc_lanyon_dining_room
+name: La sala da pranzo del dottor Lanyon
+background: backgrounds/loc_lanyon_dining_room
+music: audio/music/mus_lanyon.mp3
+ambience:
+  sounds: [clock]
+walkable: [[0, 185], [480, 185], [480, 268], [0, 268]]
+# 1 m = 40 px: a door (2.1 m) is 85 px, Utterson about 75-85 px
+scale: { far_y: 185, far: 1.05, near_y: 268, near: 1.3 }
+# evening: candles on the table, the fire (D28)
+lighting:
+  ambient: "#6e6068"
+  lights:
+    - { at: [245, 142], radius: 180, color: "#ffc884", intensity: 1.4, flicker: true, halo: 5 }
+    - { at: [420, 172], radius: 90, color: "#ff8a44", intensity: 1.0, flicker: true }
+entries:
+  door: [60, 222]
+on_enter:
+  # r. 41-51
+  - when: { not: { flag: c2_at_lanyon } }
+    effects:
+      - narrate: "Il solenne maggiordomo lo conosceva e gli diede il benvenuto; non gli fece fare anticamera, ma lo condusse dritto dalla porta alla sala da pranzo, dove il dottor Lanyon sedeva solo davanti al suo vino."
+      - narrate: "Era un signore cordiale, in salute, elegante, dal viso rosso, con una zazzera di capelli prematuramente bianchi e modi rumorosi e decisi. Alla vista di Utterson balzò in piedi e lo accolse con entrambe le mani."
+        image: illustrations/ill_c2_lanyon
+      - narrate: "La cordialità, com'era nel carattere dell'uomo, aveva all'occhio qualcosa di teatrale; ma poggiava su un sentimento sincero. I due erano vecchi amici, compagni sia a scuola sia al college, entrambi rispettosi di sé e dell'altro e, cosa che non sempre ne consegue, uomini che godevano davvero l'uno della compagnia dell'altro."
+        image: illustrations/ill_c2_lanyon
+      - learn: F02.5
+      - set: c2_at_lanyon
+hotspots:
+  - id: table
+    name: La tavola
+    shape: { x: 160, y: 140, w: 170, h: 52 }
+    verbs:
+      look:
+        - effects:
+            - narrate: "Il vino del dottor Lanyon, che stasera sedeva a tavola da solo."
+  - id: sideboard
+    name: Il camino
+    shape: { x: 380, y: 125, w: 80, h: 60 }
+    verbs:
+      look:
+        - effects:
+            - narrate: "La casa di un medico illustre, che riceve la folla dei suoi pazienti."
+  - id: lanyon_door
+    name: La porta
+    shape: { x: 20, y: 100, w: 42, h: 85 }
+    walk_to: [41, 205]
+    verbs:
+      use:
+        - when: { knows: F02.7 }
+          effects: [{ dialogue: d02_sleepless }]
+        - effects:
+            - narrate: "Utterson non è venuto fin qui per una visita di cortesia: ha una domanda da fare."
+npcs:
+  - npc: lanyon
+    at: [348, 224]
+    facing: left
+    talk: d02_lanyon
+    chat: true

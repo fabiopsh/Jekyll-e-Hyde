@@ -1,0 +1,80 @@
+# S 02.5-02.6 — the by-street on a fine dry frosty night, ten o'clock, shops closed (story/bible.md:
+# loc_by_street). The day background under a night light (D28): same layout, same hotspots.
+id: loc_by_street_night
+name: La stradina, di notte
+background: backgrounds/loc_by_street
+# "the lamps, unshaken by any wind, drawing a regular pattern of light and shadow" (r. 130-131): the lamp on
+# the right of the picture, and one beyond the left edge
+lighting:
+  ambient: "#2e3654"
+  lights:
+    - { at: [468, 111], radius: 150, color: "#ffc070", intensity: 1.7, flicker: true, halo: 9 }
+    - { at: [-30, 120], radius: 190, color: "#ffc070", intensity: 1.1, flicker: true }
+music: audio/music/mus_night_watch.mp3
+# "the lamps, unshaken by any wind": no wind; small sounds carry far
+ambience:
+  sounds: [footsteps]
+walkable: [[0, 195], [480, 195], [480, 268], [0, 268]]
+scale: { far_y: 195, far: 0.9, near_y: 268, near: 1.1 }
+entries:
+  west: [40, 230]
+  corner: [440, 230]
+on_enter:
+  # r. 129-140
+  - when: { not: { flag: c2_frost_seen } }
+    effects:
+      - narrate: "Era una bella notte asciutta; gelo nell'aria; le strade pulite come il pavimento di una sala da ballo; i lampioni, immobili senza vento, disegnavano un regolare schema di luce e ombra."
+        image: illustrations/ill_c2_frost_night
+      - narrate: "Alle dieci, chiusi i negozi, la stradina era solitaria e, nonostante il basso brontolio di Londra tutt'intorno, silenziosissima. I piccoli suoni arrivavano lontano, e l'arrivo di un passante si annunciava molto prima di lui."
+        image: illustrations/ill_c2_frost_night
+      - narrate: "Utterson era al suo posto da qualche minuto quando si accorse di un passo strano e leggero che si avvicinava. La sua attenzione non era mai stata catturata in modo così netto e deciso."
+      - set: c2_frost_seen
+hotspots:
+  - id: door
+    name: La porta
+    shape: { x: 236, y: 110, w: 46, h: 72 }
+    walk_to: [259, 205]
+    verbs:
+      look:
+        - when: { flag: c2_met_hyde }
+          effects:
+            - narrate: "Il signor Hyde è sparito dietro questa porta, con straordinaria rapidità."
+        - effects:
+            - narrate: "La porta, al buio. Nessuna luce dall'edificio cieco."
+      use:
+        - effects:
+            - narrate: "Non c'è campanello, né battente."
+  - id: court
+    name: L'ingresso del cortile
+    shape: { x: 288, y: 115, w: 42, h: 67 }
+    verbs:
+      use:
+        # r. 140-152
+        - when: { not: { flag: c2_hyde_came } }
+          effects:
+            - narrate: "Con una forte, superstiziosa premonizione di successo, Utterson si ritirò nell'ingresso del cortile."
+            - narrate: "I passi si avvicinarono rapidi e d'un tratto si fecero più forti, girando in fondo alla strada. L'avvocato, sporgendosi dall'ingresso, poté presto vedere con che genere di uomo aveva a che fare."
+            - narrate: "Era piccolo e vestito molto semplicemente, e il suo aspetto, anche a quella distanza, andava stranamente contro l'inclinazione di chi lo osservava. Ma andò dritto verso la porta, attraversando la strada per far prima; e mentre si avvicinava trasse di tasca una chiave, come uno che sta tornando a casa."
+              image: illustrations/ill_c2_key
+            - set: c2_hyde_came
+            - learn: F02.10
+        - effects:
+            - narrate: "Il posto di guardia di Utterson, nell'ingresso del cortile."
+      look:
+        - effects:
+            - narrate: "L'ingresso del cortile, accanto all'edificio: da lì si vede la porta senza essere visti."
+exits:
+  - id: to_square
+    name: Dietro l'angolo, la piazza
+    shape: { x: 445, y: 150, w: 35, h: 118 }
+    to: loc_jekyll_square
+    at: corner
+    when: { flag: c2_met_hyde }
+    blocked: "Utterson è qui per il signor Hyde: non lascerà il suo posto di guardia."
+npcs:
+  - npc: hyde
+    at: [262, 207]
+    facing: right
+    when: { all: [{ flag: c2_hyde_came }, { not: { flag: c2_met_hyde } }] }
+    talk: d02_hyde
+    chat: false

@@ -56,10 +56,23 @@ hotspots:
               image: illustrations/ill_c1_court
         - effects:
             - narrate: "Proprio accanto all'edificio, la fila delle case è interrotta dall'ingresso di un cortile."
+      use:
+        # Chapter 2, S 02.4: Utterson's chosen post, watching the door (proposta di gioco: the player picks the hour)
+        - when: { chapter: 2 }
+          effects: [{ dialogue: d02_watch }]
+        - effects:
+            - narrate: "Non c'è motivo di entrare nel cortile di altri."
+on_enter:
+  # Chapter 2: the watch begins (proposta di gioco, story/chapters/02, S 02.4)
+  - when: { all: [{ chapter: 2 }, { not: { flag: c2_on_watch } }] }
+    effects:
+      - narrate: "La porta è lì, come sempre, senza campanello né battente. Accanto, l'ingresso del cortile: da lì si vede chi arriva senza essere visti."
+      - set: c2_on_watch
 npcs:
   - npc: enfield
     at: [90, 230]
     facing: right
+    when: { chapter: 1 } # the Sunday walk only
     talk: d01_enfield
     chat: true
     follow: true # the Sunday walk: Enfield walks along with Utterson

@@ -59,12 +59,12 @@ export function playDialogue(session: Session, dialogue: Dialogue): Promise<void
         for (const line of node.lines) {
           if (line.image) showIllustration(line.image) // stays until the next image or the end
           const name = speakerName(session.content, line.speaker)
-          const p = h('p', { class: line.speaker === 'narrator' ? 'line narrator' : 'line' })
+          const p = h('p', { class: line.speaker === 'narrator' ? 'line narrator' : line.thought ? 'line thought' : 'line' })
           const advance = h('div', { class: 'advance' }, '▸')
           box.replaceChildren(
             ...[portraitFor(session.content, line.speaker)].filter((x): x is HTMLElement => !!x),
             h('div', { class: 'dialogue-body' },
-              name ? h('div', { class: 'speaker' }, name) : null,
+              name ? h('div', { class: 'speaker' }, line.thought ? `${name}, tra sé` : name) : null,
               p,
               advance,
             ),

@@ -1,0 +1,77 @@
+# S 02.1 — Utterson's business room, Sunday night, one candle (story/bible.md: loc_utterson_study).
+# Coordinates follow the composition sketch tools/assets/data/layouts/loc_utterson_study.png.
+id: loc_utterson_study
+name: La stanza degli affari
+background: backgrounds/loc_utterson_study
+music: audio/music/mus_utterson_study.mp3
+ambience:
+  sounds: [clock, fire]
+walkable: [[0, 185], [480, 185], [480, 268], [0, 268]]
+# 1 m = 40 px: a door (2.1 m) is 85 px, Utterson about 75-85 px
+scale: { far_y: 185, far: 1.05, near_y: 268, near: 1.3 }
+# night, one candle on the desk, embers in the fireplace (D28)
+lighting:
+  ambient: "#4a4252"
+  lights:
+    - { at: [255, 140], radius: 160, color: "#ffb868", intensity: 1.7, flicker: true, halo: 6 }
+    - { at: [70, 172], radius: 80, color: "#ff7a38", intensity: 1.0, flicker: true }
+entries:
+  desk: [255, 222]
+hotspots:
+  - id: fireplace
+    name: Il caminetto
+    shape: { x: 30, y: 120, w: 80, h: 65 }
+    verbs:
+      look:
+        - effects:
+            - narrate: "Accanto a questo fuoco, ogni domenica, Utterson legge finché la chiesa vicina batte le dodici. Non stasera."
+  - id: books
+    name: I libri di teologia
+    shape: { x: 130, y: 97, w: 70, h: 88 }
+    verbs:
+      look:
+        - effects:
+            - narrate: "Volumi di arida teologia, le letture della domenica sera."
+  - id: desk
+    name: Lo scrittoio
+    shape: { x: 215, y: 138, w: 80, h: 47 }
+    verbs:
+      look:
+        - effects:
+            - narrate: "Lo scrittoio, con l'unica candela accesa nella stanza."
+  - id: safe
+    name: La cassaforte
+    shape: { x: 330, y: 140, w: 42, h: 45 }
+    walk_to: [351, 210]
+    verbs:
+      look:
+        - effects:
+            - narrate: "La cassaforte dell'avvocato. Nella sua parte più riservata c'è un documento che da tempo non gli dà pace."
+      use:
+        - when: { not: { flag: c2_will_read } }
+          effects:
+            # r. 9-31
+            - narrate: "Aprì la cassaforte e dalla parte più riservata prese un documento che sulla busta portava la scritta «Testamento del dottor Jekyll»; poi sedette, con la fronte corrucciata, a studiarne il contenuto."
+              image: illustrations/ill_c2_safe
+            - narrate: "Il testamento era olografo: Utterson, che pure lo custodiva ora che era fatto, si era rifiutato di dare il minimo aiuto nello stenderlo."
+              image: illustrations/ill_c2_will
+            - narrate: "Stabiliva non solo che, in caso di morte di Henry Jekyll, M.D., D.C.L., L.L.D., F.R.S., ecc., tutti i suoi beni passassero nelle mani del suo «amico e benefattore Edward Hyde»; ma che, in caso di «scomparsa o assenza inspiegata per un periodo superiore a tre mesi di calendario», il detto Edward Hyde prendesse il posto del detto Henry Jekyll senza ulteriore indugio, libero da ogni onere od obbligo, salvo il pagamento di alcune piccole somme ai membri della casa del dottore."
+              image: illustrations/ill_c2_will
+            - learn: F02.1
+            - learn: F02.2
+            - learn: F02.3
+            - narrate: "Quel documento era da tempo il cruccio dell'avvocato. Lo offendeva come avvocato e come amante dei lati sani e consueti della vita, per il quale il fantasioso era indecente. Finora era stata l'ignoranza sul signor Hyde ad alimentare il suo sdegno; ora, per un improvviso rovescio, era la conoscenza."
+            - narrate: "Era già abbastanza grave quando il nome era soltanto un nome, di cui non poteva sapere di più. Era peggio ora che cominciava a vestirsi di attributi detestabili; e dalle nebbie mutevoli e inconsistenti che tanto a lungo gli avevano confuso lo sguardo balzò fuori l'improvvisa, definita immagine di un demonio."
+            - dialogue: d02_will
+        - effects:
+            - narrate: "Il testamento è di nuovo al suo posto, nella parte più riservata della cassaforte."
+  - id: study_door
+    name: La porta
+    shape: { x: 405, y: 100, w: 42, h: 85 }
+    walk_to: [426, 205]
+    verbs:
+      use:
+        - when: { flag: c2_will_read }
+          effects: [{ dialogue: d02_leave_study }]
+        - effects:
+            - narrate: "Non ancora: Utterson è entrato qui per quel documento, nella cassaforte."

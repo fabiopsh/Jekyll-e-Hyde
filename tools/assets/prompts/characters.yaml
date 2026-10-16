@@ -49,3 +49,58 @@ enfield:
     chest: 0.30
     hip: 0.60
 
+
+# ---- Chapter 2 (story/chapters/02-ricerca-di-hyde.md, Profili personaggio; story/bible.md) ----------------------
+
+lanyon:
+  book:
+    - "hale, dapper, rosy-faced, with a shock of hair prematurely white (ch. 2, r. 43-45)"
+    - "noisy and decided manner (ch. 2, r. 43-45)"
+  period:
+    - "about fifty (age not given in ch. 2; the bible only fixes a school and college friend of Utterson)"
+    - "well-cut black frock coat, pale waistcoat, neat cravat, dark trousers (bible: clothes are a design choice)"
+    - "clean-shaven, stout build (not in the book; chosen for consistency)"
+  appearance: >-
+    hale dapper stout victorian gentleman about fifty, ruddy red face, shock of white hair, clean-shaven,
+    black frock coat, pale waistcoat, dark trousers, black shoes
+  illustration: >-
+    hale stout gentleman about fifty, ruddy red face, shock of white hair, clean-shaven, black frock coat
+  # no hat: a physician at home; the portrait prefix of the request leaves "whole hat visible" out
+  negative_extra: "hat, top hat, cap, beard, moustache, thin, frail, bald, grey hair, sad"
+  anim:
+    chest: 0.30
+    hip: 0.62
+
+poole:
+  book:
+    - "elderly servant, well dressed (ch. 2, r. 234-235)"
+    - "courteous, formal, reserved manner (ch. 2, r. 270)"
+  period:
+    - "black tail coat, white shirt, black tie, black trousers (bible: butler's dress is a design choice)"
+    - "grey hair, clean-shaven (not in the book; chosen for consistency)"
+  appearance: >-
+    elderly dignified victorian butler, well dressed, grey hair, clean-shaven, black tail coat,
+    white shirt, black tie, black trousers, black shoes
+  negative_extra: "hat, top hat, cap, beard, moustache, young, smile, smiling, grin, red face"
+  anim:
+    chest: 0.30
+    hip: 0.62
+
+# Hyde: only what the book says (ch. 2 r. 148-149, 212-216): small, dwarfish, pale, very plainly dressed.
+# NO nameable malformation (no hunchback, scar, fangs, claws, hair on the hands), nothing that reads as a
+# "villain" (no cape, mask, odd hat). A plain gentleman's top hat is fine (bible: dress of ch. 9 is rich and sober).
+hyde:
+  book:
+    - "small, dwarfish (ch. 2, r. 148, 212; ch. 8, r. 211)"
+    - "very plainly dressed (ch. 2, r. 148-149)"
+    - "pale (ch. 2, r. 212); deformity without any nameable malformation (ch. 2, r. 213)"
+  period:
+    - "plain dark clothes of the 1880s: short dark coat, dark trousers, a plain black top hat (bible: design choice)"
+    - "age not given: a thin young-looking man (Utterson calls him a young man, r. 262)"
+  appearance: >-
+    small dwarfish pale thin man, plainly dressed in dark simple clothes, plain black top hat,
+    short dark coat, dark trousers, black shoes
+  negative_extra: "hunchback, scar, fangs, claws, horns, hairy, monster, villain, cape, cloak, mask, tall, fat, muscular, evil grin, smile, beard"
+  anim:
+    chest: 0.30
+    hip: 0.58

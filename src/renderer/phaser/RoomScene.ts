@@ -4,8 +4,9 @@ import Phaser from 'phaser'
 import { assetUrl, cursor } from '../assets'
 import { actionCursor, type CursorIcon } from '../cursors'
 import { addAmbience } from './ambience'
+import { addLighting } from './lighting'
 import { playFootstep } from '../audio'
-import type { Effect, Scene as SceneData } from '../../shared/content-schema'
+import type { Condition, Effect, Scene as SceneData } from '../../shared/content-schema'
 import { check } from '../../game/rules'
 import type { Session } from '../session'
 import { isModal } from '../ui/dom'
@@ -34,6 +35,7 @@ export class RoomScene extends Phaser.Scene {
   private cb!: RoomCallbacks
   private player!: Phaser.GameObjects.Sprite
   private followers: Phaser.GameObjects.Sprite[] = []
+  private conditional: { when: Condition | undefined; obj: Phaser.GameObjects.Sprite | Phaser.GameObjects.Zone }[] = []
   private ambience: (time: number) => void = () => undefined
   private lastStep = 0
   private walkable!: Phaser.Geom.Polygon
@@ -69,10 +71,11 @@ export class RoomScene extends Phaser.Scene {
     const entry = this.room.entries[s.entry ?? ''] ?? Object.values(this.room.entries)[0] ?? [GAME_WIDTH / 2, GAME_HEIGHT - 20]
     this.player = this.makeCharacter(s.player, entry[0], entry[1])
 
-    // npcs
+    // npcs (all are made; refresh() shows those whose `when` holds now)
+    this.conditional = []
     for (const n of this.room.npcs) {
-      if (!check(n.when, s)) continue
       const npc = this.makeCharacter(n.npc, n.at[0], n.at[1])
+      this.conditional.push({ when: n.when, obj: npc })
       npc.setFlipX(n.facing === 'left')
       if (n.follow) this.followers.push(npc)
       const name = this.session.content.characters[n.npc]?.name ?? n.npc
@@ -88,7 +91,6 @@ export class RoomScene extends Phaser.Scene {
 
     // hotspots
     for (const hs of this.room.hotspots) {
-      if (!check(hs.when, s)) continue
       const zone = 'polygon' in hs.shape
         ? this.add.zone(0, 0, GAME_WIDTH, GAME_HEIGHT).setOrigin(0).setInteractive(new Phaser.Geom.Polygon(hs.shape.polygon.flat()), Phaser.Geom.Polygon.Contains)
         : this.add.zone(hs.shape.x, hs.shape.y, hs.shape.w, hs.shape.h).setOrigin(0).setInteractive()
@@ -108,7 +110,9 @@ export class RoomScene extends Phaser.Scene {
           },
         })),
       }), hs.verbs.talk ? 'talk' : hs.verbs.take || hs.verbs.use ? 'hand' : 'look')
+      this.conditional.push({ when: hs.when, obj: zone })
     }
+    this.refresh()
 
     // exits
     for (const ex of this.room.exits) {
@@ -129,11 +133,12 @@ export class RoomScene extends Phaser.Scene {
 
     // read-only hook for scripts/shot.ts: where the NPCs stand now (followers move). Harmless in the game.
     ;(window as unknown as { __jhNpcs: () => { x: number; y: number }[] }).__jhNpcs = () =>
-      this.children.list.filter((o): o is Phaser.GameObjects.Sprite => o instanceof Phaser.GameObjects.Sprite && o !== this.player).map((o) => ({ x: o.x, y: o.y }))
+      this.children.list.filter((o): o is Phaser.GameObjects.Sprite => o instanceof Phaser.GameObjects.Sprite && o !== this.player && o.visible).map((o) => ({ x: o.x, y: o.y }))
 
     this.ambience = addAmbience(this, this.room, () => this.player)
 
     for (const fg of this.room.foreground) this.addImageOrPlaceholder(fg, 10_000, true)
+    addLighting(this, this.room)
 
     // click on empty floor: walk
     this.input.on('pointerdown', (p: Phaser.Input.Pointer, over: unknown[]) => {
@@ -153,10 +158,21 @@ export class RoomScene extends Phaser.Scene {
     if (enter.length) this.time.delayedCall(300, () => this.cb.run(enter))
   }
 
+  // Shows or hides npcs and hotspots with a `when`, after the state changed (e.g. someone arrives).
+  refresh(): void {
+    if (!this.conditional || !this.sys.isActive()) return
+    for (const { when, obj } of this.conditional) {
+      const on = check(when, this.session.state)
+      if (on === obj.visible && obj.input?.enabled === on) continue
+      obj.setVisible(on)
+      if (obj.input) obj.input.enabled = on
+    }
+  }
+
   update(_time: number, delta: number): void {
     this.player.setDepth(this.player.y)
     this.player.setScale(this.scaleAt(this.player.y))
-    for (const f of this.followers) this.follow(f, delta)
+    for (const f of this.followers) if (f.visible) this.follow(f, delta)
     this.ambience(_time)
     // a step every STEP_MS while the player walks (the room decides if steps make a sound)
     if (this.walkTween && _time - this.lastStep > STEP_MS) { this.lastStep = _time; playFootstep() }

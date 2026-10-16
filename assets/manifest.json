@@ -211,5 +211,253 @@
     "seed": 6060003,
     "prompt": "pixel art, adventure game illustration, victorian london 1880s, close-up of a handshake between two gentlemen, one hand in a black glove, the other hand in a pale grey glove, white shirt cuffs, plain dark backdrop, dramatic lighting, flat colors",
     "exported_at": "2026-10-15T22:59:07+00:00"
+  },
+  {
+    "id": "loc_utterson_study",
+    "kind": "background",
+    "variant": 1,
+    "files": [
+      "backgrounds/loc_utterson_study.png"
+    ],
+    "seed": 9422501,
+    "prompt": "pixel art, adventure game background, victorian london 1880s, a bachelor's study, evenly lit, a stone fireplace with a mantel and a small painting, a bookshelf of old books, a writing desk with one candle, a dark iron safe, a panelled door, wooden floor, simple clean flat shapes, flat colors, muted browns and dark greens",
+    "exported_at": "2026-10-16T12:42:44+00:00"
+  },
+  {
+    "id": "loc_lanyon_dining_room",
+    "kind": "background",
+    "variant": 0,
+    "files": [
+      "backgrounds/loc_lanyon_dining_room.png"
+    ],
+    "seed": 4391700,
+    "prompt": "pixel art, adventure game background, victorian london 1880s, a wealthy physician's dining room, evenly lit, a dining table with a white cloth, wine decanter and glasses, chairs, a fireplace, gilt framed paintings on red wallpaper, a panelled door, wooden floor, simple clean flat shapes, flat colors, muted browns and dark greens",
+    "exported_at": "2026-10-16T12:40:52+00:00"
+  },
+  {
+    "id": "loc_jekyll_square",
+    "kind": "background",
+    "variant": 2,
+    "files": [
+      "backgrounds/loc_jekyll_square.png"
+    ],
+    "seed": 2030402,
+    "prompt": "pixel art, adventure game background, victorian london 1880s, a square of old houses on an overcast day, decayed with brass plates, the second house from the left whole and rich with a fine door and a semicircular fanlight, grey pavement, simple clean flat shapes, flat colors, muted browns and dark greens",
+    "exported_at": "2026-10-16T12:42:44+00:00"
+  },
+  {
+    "id": "loc_jekyll_hall",
+    "kind": "background",
+    "variant": 0,
+    "files": [
+      "backgrounds/loc_jekyll_hall.png"
+    ],
+    "seed": 7483300,
+    "prompt": "pixel art, adventure game background, victorian london 1880s, a large low-roofed comfortable hall, evenly lit, a tall oak front door, a big open fire in a wide hearth with a high brass fender, oak cabinets, an inner wooden door, ceiling beams, stone floor, simple clean flat shapes, flat colors, muted browns and dark greens",
+    "exported_at": "2026-10-16T12:40:52+00:00"
+  },
+  {
+    "id": "lanyon",
+    "kind": "character",
+    "variant": 1,
+    "flip": false,
+    "files": [
+      "characters/lanyon.png",
+      "characters/lanyon.json"
+    ],
+    "seed": 1303101,
+    "prompt": "pixel art, full body character sprite, hale dapper stout victorian gentleman about fifty, ruddy red face, shock of white hair, clean-shaven, black frock coat, pale waistcoat, dark trousers, black shoes, side view facing right, standing upright, arms at sides, full figure, single character, plain white background, flat colors, dark outline",
+    "exported_at": "2026-10-16T10:54:55+00:00"
+  },
+  {
+    "id": "poole",
+    "kind": "character",
+    "variant": 2,
+    "flip": false,
+    "files": [
+      "characters/poole.png",
+      "characters/poole.json"
+    ],
+    "seed": 173402,
+    "prompt": "pixel art, full body character sprite, elderly dignified victorian butler, well dressed, grey hair, clean-shaven, black tail coat, white shirt, black tie, black trousers, black shoes, side view facing right, standing upright, arms at sides, full figure, single character, plain white background, flat colors, dark outline",
+    "exported_at": "2026-10-16T10:54:55+00:00"
+  },
+  {
+    "id": "hyde",
+    "kind": "character",
+    "variant": 1,
+    "flip": false,
+    "files": [
+      "characters/hyde.png",
+      "characters/hyde.json"
+    ],
+    "seed": 5183501,
+    "prompt": "pixel art, full body character sprite, small dwarfish pale thin man, plainly dressed in dark simple clothes, plain black top hat, short dark coat, dark trousers, black shoes, side view facing right, standing upright, arms at sides, full figure, single character, plain white background, flat colors, dark outline",
+    "exported_at": "2026-10-16T10:54:55+00:00"
+  },
+  {
+    "id": "lanyon_neutral",
+    "kind": "portrait",
+    "variant": 2,
+    "files": [
+      "portraits/lanyon_neutral.png"
+    ],
+    "seed": 1903102,
+    "prompt": "pixel art, portrait, head and shoulders, hale dapper stout victorian gentleman about fifty, ruddy red face, shock of white hair, clean-shaven, black frock coat, pale waistcoat, dark trousers, black shoes, calm neutral expression, plain dark brown backdrop, flat colors, dark outline",
+    "exported_at": "2026-10-16T10:54:55+00:00"
+  },
+  {
+    "id": "poole_neutral",
+    "kind": "portrait",
+    "variant": 2,
+    "files": [
+      "portraits/poole_neutral.png"
+    ],
+    "seed": 9217602,
+    "prompt": "pixel art, portrait, head and shoulders, elderly dignified victorian butler, well dressed, grey hair, clean-shaven, black tail coat, white shirt, black tie, black trousers, black shoes, calm neutral expression, plain dark brown backdrop, flat colors, dark outline",
+    "exported_at": "2026-10-16T10:54:55+00:00"
+  },
+  {
+    "id": "hyde_neutral",
+    "kind": "portrait",
+    "variant": 1,
+    "files": [
+      "portraits/hyde_neutral.png"
+    ],
+    "seed": 8093801,
+    "prompt": "pixel art, portrait, head and shoulders, whole hat visible, small pale thin man, plainly dressed in a dark coat, plain black top hat, face in deep shadow under the hat brim, pale chin lit from below, dark blue night backdrop, flat colors, dark outline",
+    "exported_at": "2026-10-16T10:59:25+00:00"
+  },
+  {
+    "id": "ill_c2_safe",
+    "kind": "illustration",
+    "variant": 1,
+    "files": [
+      "illustrations/ill_c2_safe.png"
+    ],
+    "seed": 6259401,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, tall lean middle-aged gentleman, long rugged unsmiling face, clean-shaven, greying hair, dark grey frock coat at night in a dark room, kneeling at an open heavy iron safe, taking out a sealed envelope, one candle on the floor, dramatic lighting, flat colors",
+    "exported_at": "2026-10-16T10:59:25+00:00"
+  },
+  {
+    "id": "ill_c2_will",
+    "kind": "illustration",
+    "variant": 2,
+    "files": [
+      "illustrations/ill_c2_will.png"
+    ],
+    "seed": 1318702,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, close-up of a handwritten legal document on a wooden desk by candlelight, pages covered in tiny wavy lines of ink, a sealed envelope with red wax beside it, a brass candlestick, dark room, dramatic lighting, flat colors",
+    "exported_at": "2026-10-16T10:54:55+00:00"
+  },
+  {
+    "id": "ill_c2_lanyon",
+    "kind": "illustration",
+    "variant": 1,
+    "files": [
+      "illustrations/ill_c2_lanyon.png"
+    ],
+    "seed": 5385201,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, hale stout gentleman about fifty, ruddy red face, shock of white hair, clean-shaven, black frock coat springing up from his chair at a dining table with a wine decanter and glasses, both hands held out in welcome, candlelit dining room, dramatic lighting, flat colors",
+    "exported_at": "2026-10-16T10:54:55+00:00"
+  },
+  {
+    "id": "ill_c2_sleepless",
+    "kind": "illustration",
+    "variant": 0,
+    "files": [
+      "illustrations/ill_c2_sleepless.png"
+    ],
+    "seed": 3610400,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, a great dark curtained four-poster bed in a pitch dark bedroom, a man lying awake on his back, a church tower faintly seen through the window, deep shadows, dramatic lighting, flat colors",
+    "exported_at": "2026-10-16T10:59:25+00:00"
+  },
+  {
+    "id": "ill_c2_bedside",
+    "kind": "illustration",
+    "variant": 1,
+    "files": [
+      "illustrations/ill_c2_bedside.png"
+    ],
+    "seed": 2484401,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, a dream vision, a dim rich bedroom, a man asleep in a bed smiling, the bed curtains plucked apart, beside the bed stands a tall black silhouette of a man, pure shadow, no face, dramatic lighting, flat colors",
+    "exported_at": "2026-10-16T10:59:25+00:00"
+  },
+  {
+    "id": "ill_c2_labyrinth",
+    "kind": "illustration",
+    "variant": 1,
+    "files": [
+      "illustrations/ill_c2_labyrinth.png"
+    ],
+    "seed": 8417501,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, a dream vision, a night city labyrinth of crossing lamplit streets seen from above, a small black faceless figure gliding fast between the lamps, mist, dramatic lighting, flat colors",
+    "exported_at": "2026-10-16T10:54:55+00:00"
+  },
+  {
+    "id": "ill_c2_morning_watch",
+    "kind": "illustration",
+    "variant": 1,
+    "files": [
+      "illustrations/ill_c2_morning_watch.png"
+    ],
+    "seed": 9690701,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, tall lean middle-aged gentleman, long rugged unsmiling face, clean-shaven, greying hair, dark grey frock coat in a dark overcoat waiting by a doorway in a busy street at noon, crowd of clerks, carts, shop fronts, sunlight, dramatic lighting, flat colors",
+    "exported_at": "2026-10-16T10:54:55+00:00"
+  },
+  {
+    "id": "ill_c2_frost_night",
+    "kind": "illustration",
+    "variant": 1,
+    "files": [
+      "illustrations/ill_c2_frost_night.png"
+    ],
+    "seed": 9194801,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, a fine dry frosty night, an empty clean street like a ballroom floor, closed shops, a regular row of gas lamps making a pattern of golden light and shadow on the pavement, deep blue night sky, dramatic lighting, flat colors",
+    "exported_at": "2026-10-16T10:54:55+00:00"
+  },
+  {
+    "id": "ill_c2_key",
+    "kind": "illustration",
+    "variant": 0,
+    "files": [
+      "illustrations/ill_c2_key.png"
+    ],
+    "seed": 7037900,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, a small plainly dressed dark figure seen from behind crossing a lamplit street at night toward a shabby door, taking a key from his pocket, frosty pavement, deep blue night, dramatic lighting, flat colors",
+    "exported_at": "2026-10-16T10:54:55+00:00"
+  },
+  {
+    "id": "ill_c2_fanlight",
+    "kind": "illustration",
+    "variant": 0,
+    "files": [
+      "illustrations/ill_c2_fanlight.png"
+    ],
+    "seed": 8320100,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, a dark grand victorian house door at night, only the fanlight above it glowing golden, a tall gentleman in a dark coat and top hat seen from behind knocking at the door, stone steps, dramatic lighting, flat colors",
+    "exported_at": "2026-10-16T10:54:55+00:00"
+  },
+  {
+    "id": "ill_c2_hall_fire",
+    "kind": "illustration",
+    "variant": 0,
+    "files": [
+      "illustrations/ill_c2_hall_fire.png"
+    ],
+    "seed": 193100,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, a comfortable low-roofed stone-flagged hall, a big open fire in a wide hearth behind a high fender, firelight flickering on polished oak cabinets, an uneasy shadow trembling on the ceiling beams, dramatic lighting, flat colors",
+    "exported_at": "2026-10-16T10:54:55+00:00"
+  },
+  {
+    "id": "ill_c2_walk_home",
+    "kind": "illustration",
+    "variant": 0,
+    "files": [
+      "illustrations/ill_c2_walk_home.png"
+    ],
+    "seed": 8769200,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, tall lean middle-aged gentleman, long rugged unsmiling face, clean-shaven, greying hair, dark grey frock coat walking home alone at night along a foggy lamplit street, head bowed, hands behind his back, deep blue night, dramatic lighting, flat colors",
+    "exported_at": "2026-10-16T10:54:55+00:00"
   }
 ]

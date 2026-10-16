@@ -1,6 +1,6 @@
 # Stato del lavoro
 
-Aggiornato: 2026-10-15. Chi lavora qui aggiorna questo file a fine sessione (vedi `AGENTS.md`).
+Aggiornato: 2026-10-16. Chi lavora qui aggiorna questo file a fine sessione (vedi `AGENTS.md`).
 
 ## Fatto
 
@@ -73,21 +73,44 @@ Aggiornato: 2026-10-15. Chi lavora qui aggiorna questo file a fine sessione (ved
   - `npm run shot` (Playwright): ha trovato tre bug ora corretti: immagini non caricate nell'app costruita
     (percorsi assoluti), riquadro invisibile che bloccava i clic a destra, notifiche sovrapposte.
 
+- **Capitolo 2 giocabile (2026-10-16, D26-D27)**: studio di Utterson (testamento nella cassaforte), sala da
+  pranzo di Lanyon, notte insonne narrata con illustrazioni, guardia alla porta a ore diverse, la stradina di
+  notte con Hyde che arriva quando Utterson si nasconde nel cortile, la piazza, l'atrio di Jekyll con Poole, il
+  ritorno a casa con i pensieri di Utterson. 52 battute del libro, identiche alle traduzioni della scheda; 23
+  fatti F02; chat libera con Lanyon e Poole. Motore: pensieri (`thought`), NPC e hotspot che compaiono e
+  scompaiono dentro la stanza, suoni di fuoco e orologio, notifiche tolte alla pagina di fine capitolo.
+  `npm run validate` ora controlla spazi e punteggiatura di ogni testo. Giro completo in
+  `tests/content-playthrough.test.ts`; scenario `npm run shot -- c2` (gioca il cap. 1 e poi tutto il 2).
+  Musica: `mus_utterson_study`, `mus_lanyon`, `mus_night_watch`, `mus_jekyll_hall` (MusicGen, non ascoltate).
+
 ## In corso
 
-- Nulla in esecuzione. Palette notturna (D25) applicata; rifatti sfondo notturno, assegno, chiave, porta da vicino;
-  lampioni, angolo e folla riquantizzati. Scelte dell'agente da confermare sul foglio
-  `tools/assets/output/sheets/c1_illustrations.png`. Limiti noti: l'assegno sembra un foglio bianco, nella
-  chiave la porta è sfocata, nello sfondo notturno le facciate sono molto scure.
+- Asset del capitolo 2 (4 sfondi, Lanyon, Poole, Hyde con ritratti, 12 illustrazioni): esportata una variante
+  per ciascuno, scelta dall'agente senza revisione; da guardare da Fabio sui fogli in
+  `tools/assets/output/sheets/` (riassunto `c2_summary.png`). Per cambiare variante: `data/selections.yaml`,
+  poi `uv run export.py`.
+  Cassaforte e porta dello studio, porte dell'atrio ridipinte (inpainting) perché coincidano con i punti
+  cliccabili. Dubbi dell'agente: in `ill_c2_bedside` la figura accanto al letto potrebbe mostrare dei
+  lineamenti (deve restare un'ombra senza volto); `ill_c2_safe` potrebbe non sembrare una cassaforte;
+  `ill_c2_lanyon` mostra Lanyon seduto, non mentre balza in piedi; Lanyon poco rosso in viso; nella piazza il
+  passaggio a sinistra verso la stradina è scuro.
+
+- Dopo il primo giro di Fabio (2026-10-16, D28): stradina di notte e piazza = sfondo di giorno + filtro di luce
+  (`lighting`); il titolo usa lo sfondo di giorno scurito; i quattro ambienti rifatti in scala (porta ~85 px,
+  Utterson 75-85 px), luce neutra e meno rumore (`despeckle`); corretto il bug delle Cronache nel menu (la
+  copertina restava sopra). Ambienti e filtro notturno approvati da Fabio sugli screenshot. Dettagli minori: nello studio la
+  cassaforte ha bordi verdi; nell'atrio i mobili di quercia sembrano una finestra; nella piazza la lunetta è
+  debole.
 
 ## Prossimi passi
 
-1. Prova manuale di Fabio del capitolo 1 (sotto).
-2. Correzioni dalla prova; poi capitolo 2 (*Ricerca di Mr. Hyde*), con il suo giro in
-   `tests/content-playthrough.test.ts` e uno scenario in `scripts/shot.ts`.
+1. Prova manuale di Fabio dei capitoli 1 e 2 (sotto) e revisione delle immagini del capitolo 2.
+2. Correzioni dalla prova; se un sfondo cambia composizione, riallineare gli hotspot in `content/scenes/`.
+3. Capitolo 3 (*Il dottor Jekyll era perfettamente tranquillo*), stesso procedimento del capitolo 2.
 
 ## Da provare a mano (Fabio)
 
+Capitolo 1:
 1. `npm run dev`. Nel menu: la stradina di notte dietro la copertina; aspetta 20-30 secondi: il lampione si
    abbassa e alla porta compare per un attimo un'ombra. *Impostazioni*: velocità e dimensione del testo.
 2. *Comincia la lettura*: la copertina si apre, cartolina "Capitolo I", intro con illustrazioni a destra.
@@ -96,11 +119,20 @@ Aggiornato: 2026-10-15. Chi lavora qui aggiorna questo file a fine sessione (ved
 4. Porta → *Osserva*: il racconto di Enfield con le illustrazioni che cambiano.
 5. Tasto J: il taccuino; gli appunti nuovi si scrivono uno dopo l'altro.
 6. Enfield → *Parla* tre volte (firmatario, nome, chiave) → stretta di mano → pagina di fine capitolo →
-   anticipazione del capitolo 2 → ritorno al menu con il segnalibro *Riprendi*.
-7. ESC: menu di pausa con volumi e impostazioni.
+   anticipazione → cartolina "Capitolo II".
 
-Da riportare: testi poco leggibili, illustrazioni che non corrispondono al testo, animazioni fastidiose o lente,
-punti cliccabili sbagliati.
+Capitolo 2:
+7. Studio: orologio e fuoco si sentono. La porta non si apre prima del testamento. Cassaforte → *Usa*: il
+   testamento con le illustrazioni; Utterson parla ad alta voce. Porta → pensiero "Utterson, tra sé".
+8. Da Lanyon: accoglienza narrata; *Parla*: prima l'amico Jekyll, poi Hyde. Prova anche *Conversa* (LLM).
+9. Porta di Lanyon: la notte insonne (la figura non ha mai volto), poi la stradina di giorno senza Enfield.
+10. Ingresso del cortile → *Usa*: scegli le ore (mattina, mezzogiorno, notte di nebbia), poi "Tornare ancora".
+11. Di notte: ingresso del cortile → *Usa*: Hyde compare alla porta. *Parla*: l'incontro; poi Hyde sparisce.
+12. Bordo destro → la piazza; porta con la lunetta → *Usa*: Poole apre, l'atrio. Fuoco → *Osserva*: Poole
+    torna. *Parla* quattro volte; ritorno a casa con i pensieri; pagina di fine capitolo senza notifiche sopra.
+
+Da riportare: testi con spazi o punteggiatura sbagliati, illustrazioni che non corrispondono al testo, punti
+cliccabili che non coincidono con il disegno (porte, cassaforte, fuoco), animazioni fastidiose o lente.
 
 ## Problemi aperti
 

@@ -53,6 +53,7 @@ const When = Condition.optional()
 
 const Point = z.tuple([z.number(), z.number()])
 const Polygon = z.array(Point).min(3)
+const Color = z.string().regex(/^#[0-9a-fA-F]{6}$/, 'colours look like #1a2b3c')
 const Rect = z.strictObject({ x: z.number(), y: z.number(), w: z.number().positive(), h: z.number().positive() })
 
 // ---- items and facts ---------------------------------------------------------------------------
@@ -129,7 +130,20 @@ export const Scene = z.strictObject({
   ambience: z.strictObject({
     smoke: z.array(Point).default([]), // chimney tops, game pixels
     birds: z.strictObject({ area: Rect, count: z.number().int().min(1).max(12) }).optional(), // they fly off when the player comes near
-    sounds: z.array(z.enum(['wind', 'bells', 'footsteps'])).default([]),
+    sounds: z.array(z.enum(['wind', 'bells', 'footsteps', 'fire', 'clock'])).default([]),
+  }).optional(),
+  // light of the room drawn by the engine (D28): `ambient` multiplies the whole picture and every sprite
+  // (dark blue = night on a day background); each light brightens a circle again (lamp, candle, fire)
+  lighting: z.strictObject({
+    ambient: Color,
+    lights: z.array(z.strictObject({
+      at: Point,
+      radius: z.number().positive(), // game pixels
+      color: Color.default('#ffc878'),
+      intensity: z.number().positive().default(1.5),
+      flicker: z.boolean().default(false), // gas flame, candle, fire
+      halo: z.number().min(0).default(0), // radius of a soft glow drawn on the flame, 0 = none
+    })).default([]),
   }).optional(),
 })
 export type Scene = z.infer<typeof Scene>
@@ -142,6 +156,7 @@ const Line = z.strictObject({
   src: bookLineId.optional(), // the book line this comes from (story/chapters/)
   emotion: z.string().optional(),
   image: z.string().optional(), // illustration shown on the right from this line on (D20)
+  thought: z.boolean().default(false), // a thought, not said aloud ("he thought"): shown as such
 })
 
 const Choice = z.strictObject({
@@ -260,6 +275,7 @@ export const GameSettings = z.strictObject({
   menu_scene: z.strictObject({
     background: z.string(), // asset key of a 480x270 background
     fallback: z.string().optional(), // shown darkened while `background` does not exist yet
+    darken: z.boolean().default(false), // night filter on `background` (a day picture, as in the game: D28)
     lamp: Point.optional(), // game pixels of the lamp light
     door: Point.optional(), // game pixels where the shadow's feet stand
     figure: z.string().optional(), // character sprite whose silhouette (black, smaller) is the shadow

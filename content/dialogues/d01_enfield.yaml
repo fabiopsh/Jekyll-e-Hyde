@@ -41,7 +41,7 @@ nodes:
       - speaker: utterson
         src: D01.5.4
         emotion: cautious_probing
-        it: "E non ha mai chiesto del... luogo con la porta?"
+        it: "E non ha mai chiesto del… luogo con la porta?"
       - speaker: enfield
         src: D01.5.5
         emotion: candid_rule
@@ -112,7 +112,7 @@ nodes:
       - speaker: enfield
         src: D01.7.2
         emotion: offended_disbelief
-        it: "Mio caro signore..."
+        it: "Mio caro signore…"
       - speaker: utterson
         src: D01.7.3
         emotion: grave_revelation

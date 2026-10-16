@@ -1,0 +1,37 @@
+# S 02.3-02.4, r. 81-127: the sleepless night, narrated (the visions are dreams, not events: the figure
+# never has a face), then the watch at the door begins. Never played (docs/DESIGN.md §1).
+id: d02_sleepless
+music: audio/music/mus_sinister_story.mp3
+start: night
+nodes:
+  night:
+    lines:
+      - speaker: narrator
+        image: illustrations/ill_c2_sleepless
+        it: "Fu tutta l'informazione che l'avvocato riportò con sé al grande letto buio, in cui si rigirò finché le piccole ore del mattino non cominciarono a farsi grandi. Fu una notte di poca pace per la sua mente affaticata, che lavorava nel buio più fitto, assediata da domande."
+      - speaker: narrator
+        it: "Le sei suonarono alle campane della chiesa così comodamente vicina alla casa di Utterson, e lui stava ancora scavando nel problema. Finora la cosa lo aveva toccato soltanto nell'intelletto; ma ora anche la sua immaginazione ne era presa, anzi resa schiava."
+      - speaker: narrator
+        image: illustrations/ill_c1_lamps
+        it: "Il racconto di Enfield gli sfilava davanti alla mente come un rotolo di immagini illuminate. Vedeva il grande campo di lampioni di una città notturna; poi la figura di un uomo che camminava in fretta; poi una bambina che correva dal dottore; e poi i due si incontravano, e quel Juggernaut umano calpestava la bambina e passava oltre, incurante delle sue grida."
+      - speaker: narrator
+        image: illustrations/ill_c2_bedside
+        it: "Oppure vedeva una camera in una casa ricca, dove il suo amico dormiva, sognando e sorridendo ai suoi sogni; poi la porta di quella camera si apriva, le cortine del letto venivano scostate, il dormiente era richiamato, ed ecco: accanto a lui stava una figura a cui era stato dato potere, e perfino a quell'ora morta lui doveva alzarsi e fare ciò che gli ordinava."
+      - speaker: narrator
+        image: illustrations/ill_c2_labyrinth
+        it: "La figura, in quei due aspetti, perseguitò l'avvocato per tutta la notte; e se a tratti si assopiva, era solo per vederla scivolare più furtiva per case addormentate, o muoversi sempre più veloce, fino alla vertigine, per labirinti più vasti di città illuminata dai lampioni, e a ogni angolo calpestare una bambina e lasciarla a gridare."
+      - speaker: narrator
+        it: "E ancora la figura non aveva un volto da cui potesse riconoscerla; perfino nei sogni non aveva volto, o ne aveva uno che lo confondeva e gli si scioglieva davanti agli occhi. Così nacque e crebbe in fretta nella mente dell'avvocato una curiosità singolarmente forte, quasi smodata, di vedere i lineamenti del vero signor Hyde."
+      - speaker: narrator
+        it: "Se solo avesse potuto vederlo una volta, il mistero si sarebbe alleggerito e forse dissolto del tutto, come accade alle cose misteriose quando le si esamina bene. Avrebbe forse visto una ragione per la strana preferenza, o schiavitù, del suo amico, e perfino per le sorprendenti clausole del testamento."
+      - speaker: narrator
+        it: "Sarebbe stato almeno un volto degno di essere visto: il volto di un uomo senza viscere di misericordia; un volto che aveva solo dovuto mostrarsi per suscitare nella mente dell'impassibile Enfield un odio duraturo."
+      - speaker: narrator
+        image: illustrations/ill_c2_morning_watch
+        it: "Da quel momento il signor Utterson cominciò a frequentare la porta nella stradina dei negozi."
+      - speaker: utterson
+        src: D02.4.1
+        thought: true
+        it: "Se lui è il signor Hyde, io sarò il signor Seek."
+    effects: [{ learn: F02.8 }, { goto: loc_by_street, at: west }]
+    next: null

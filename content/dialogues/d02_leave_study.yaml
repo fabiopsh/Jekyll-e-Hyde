@@ -1,0 +1,14 @@
+# S 02.1, r. 36-39: out into the night, towards Cavendish Square.
+id: d02_leave_study
+start: out
+nodes:
+  out:
+    lines:
+      - speaker: narrator
+        it: "Con questo spense la candela, indossò un pastrano e si avviò in direzione di Cavendish Square, quella cittadella della medicina dove il suo amico, il grande dottor Lanyon, aveva casa e riceveva la folla dei suoi pazienti."
+      - speaker: utterson
+        src: D02.1.2
+        thought: true
+        it: "Se qualcuno lo sa, sarà Lanyon."
+    effects: [{ goto: loc_lanyon_dining_room, at: door }]
+    next: null

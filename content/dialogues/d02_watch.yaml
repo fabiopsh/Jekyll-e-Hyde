@@ -1,0 +1,49 @@
+# S 02.4, r. 121-129: the watch at the door "by all lights and at all hours". Proposta di gioco (story/chapters/02,
+# S 02.4): the player picks the hour; nothing happens until every hour has been tried, then comes the dry,
+# frosty night of S 02.5. The book gives no count of days: none is shown.
+id: d02_watch
+start: hour
+nodes:
+  hour:
+    choices:
+      - text: "Fare la guardia la mattina, prima dell'orario d'ufficio."
+        when: { not: { flag: c2_watch_morning } }
+        next: morning
+      - text: "Fare la guardia a mezzogiorno, quando gli affari sono molti e il tempo poco."
+        when: { not: { flag: c2_watch_noon } }
+        next: noon
+      - text: "Fare la guardia di notte, sotto la luna velata dalla nebbia."
+        when: { not: { flag: c2_watch_fog } }
+        next: fog
+      - text: "Tornare ancora, di notte."
+        when: { all: [{ flag: c2_watch_morning }, { flag: c2_watch_noon }, { flag: c2_watch_fog }] }
+        next: frost
+      - text: "Non ora."
+        next: null
+  morning:
+    lines:
+      - speaker: narrator
+        image: illustrations/ill_c2_morning_watch
+        it: "La mattina, prima dell'orario d'ufficio, l'avvocato è al suo posto prescelto. La porta resta chiusa."
+    effects: [{ set: c2_watch_morning }]
+    next: hour
+  noon:
+    lines:
+      - speaker: narrator
+        image: illustrations/ill_c2_morning_watch
+        it: "A mezzogiorno, quando gli affari sono molti e il tempo poco, l'avvocato è al suo posto. Nessuno entra da quella porta."
+    effects: [{ set: c2_watch_noon }]
+    next: hour
+  fog:
+    lines:
+      - speaker: narrator
+        image: illustrations/ill_c1_lamps
+        it: "Di notte, sotto la faccia della luna della città annebbiata, l'avvocato è al suo posto. Nella stradina non viene nessuno."
+    effects: [{ set: c2_watch_fog }]
+    next: hour
+  frost:
+    lines:
+      - speaker: narrator
+        it: "In ogni luce e a ogni ora di solitudine o di folla, l'avvocato si trovava al suo posto prescelto. E alla fine la sua pazienza fu ricompensata."
+    effects: [{ learn: F02.9 }, { goto: loc_by_street_night, at: west }]
+    next: null

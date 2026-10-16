@@ -61,13 +61,15 @@ def build_prompt(request: dict, style: dict, characters: dict) -> tuple[str, str
             raise SystemExit(f"{request['id']}: character {request['character']!r} not in prompts/characters.yaml")
         if kind == "character":
             pose = request.get("pose_text") or block["pose"]
-            subject = f"{sheet['appearance']}, {pose}"
+            subject = f"{request.get('appearance', sheet['appearance'])}, {pose}"
         else:
             mood = request.get("mood", "neutral")
             if mood not in block["moods"]:
                 raise SystemExit(f"{request['id']}: mood {mood!r} not in prompts/style.yaml portrait.moods")
-            subject = f"{sheet['appearance']}, {block['moods'][mood]}"
-    prompt = ", ".join(part.strip() for part in (block["prefix"], subject, block["suffix"]) if part)
+            # `appearance` in the request replaces the sheet text (e.g. a bust without trousers and shoes)
+            subject = f"{request.get('appearance', sheet['appearance'])}, {block['moods'][mood]}"
+    prefix, suffix = request.get("prefix", block["prefix"]), request.get("suffix", block["suffix"])  # per-request override
+    prompt = ", ".join(part.strip() for part in (prefix, subject, suffix) if part)
     negative = block["negative"]
     if kind in ("character", "portrait") and sheet.get("negative_extra"):
         negative = f"{negative}, {sheet['negative_extra']}"

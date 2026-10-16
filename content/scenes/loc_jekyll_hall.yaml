@@ -1,0 +1,73 @@
+# S 02.7-02.8 — the hall of Jekyll's house, the same night (story/bible.md: loc_jekyll_hall).
+# Coordinates follow the composition sketch tools/assets/data/layouts/loc_jekyll_hall.png.
+id: loc_jekyll_hall
+name: L'atrio di casa Jekyll
+background: backgrounds/loc_jekyll_hall
+music: audio/music/mus_jekyll_hall.mp3
+ambience:
+  sounds: [fire, clock]
+walkable: [[0, 185], [480, 185], [480, 268], [0, 268]]
+# 1 m = 40 px: a door (2.1 m) is 85 px, Utterson about 75-85 px
+scale: { far_y: 185, far: 1.05, near_y: 268, near: 1.3 }
+# night: the bright open fire lights the hall (D28)
+lighting:
+  ambient: "#584a4c"
+  lights:
+    - { at: [200, 165], radius: 220, color: "#ff9c48", intensity: 1.8, flicker: true }
+entries:
+  hearth: [205, 222]
+on_enter:
+  # r. 239-246
+  - when: { not: { flag: c2_hall_seen } }
+    effects:
+      - narrate: "Poole lo fece entrare in un atrio grande, basso di soffitto, comodo, pavimentato di lastre di pietra, scaldato, come nelle case di campagna, da un vivace fuoco aperto, e arredato con costosi mobili di quercia. Utterson si avvicinò al fuoco e si appoggiò all'alto parafuoco."
+      - set: c2_hall_seen
+hotspots:
+  - id: hearth
+    name: Il fuoco
+    shape: { x: 150, y: 120, w: 100, h: 65 }
+    walk_to: [200, 215] # in front of the fender, not in the fire
+    verbs:
+      look:
+        # r. 246-254
+        - when: { not: { flag: c2_poole_back } }
+          effects:
+            - narrate: "Quell'atrio, dove ora era rimasto solo, era un capriccio prediletto del suo amico, il dottore; e Utterson stesso era solito dire che era la stanza più piacevole di Londra."
+              image: illustrations/ill_c2_hall_fire
+            - narrate: "Ma quella sera c'era un brivido nel suo sangue; il volto di Hyde gli pesava sulla memoria; provava, cosa rara in lui, nausea e disgusto della vita; e nel buio del suo animo gli parve di leggere una minaccia nel tremolio del fuoco sui mobili lucidi e nel sussultare inquieto dell'ombra sul soffitto."
+              image: illustrations/ill_c2_hall_fire
+            - narrate: "Si vergognò del suo sollievo quando Poole, poco dopo, tornò ad annunciare che il dottor Jekyll era uscito."
+            - set: c2_poole_back
+        - effects:
+            - narrate: "Il fuoco tremola sui mobili lucidi; l'ombra sussulta sul soffitto."
+  - id: cabinets
+    name: I mobili di quercia
+    shape: { x: 290, y: 115, w: 100, h: 70 }
+    verbs:
+      look:
+        - effects:
+            - narrate: "Costosi mobili di quercia, lucidi; il fuoco vi tremola sopra."
+  - id: front_door
+    name: La porta d'ingresso
+    shape: { x: 15, y: 95, w: 45, h: 90 }
+    verbs:
+      look:
+        - effects:
+            - narrate: "La porta da cui Poole lo ha fatto entrare."
+  - id: inner_door
+    name: La porta verso la casa
+    shape: { x: 420, y: 100, w: 42, h: 85 }
+    verbs:
+      look:
+        - effects:
+            - narrate: "Di là c'è il resto della casa."
+      use:
+        - effects:
+            - narrate: "Utterson non gira per la casa di un amico in sua assenza."
+npcs:
+  - npc: poole
+    at: [405, 224]
+    facing: left
+    when: { flag: c2_poole_back }
+    talk: d02_poole
+    chat: true

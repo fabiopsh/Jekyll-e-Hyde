@@ -1,0 +1,54 @@
+# S 02.7 — the square round the corner from the by-street, at night (story/bible.md: loc_jekyll_square).
+# Coordinates follow the composition sketch tools/assets/data/layouts/loc_jekyll_square.png.
+id: loc_jekyll_square
+name: La piazza
+background: backgrounds/loc_jekyll_square
+music: audio/music/mus_night_watch.mp3
+ambience:
+  sounds: [footsteps]
+walkable: [[0, 195], [480, 195], [480, 268], [0, 268]]
+scale: { far_y: 195, far: 0.9, near_y: 268, near: 1.1 }
+# painted by day, shown at night: "plunged in darkness except for the fanlight" (r. 233-234, D28)
+lighting:
+  ambient: "#2a3150"
+  lights:
+    - { at: [178, 112], radius: 75, color: "#ffc070", intensity: 1.6, halo: 8 }
+    - { at: [-20, 110], radius: 160, color: "#ffc070", intensity: 0.9, flicker: true }
+entries:
+  corner: [45, 230]
+on_enter:
+  # r. 227-234
+  - when: { not: { flag: c2_square_seen } }
+    effects:
+      - narrate: "Dietro l'angolo della stradina c'era una piazza di case antiche e belle, ora per lo più decadute dalla loro alta condizione e affittate a piani e a stanze a gente d'ogni sorta: incisori di mappe, architetti, avvocati poco limpidi e agenti di imprese oscure."
+      - narrate: "Una casa, però, la seconda dall'angolo, era ancora occupata per intero; e aveva un grande aspetto di ricchezza e di comodità, benché ora fosse immersa nel buio, salvo la lunetta sopra la porta."
+        image: illustrations/ill_c2_fanlight
+      - learn: F02.18
+      - set: c2_square_seen
+hotspots:
+  - id: jekyll_door
+    name: La porta con la lunetta accesa
+    shape: { x: 160, y: 106, w: 36, h: 86 }
+    walk_to: [178, 210]
+    verbs:
+      look:
+        - effects:
+            - narrate: "La porta della casa di Jekyll. Tutto è buio, salvo la lunetta sopra la porta."
+      use:
+        - effects:
+            - narrate: "Utterson si fermò davanti alla porta e bussò."
+              image: illustrations/ill_c2_fanlight
+            - dialogue: d02_poole_door
+  - id: houses
+    name: Le altre case
+    shape: { x: 200, y: 30, w: 280, h: 162 }
+    verbs:
+      look:
+        - effects:
+            - narrate: "Case affittate a piani e a stanze: incisori di mappe, architetti, avvocati poco limpidi, agenti di imprese oscure."
+exits:
+  - id: to_by_street
+    name: La stradina
+    shape: { x: 0, y: 60, w: 35, h: 140 }
+    to: loc_by_street_night
+    at: corner

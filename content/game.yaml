@@ -3,9 +3,9 @@ menu_music: audio/music/mus_menu_theme.mp3
 # The title: the by-street at night; every so often the lamp dims and a small dark figure stands at the door.
 # The figure is a faceless silhouette (story/bible.md: Hyde's look is never described).
 menu_scene:
-  background: backgrounds/loc_by_street_night
-  fallback: backgrounds/loc_by_street
-  lamp: [461, 24]
+  background: backgrounds/loc_by_street
+  darken: true # the day picture under a night filter, like the night scene of chapter 2 (D28)
+  lamp: [468, 111]
   door: [259, 182]
   figure: characters/utterson
 # Chapter 1, D01.1.1-2: no spoilers on the cover.

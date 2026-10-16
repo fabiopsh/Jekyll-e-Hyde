@@ -28,3 +28,32 @@ selections:
   ill_c1_door_closeup: 0
   ill_c1_shops: 0
   ill_c1_handshake: 3
+
+  # 2026-10-16 chapter 2: default variant = lowest palette error (pick by script, not by eye); to be confirmed by Fabio.
+  # ill_c2_safe, ill_c2_sleepless, ill_c2_bedside, hyde_neutral corrected by looking at the 3-4 variants side by side
+  # (the script pick had chosen a seated man, a room without a bed, a room without the figure, a full-body Hyde).
+  # 2026-10-16 third pass: the 4 backgrounds redone evenly lit at human scale (best sketch correlation).
+  # (second pass, inpainted safe/doors): study v2, hall v2.
+  # backgrounds: variant with the best luminance correlation with the composition sketch (study redone at strength 0.55)
+  loc_utterson_study: 1
+  loc_lanyon_dining_room: 0
+  loc_jekyll_square: 2
+  loc_jekyll_hall: 0
+  lanyon: 1
+  poole: 2
+  hyde: 1
+  lanyon_neutral: 2
+  poole_neutral: 2
+  hyde_neutral: 1
+  ill_c2_safe: 1
+  ill_c2_will: 2
+  ill_c2_lanyon: 1
+  ill_c2_sleepless: 0
+  ill_c2_bedside: 1
+  ill_c2_labyrinth: 1
+  ill_c2_morning_watch: 1
+  ill_c2_frost_night: 1
+  ill_c2_key: 0
+  ill_c2_fanlight: 0
+  ill_c2_hall_fire: 0
+  ill_c2_walk_home: 0

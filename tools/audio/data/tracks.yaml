@@ -33,3 +33,39 @@ tracks:
     prompt: >-
       dark victorian gothic suspense, brooding low cello drone, eerie tremolo strings and sinister music box,
       cold winter night, suspenseful drama, slow tempo, gothic novel soundtrack
+
+  - id: mus_utterson_study
+    scene: loc_utterson_study
+    title: Lo Studio di Utterson
+    duration: 22
+    loop_crossfade: 2.0
+    prompt: >-
+      victorian london 1886, night in a lonely bachelor lawyer's study lit by a single candle,
+      slow grave solo cello with sparse low piano notes, sober, brooding, quiet, no vocals, period chamber music
+
+  - id: mus_lanyon
+    scene: loc_lanyon_dining_room
+    title: La Sala da Pranzo di Lanyon
+    duration: 22
+    loop_crossfade: 2.0
+    prompt: >-
+      victorian london 1886, a doctor's warm dining room in the evening, gentle victorian parlour piano
+      and soft chamber strings, cordial and genteel with a faint uneasy undertone, slow tempo, no vocals
+
+  - id: mus_night_watch
+    scene: loc_by_street_night
+    title: La Veglia nella Notte
+    duration: 22
+    loop_crossfade: 2.0
+    prompt: >-
+      victorian london 1886, deserted frosty night street, waiting in silence, very sparse and tense,
+      low sustained strings with soft pizzicato like distant footsteps, suspense, no vocals, gothic chamber music
+
+  - id: mus_jekyll_hall
+    scene: loc_jekyll_hall
+    title: L'Atrio di Casa Jekyll
+    duration: 22
+    loop_crossfade: 2.0
+    prompt: >-
+      victorian london 1886, large comfortable hall with an open fire at night, warm low strings
+      slowly turning unsettled, uneasy shiver, slow, muted, no vocals, gothic chamber music

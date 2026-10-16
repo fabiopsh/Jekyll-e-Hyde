@@ -1,0 +1,14 @@
+# S 02.1, r. 33-34: Utterson puts the will back and speaks aloud. Lines from story/chapters/02-ricerca-di-hyde.md.
+id: d02_will
+start: back
+nodes:
+  back:
+    lines:
+      - speaker: narrator
+        it: "Rimise nella cassaforte quel foglio odioso."
+      - speaker: utterson
+        src: D02.1.1
+        emotion: grave
+        it: "Pensavo fosse follia, e ora comincio a temere che sia disonore."
+    effects: [{ set: c2_will_read }, { learn: F02.4 }]
+    next: null

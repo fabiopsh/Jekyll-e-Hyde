@@ -31,7 +31,9 @@ async function clickGame(page: Page, x: number, y: number, button: 'left' | 'rig
 async function advanceAll(page: Page, max = 60, stopAt?: string): Promise<void> {
   for (let i = 0; i < max; i++) {
     if (stopAt && (await page.locator(stopAt).count())) return
-    if (!(await page.locator('.narration, .dialogue, .chapter-card, .chapter-end').count())) return
+    const open = () => page.locator('.narration, .dialogue, .chapter-card, .chapter-end').count()
+    // a toast between two panels leaves a short gap: the panels are over only if none comes back
+    if (!(await open())) { await wait(600); if (!(await open())) return }
     await page.keyboard.press('Space')
     await wait(150)
   }
@@ -71,7 +73,91 @@ const scenarios: Record<string, (page: Page) => Promise<void>> = {
   },
 
   // chapter 1 played to the end: story, the three questions to Enfield, end page and teaser
-  c1full: async (page) => {
+  c1full: (page) => playChapter1(page, true),
+
+  // chapter 1 played quickly, then chapter 2 to the end
+  c2: async (page) => {
+    await playChapter1(page, false)
+    await advanceUntil(page, '.chapter-card', 20) // the end page, the teaser, then chapter 2's card
+    await wait(1200)
+    await shot(page, 'card')
+    await advanceAll(page)
+    await wait(1200)
+    await shot(page, 'study')
+    await verb(page, 351, 162, 'Usa') // the safe
+    await advanceUntil(page, '.illustration img')
+    await page.keyboard.press('Space'); await wait(400); await page.keyboard.press('Space'); await wait(1500)
+    await shot(page, 'will')
+    await advanceAll(page, 80)
+    await verb(page, 426, 140, 'Usa') // the door
+    await advanceUntil(page, '.line.thought')
+    await wait(1500)
+    await shot(page, 'thought')
+    await advanceAll(page, 80)
+    await wait(1200)
+    await shot(page, 'lanyon-room')
+    await openTalk(page)
+    await page.locator('.choice', { hasText: 'Jekyll' }).click()
+    await advanceUntil(page, '.choice')
+    await page.locator('.choice', { hasText: 'Hyde' }).click()
+    await advanceAll(page, 80)
+    await verb(page, 41, 140, 'Usa') // Lanyon's door: the sleepless night
+    for (let i = 0; i < 4; i++) { await page.keyboard.press('Space'); await wait(300) }
+    await wait(1500)
+    await shot(page, 'sleepless')
+    await advanceAll(page, 80)
+    await wait(1200)
+    await advanceAll(page, 20)
+    await shot(page, 'watch-day')
+    await verb(page, 309, 150, 'Usa') // the court: the watch
+    for (const hour of ['mattina', 'mezzogiorno', 'nebbia', 'Tornare']) {
+      await page.locator('.choice', { hasText: hour }).click()
+      await advanceUntil(page, '.choice', 20)
+    }
+    await advanceAll(page, 80)
+    await wait(1500)
+    await shot(page, 'night')
+    await verb(page, 309, 150, 'Usa') // hide in the court
+    await advanceAll(page, 40)
+    await wait(800)
+    await shot(page, 'hyde-arrives')
+    await openTalk(page)
+    await advanceUntil(page, '.choice')
+    await page.locator('.choice').first().click()
+    await advanceUntil(page, '.line.thought')
+    await wait(1500)
+    await shot(page, 'hyde-dialogue')
+    await advanceAll(page, 80)
+    await wait(800)
+    await shot(page, 'hyde-gone')
+    await clickGame(page, 462, 220) // round the corner
+    await wait(4000)
+    await advanceAll(page, 40)
+    await wait(1200)
+    await shot(page, 'square')
+    await verb(page, 173, 150, 'Usa') // knock
+    await advanceAll(page, 60)
+    await wait(1500)
+    await advanceAll(page, 20)
+    await shot(page, 'hall')
+    await verb(page, 200, 150, 'Osserva') // the fire
+    await advanceAll(page, 40)
+    await wait(800)
+    await shot(page, 'poole')
+    await openTalk(page)
+    for (const pick of ['porta', 'fiducia', 'incontrato', 'buonanotte']) {
+      await page.locator('.choice', { hasText: pick }).click()
+      await advanceUntil(page, '.choice, .chapter-end', 60)
+    }
+    await advanceAll(page, 80, '.chapter-end')
+    await wait(800)
+    await shot(page, 'chapter-end')
+  },
+}
+
+// Chapter 1 from the menu to its end page (`shots`: also take the chapter 1 screenshots).
+async function playChapter1(page: Page, shots: boolean): Promise<void> {
+  {
     await page.waitForSelector('.menu-btn.new', { timeout: 30_000 })
     await page.click('.menu-btn.new')
     await page.waitForSelector('.chapter-card', { timeout: 10_000 }) // the cover opens first
@@ -79,7 +165,7 @@ const scenarios: Record<string, (page: Page) => Promise<void>> = {
     await wait(800)
     await clickGame(page, 300, 230) // walk east: Enfield follows
     await wait(5000)
-    await shot(page, 'walk')
+    if (shots) await shot(page, 'walk')
     await clickGame(page, 259, 146) // the door
     await page.locator('.verb-menu button', { hasText: 'Osserva' }).click()
     await wait(2500)
@@ -90,19 +176,35 @@ const scenarios: Record<string, (page: Page) => Promise<void>> = {
       await wait(500)
       if (pick === 'chiave') {
         for (let i = 0; i < 40 && !(await page.locator('.choice').count()); i++) { await page.keyboard.press('Space'); await wait(150) }
-        await shot(page, 'bargain-choice')
+        if (shots) await shot(page, 'bargain-choice')
         await page.locator('.choice').first().click()
         await wait(1800)
-        await shot(page, 'handshake')
+        if (shots) await shot(page, 'handshake')
       }
       await advanceAll(page, 120, '.chapter-end')
     }
     await wait(800)
+    if (!shots) return
     await shot(page, 'chapter-end')
     await page.keyboard.press('Space')
     await wait(2500)
     await shot(page, 'teaser')
-  },
+  }
+}
+
+// Clicks a hotspot (game pixels) and picks a verb from its menu.
+async function verb(page: Page, x: number, y: number, label: string): Promise<void> {
+  await clickGame(page, x, y)
+  await wait(400)
+  const button = page.locator('.verb-menu button', { hasText: label })
+  if (await button.count()) await button.click() // a hotspot with a single verb runs it at once
+  // the player walks there first: wait for the panel the action opens
+  await page.waitForSelector('.narration, .dialogue', { timeout: 15_000 })
+}
+
+// Presses Space until `selector` is on screen (or `max` presses).
+async function advanceUntil(page: Page, selector: string, max = 60): Promise<void> {
+  for (let i = 0; i < max && !(await page.locator(selector).count()); i++) { await page.keyboard.press('Space'); await wait(200) }
 }
 
 // Opens "Parla" on the companion, wherever it stands: its sprite position comes from the running game.
@@ -134,6 +236,9 @@ async function main(): Promise<void> {
   await page.setViewportSize({ width: 1440, height: 810 })
   try {
     await run(page)
+  } catch (e) {
+    await shot(page, 'failed') // what the screen showed when the scenario broke
+    throw e
   } finally {
     await app.close()
   }

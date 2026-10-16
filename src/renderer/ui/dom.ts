@@ -203,3 +203,8 @@ export function toast(text: string, kind: 'fact' | 'item' | 'objective' | 'info'
   setTimeout(() => el.classList.add('out'), 3500)
   setTimeout(() => el.remove(), 4200)
 }
+
+// Removes every notification on screen (a page that already lists them is opening).
+export function clearToasts(): void {
+  document.querySelector('#ui > .toasts')?.replaceChildren()
+}

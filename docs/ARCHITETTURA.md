@@ -80,11 +80,16 @@ Unico oggetto serializzato nel salvataggio.
 ### Scena (`content/scenes/*.yaml`)
 Sfondo, eventuali livelli in primo piano, poligono calpestabile, punti di ingresso, hotspot (forma, nome,
 verbi *guarda/usa/parla/prendi* → effetti), uscite (verso scena, condizione), NPC presenti (posizione, condizione).
+NPC e hotspot con `when` seguono lo stato mentre si è nella stanza: dopo ogni gruppo di effetti la stanza li
+mostra o li nasconde (`RoomScene.refresh()`), così qualcuno può arrivare o andarsene senza cambiare scena.
 
 ### Dialogo scritto (`content/dialogues/*.yaml`)
 Nodi con battute (`speaker`, `it`, `src: D02.3.4` = riferimento alla battuta del libro), scelte del giocatore
 (testo, condizione, effetti, nodo successivo). Le battute del libro si usano così come sono state tradotte in
-`story/chapters/`; `src` permette di controllare la fedeltà.
+`story/chapters/`; `src` permette di controllare la fedeltà. `thought: true` segna un pensiero ("he thought"):
+si mostra in corsivo con il nome "Utterson, tra sé", mai come battuta detta a un altro personaggio.
+`npm run validate` controlla spazi e punteggiatura di ogni testo mostrato (`src/shared/typography.ts`):
+doppi spazi, spazi prima della punteggiatura o mancanti dopo, `...` al posto di `…`, « » non appaiati.
 
 ### Capitolo (`content/chapters/*.yaml`)
 Personaggio giocato (Utterson; Lanyon e Jekyll/Hyde nei flashback), scena iniziale, obiettivi in ordine con
@@ -167,6 +172,7 @@ Il gioco **non ha voci** (D19): i personaggi parlano con il testo.
   dichiara la sua traccia nel campo `music`; il menu in `content/game.yaml`. Dissolvenze in `src/renderer/audio.ts`.
 - Blip: mentre il testo appare lettera per lettera, ogni 2 caratteri un breve suono con il timbro del personaggio
   (`blip` in `content/characters.yaml`: frequenza, forma d'onda, filtro; `typewriter` per il narratore).
+- Ambiente della scena (`ambience.sounds`): vento, campane, passi, fuoco del camino, orologio a pendolo.
 - Effetti: clic su pulsanti, scelte e hotspot. Volumi di musica ed effetti nel menu di pausa (ESC).
 
 ## 8. Comandi

@@ -130,3 +130,30 @@ Le 32 righe di giorno di `tools/assets/palette.hex` restano fisse; le righe 33-4
 blu lunare, blu-grigio della nebbia, due ori della luce a gas e il crema dell'alone (metodo in
 `tools/assets/README.md`). Gli asset di giorno riquantizzati cambiano tra lo 0% e il 15% dei pixel con errore
 minore; `enfield_neutral` e `ill_c1_handshake` peggioravano e restano sulla palette di giorno (`palette_size: 32`).
+
+**D26 — Capitolo 2: forma del gioco.** (agente, 2026-10-16)
+- La guardia alla porta (S 02.4): dall'ingresso del cortile il giocatore sceglie l'ora (mattina, mezzogiorno,
+  notte di nebbia); quando le ha provate tutte compare "Tornare ancora, di notte" e arriva la notte gelida di
+  S 02.5. Nessun conteggio di giorni, che il libro non dà.
+- Hyde compare solo quando Utterson si nasconde nel cortile (S 02.5 r. 144) e scompare dopo il dialogo; Poole
+  torna nell'atrio dopo che Utterson ha guardato il fuoco (r. 246-254). Per questo NPC e hotspot con `when`
+  si aggiornano dentro la stanza (ARCHITETTURA §4).
+- I pensieri del libro (`he thought`) hanno `thought: true` e si mostrano come pensieri (Note di fedeltà
+  della scheda).
+- La notte insonne (S 02.3) e il ritorno a casa (S 02.9) sono narrati, con illustrazioni; le visioni restano
+  visioni: la figura non ha mai volto. Il volto di Hyde non si disegna mai: il libro non dice che cosa vede
+  Utterson in quei secondi.
+- Hyde non ha chat libera; Lanyon e Poole sì (persona in `content/npcs/`, fatti con `reveal_when`).
+
+**D27 — Controllo tipografico dei testi.** (Fabio)
+Ogni testo mostrato passa da `npm run validate` (spazi e punteggiatura, `src/shared/typography.ts`); un errore
+blocca la validazione. Corretti due `...` del capitolo 1.
+
+**D28 — Notte e luci come filtro del motore, ambienti in scala con il personaggio.** (Fabio, 2026-10-16)
+- Lo sfondo notturno generato da zero era poco comprensibile. Una scena di notte usa lo sfondo di giorno con il
+  campo `lighting` (luce ambiente scura + lampioni, candele, fuoco; pipeline Light2D di Phaser): stessa
+  inquadratura, stessi hotspot, e i personaggi si scuriscono con la scena. Anche il titolo usa lo sfondo di giorno
+  con un filtro notturno (`menu_scene.darken`). `assets/backgrounds/loc_by_street_night.png` non è più usato.
+- Gli sfondi si dipingono con luce neutra e forme semplici; l'atmosfera (notte, candela) la aggiunge `lighting`.
+- Scala: 1 m ≈ 40 px; una porta è alta circa 85 px, Utterson negli interni 75-85 px (`scale` 1.05-1.3). Gli
+  sfondi del capitolo 2 sono stati rifatti con questa scala (bozzetti in `tools/assets/make_layouts.py`).

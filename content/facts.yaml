@@ -77,3 +77,86 @@
 - id: F01.19
   text: "Enfield e io abbiamo fatto un patto: non parlare mai più di questa storia."
   chapter: 1
+
+# ---- chapter 2 ----
+- id: F02.1
+  text: "Il testamento di Jekyll è olografo: Utterson lo custodisce, ma si era rifiutato di aiutare a scriverlo."
+  chapter: 2
+- id: F02.2
+  text: "Alla morte di Jekyll tutti i suoi beni vanno al suo «amico e benefattore Edward Hyde»."
+  chapter: 2
+- id: F02.3
+  text: "Se Jekyll scompare o resta assente senza spiegazione per più di tre mesi, Hyde prende il suo posto senza indugio."
+  chapter: 2
+- id: F02.4
+  text: "Utterson pensava che il testamento fosse follia; ora teme che sia disonore."
+  chapter: 2
+- id: F02.5
+  text: "Utterson e Lanyon sono vecchi amici, compagni di scuola e di college."
+  chapter: 2
+  known_by: [lanyon]
+- id: F02.6
+  text: "Da più di dieci anni Lanyon vede pochissimo Jekyll: le sue idee gli sembrano «stupidaggini non scientifiche»."
+  chapter: 2
+  known_by: [lanyon]
+- id: F02.7
+  text: "Lanyon non ha mai sentito nominare Hyde: «è venuto dopo il mio tempo»."
+  chapter: 2
+  known_by: [lanyon]
+  reveal_when: { flag: c2_asked_friends }
+- id: F02.8
+  text: "Dopo una notte insonne, Utterson vuole a ogni costo vedere il volto del vero signor Hyde."
+  chapter: 2
+- id: F02.9
+  text: "Utterson fa la guardia alla porta della stradina la mattina, a mezzogiorno e di notte."
+  chapter: 2
+- id: F02.10
+  text: "Una notte gelida, verso le dieci, un uomo piccolo e vestito semplicemente arriva alla porta con una chiave in mano."
+  chapter: 2
+- id: F02.11
+  text: "Il dottor Jekyll quella notte non è in casa."
+  chapter: 2
+  known_by: [poole]
+  reveal_when: { flag: c2_poole_back }
+- id: F02.12
+  text: "Hyde ora sa chi è Utterson: il signor Utterson di Gaunt Street, vecchio amico di Jekyll."
+  chapter: 2
+- id: F02.13
+  text: "Hyde ha dato a Utterson il suo indirizzo: il numero di una strada di Soho."
+  chapter: 2
+- id: F02.14
+  text: "Utterson ha visto in faccia il signor Hyde, per alcuni secondi: lo riconoscerebbe."
+  chapter: 2
+- id: F02.15
+  text: "Quando Utterson nomina Jekyll come amico comune, Hyde gli dà del bugiardo e sparisce nella casa."
+  chapter: 2
+- id: F02.16
+  text: "Hyde è pallido e nanesco, dà un'impressione di deformità senza alcuna malformazione definibile, ha un sorriso sgradevole e una voce rauca, sussurrante e un po' spezzata."
+  chapter: 2
+- id: F02.17
+  text: "Utterson prova per Hyde un disgusto, una repulsione e una paura che non sa spiegare: «sembra appena umano»."
+  chapter: 2
+- id: F02.18
+  text: "La casa di Jekyll è la seconda dall'angolo della piazza dietro la stradina, l'unica ancora abitata per intero."
+  chapter: 2
+- id: F02.19
+  text: "Il signor Hyde ha una chiave ed entra dalla vecchia porta della sala di dissezione."
+  chapter: 2
+  known_by: [poole]
+  reveal_when: { flag: c2_poole_back }
+- id: F02.20
+  text: "Tutta la servitù di Jekyll ha l'ordine di obbedire al signor Hyde."
+  chapter: 2
+  known_by: [poole]
+  reveal_when: { knows: F02.19 }
+- id: F02.21
+  text: "Hyde non cena mai in casa di Jekyll; per lo più entra ed esce dal laboratorio."
+  chapter: 2
+  known_by: [poole]
+  reveal_when: { knows: F02.20 }
+- id: F02.22
+  text: "Utterson sospetta che Jekyll sia perseguitato da un vecchio peccato di gioventù (è una sua ipotesi)."
+  chapter: 2
+- id: F02.23
+  text: "Utterson teme che Hyde, se sa del testamento, diventi impaziente di ereditare; vuole intervenire, se Jekyll glielo permetterà."
+  chapter: 2

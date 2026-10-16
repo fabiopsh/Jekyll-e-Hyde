@@ -1,0 +1,48 @@
+# Chapter 2 — SEARCH FOR MR. HYDE. Story: story/chapters/02-ricerca-di-hyde.md. Design: docs/DESIGN.md §3.
+# Its first line (S 02.1, r. 3-4) is the `ending` of chapter 1.
+number: 2
+title: La ricerca del signor Hyde
+player: utterson
+start_scene: loc_utterson_study
+start_at: desk
+intro:
+  # S 02.1, r. 4-9
+  - text: "La domenica, finita la cena, era sua abitudine sedersi accanto al fuoco, con un volume di arida teologia sul leggio, finché l'orologio della chiesa vicina non batteva le dodici; allora se ne andava a letto, sobrio e riconoscente."
+    image: illustrations/ill_c1_utterson_alone
+  - text: "Quella sera, invece, appena tolta la tovaglia, prese una candela ed entrò nella sua stanza degli affari."
+    image: illustrations/ill_c2_safe
+# After the end-of-chapter page: the first line of chapter 3 (story/chapters/03-jekyll-era-tranquillo.md, r. 3-6)
+ending:
+  - "Due settimane dopo, per eccellente fortuna, il dottore diede una delle sue piacevoli cene a cinque o sei vecchi amici, tutti uomini intelligenti e rispettabili, e tutti giudici di buon vino."
+objectives:
+  - id: c2_read_will
+    text: Rileggi il testamento del dottor Jekyll.
+    done_when: { flag: c2_will_read }
+    hints:
+      - "Utterson non è entrato qui per leggere teologia."
+      - "Il documento che lo tormenta è custodito al sicuro, in questa stanza."
+      - "Usa la cassaforte e leggi il testamento."
+  - id: c2_ask_lanyon
+    text: Chiedi a Lanyon del signor Hyde.
+    done_when: { knows: F02.7 }
+    hints:
+      - "Se qualcuno sa qualcosa di quest'uomo, è un vecchio amico di Jekyll."
+      - "Parla con Lanyon: prima del vostro vecchio amico, poi del signor Hyde."
+      - "Parla con Lanyon e chiedigli se ha mai incontrato un certo Hyde."
+  - id: c2_see_hyde
+    text: Vedi in faccia il signor Hyde.
+    done_when: { knows: F02.14 }
+    hints:
+      - "Il signor Hyde entra da quella porta, nella stradina. Prima o poi tornerà."
+      - "Fai la guardia alla porta a ogni ora: usa l'ingresso del cortile, il tuo posto di guardia."
+      - "Di notte nasconditi nell'ingresso del cortile; poi parla con l'uomo alla porta."
+  - id: c2_find_jekyll
+    text: Cerca Jekyll a casa sua.
+    done_when: { flag: c2_done }
+    hints:
+      - "La casa di Jekyll è dietro l'angolo della stradina, nella piazza."
+      - "Bussa alla porta con la lunetta illuminata, poi aspetta accanto al fuoco."
+      - "Nell'atrio osserva il fuoco, poi parla con Poole del signor Hyde."
+next_when: { flag: c2_done }
+# Nothing that comes after chapter 2 (story/bible.md §7): the secret, the crimes, Lanyon's end.
+banned_words: [trasform, pozion, sostanza, sdoppia, doppia natura, carew, omicid, assassin, fiala, cassetto, confession]

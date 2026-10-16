@@ -245,3 +245,250 @@ assets:
       close-up of a handshake between two gentlemen, one hand in a black glove, the other hand in a
       pale grey glove, white shirt cuffs, plain dark backdrop
     negative_extra: "face, extra fingers, bare hands"
+
+  # ==== Chapter 2 (story/chapters/02-ricerca-di-hyde.md), generated 2026-10-16 ================================
+  # Backgrounds: composition sketches in make_layouts.py (coordinates of the 480x270 game frame in their
+  # docstrings), repainted with img2img. Illustrations: text only. Hyde never has a face (silhouette only).
+
+  - id: lanyon
+    kind: character
+    variants: 4
+    source: "story/chapters/02-ricerca-di-hyde.md, Profili personaggio: lanyon"
+    character: lanyon
+    pose: base
+    layout: layouts/pose_profile_lanyon.png
+    strength: 0.75
+    noise: 6
+
+  - id: poole
+    kind: character
+    variants: 4
+    source: "story/chapters/02-ricerca-di-hyde.md, Profili personaggio: poole"
+    character: poole
+    pose: base
+    layout: layouts/pose_profile_poole.png
+    strength: 0.75
+    noise: 6
+
+  - id: hyde
+    kind: character
+    variants: 4
+    height: 51   # 80% of the 64 px of the gentlemen: "dwarfish" (ch. 2 r. 148, 212)
+    source: "story/chapters/02-ricerca-di-hyde.md, Profili personaggio: hyde; story/bible.md hyde"
+    character: hyde
+    pose: base
+    layout: layouts/pose_profile_hyde.png
+    strength: 0.75
+    noise: 6
+
+  - id: lanyon_neutral
+    kind: portrait
+    variants: 3
+    source: "story/chapters/02-ricerca-di-hyde.md, Profili personaggio: lanyon"
+    character: lanyon
+    mood: neutral
+    prefix: "pixel art, portrait, head and shoulders"   # no hat for him
+
+  - id: poole_neutral
+    kind: portrait
+    variants: 3
+    source: "story/chapters/02-ricerca-di-hyde.md, Profili personaggio: poole"
+    character: poole
+    mood: neutral
+    prefix: "pixel art, portrait, head and shoulders"   # no hat for him
+
+  - id: hyde_neutral
+    kind: portrait
+    source: "story/chapters/02-ricerca-di-hyde.md, Profili personaggio: hyde (face never described: shadow)"
+    character: hyde
+    mood: shadowed
+    # The full sheet (coat, trousers, shoes) made SDXL draw the whole body: bust only here (hat kept).
+    appearance: "small pale thin man, plainly dressed in a dark coat, plain black top hat"
+    variants: 4
+    suffix: "dark blue night backdrop, flat colors, dark outline"
+
+  # ---- Illustrations of chapter 2 (r. = lines of book/chapters/02-ricerca-di-hyde.txt) ------------------------
+  - id: ill_c2_safe
+    kind: illustration
+    variants: 3
+    source: "cap. 2 r. 9-12 (the safe, the will in its envelope)"
+    subject: >-
+      {utterson} at night in a dark room, kneeling at an open heavy iron safe, taking out a sealed envelope,
+      one candle on the floor
+    negative_extra: "smile, two people"
+
+  - id: ill_c2_will
+    kind: illustration
+    variants: 3
+    source: "cap. 2 r. 12-30 (the holograph will; nothing readable)"
+    subject: >-
+      close-up of a handwritten legal document on a wooden desk by candlelight, pages covered in tiny
+      wavy lines of ink, a sealed envelope with red wax beside it, a brass candlestick, dark room
+    negative_extra: "person, hand, face, numbers, book, coins"
+
+  - id: ill_c2_lanyon
+    kind: illustration
+    variants: 3
+    source: "cap. 2 r. 37-47 (Lanyon alone over his wine, springs up with both hands out)"
+    subject: >-
+      {lanyon} springing up from his chair at a dining table with a wine decanter and glasses,
+      both hands held out in welcome, candlelit dining room
+    negative_extra: "two people, crowd, hat"
+
+  - id: ill_c2_sleepless
+    kind: illustration
+    variants: 3
+    source: "cap. 2 r. 83-87 (great dark bed, curtains drawn, the church striking the hours)"
+    subject: >-
+      a great dark curtained four-poster bed in a pitch dark bedroom, a man lying awake on his back,
+      a church tower faintly seen through the window, deep shadows
+    negative_extra: "bright, daylight, lamp, candle, two people"
+
+  - id: ill_c2_bedside
+    kind: illustration
+    variants: 3
+    source: "cap. 2 r. 100-111 (vision, not an event: the figure at the bedside, no face)"
+    subject: >-
+      a dream vision, a dim rich bedroom, a man asleep in a bed smiling, the bed curtains plucked apart,
+      beside the bed stands a tall black silhouette of a man, pure shadow, no face
+    # first run (2026-10-16): in 3 of 3 variants the figure was missing; this text redoes all 3
+    negative_extra: "face on the figure, monster, horns, claws, weapon"
+
+  - id: ill_c2_labyrinth
+    kind: illustration
+    variants: 3
+    source: "cap. 2 r. 100-111 (vision: the city labyrinth of lamplit streets, the figure gliding)"
+    subject: >-
+      a dream vision, a night city labyrinth of crossing lamplit streets seen from above,
+      a small black faceless figure gliding fast between the lamps, mist
+    negative_extra: "face, crowd, monster, horns"
+
+  - id: ill_c2_morning_watch
+    kind: illustration
+    variants: 3
+    source: "cap. 2 r. 121-123 (at noon the by-street is busy; Utterson on watch, in the morning)"
+    subject: >-
+      {utterson} in a dark overcoat waiting by a doorway in a busy street at noon, crowd of clerks,
+      carts, shop fronts, sunlight
+    negative_extra: "smile, night"
+
+  - id: ill_c2_frost_night
+    kind: illustration
+    variants: 3
+    source: "cap. 2 r. 129-133 (a fine dry frosty night, streets as clean as a ballroom floor, lamps unshaken)"
+    subject: >-
+      a fine dry frosty night, an empty clean street like a ballroom floor, closed shops,
+      a regular row of gas lamps making a pattern of golden light and shadow on the pavement,
+      deep blue night sky
+    negative_extra: "people, person, figure, crowd, carriage, daylight, moon"
+
+  - id: ill_c2_key
+    kind: illustration
+    variants: 3
+    source: "cap. 2 r. 137-149 (a little, plainly dressed man crosses the street with a key; Hyde has no face here)"
+    subject: >-
+      a small plainly dressed dark figure seen from behind crossing a lamplit street at night
+      toward a shabby door, taking a key from his pocket, frosty pavement, deep blue night
+    negative_extra: "face, front view, crowd, hunchback, tall, cape, cloak, monster"
+
+  - id: ill_c2_fanlight
+    kind: illustration
+    variants: 3
+    source: "cap. 2 r. 232-238 (dark house, only the fanlight lit; Utterson knocks)"
+    subject: >-
+      a dark grand victorian house door at night, only the fanlight above it glowing golden,
+      a tall gentleman in a dark coat and top hat seen from behind knocking at the door, stone steps
+    negative_extra: "lit windows, crowd, daylight, two people"
+
+  - id: ill_c2_hall_fire
+    kind: illustration
+    variants: 3
+    source: "cap. 2 r. 239-254 (the hall: open fire, high fender, flicker on oak, shadow on the ceiling)"
+    subject: >-
+      a comfortable low-roofed stone-flagged hall, a big open fire in a wide hearth behind a high fender,
+      firelight flickering on polished oak cabinets, an uneasy shadow trembling on the ceiling beams
+    negative_extra: "people, person, figure, daylight, window"
+
+  - id: ill_c2_walk_home
+    kind: illustration
+    variants: 3
+    source: "cap. 2 r. 278-300 (Utterson walks home alone, troubled, at night)"
+    subject: >-
+      {utterson} walking home alone at night along a foggy lamplit street, head bowed, hands behind his back,
+      deep blue night
+    negative_extra: "crowd, two people, daylight, smile"
+
+  # ---- Chapter 2 backgrounds, second version (2026-10-16): human scale (1 m = 40 px, wall base y185), EVENLY LIT
+  # and daylight-like (the game engine adds the night and candle mood), big flat shapes. New sketches in
+  # make_layouts.py. palette_size 32 = the day palette; despeckle 1 = isolated pixels removed after the palette.
+  - id: loc_utterson_study
+    kind: background
+    variants: 3
+    # Patch pass: the first v3 run put an armchair where the safe goes; its v1 is kept (layouts/..._base.png,
+    # strength 0.15) and the safe box is repainted (inpainting).
+    layout: layouts/loc_utterson_study_base.png
+    strength: 0.15
+    noise: 4
+    regions:
+      - box: [924, 392, 1042, 530]    # game x330-372 y140-185
+        strength: 0.95
+        subject: "heavy dark grey iron safe strongbox standing on the floor, brass keyhole and handle"
+        negative_extra: "chair, armchair, bookshelf, books, window, door, fireplace, green"
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi: loc_utterson_study (r. 9-12)"
+    subject: >-
+      a bachelor's study, evenly lit, a stone fireplace with a mantel and a small painting, a bookshelf of
+      old books, a writing desk with one candle, a dark iron safe, a panelled door, wooden floor,
+      simple clean flat shapes
+    negative_extra: "night, dark, shadows, noisy texture, window, chandelier, bed, people"
+
+  - id: loc_lanyon_dining_room
+    kind: background
+    variants: 3
+    layout: layouts/loc_lanyon_dining_room.png   # make_layouts.py
+    strength: 0.6
+    noise: 4
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi: loc_lanyon_dining_room (r. 37-43)"
+    subject: >-
+      a wealthy physician's dining room, evenly lit, a dining table with a white cloth, wine decanter and
+      glasses, chairs, a fireplace, gilt framed paintings on red wallpaper, a panelled door, wooden floor,
+      simple clean flat shapes
+    negative_extra: "night, dark, shadows, noisy texture, window, bed, food, people"
+
+  - id: loc_jekyll_square
+    kind: background
+    variants: 3
+    # Patch pass: the fanlight over the door was missing; v2 of the first v3 run kept, box repainted.
+    layout: layouts/loc_jekyll_square_base.png
+    strength: 0.15
+    noise: 4
+    regions:
+      - box: [434, 280, 560, 352]     # game x155-200 y98-120
+        strength: 0.95
+        subject: "semicircular fanlight window above a door, pale glass, white stone arch"
+        negative_extra: "square window, balcony, chimney, sign, lamp"
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi: loc_jekyll_square (r. 227-235)"
+    subject: >-
+      a square of old houses on an overcast day, decayed with brass plates, the second house from the left
+      whole and rich with a fine door and a semicircular fanlight, grey pavement, simple clean flat shapes
+    negative_extra: "night, street lamp, noisy texture, trees, carriage, sun, people"
+
+  - id: loc_jekyll_hall
+    kind: background
+    variants: 3
+    layout: layouts/loc_jekyll_hall.png   # make_layouts.py
+    strength: 0.6
+    noise: 4
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi: loc_jekyll_hall (r. 239-254)"
+    subject: >-
+      a large low-roofed comfortable hall, evenly lit, a tall oak front door, a big open fire in a wide
+      hearth with a high brass fender, oak cabinets, an inner wooden door, ceiling beams,
+      stone floor, simple clean flat shapes
+    negative_extra: "night, dark, shadows, noisy texture, window, staircase, chandelier, people"

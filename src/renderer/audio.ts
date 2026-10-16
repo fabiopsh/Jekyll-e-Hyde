@@ -283,7 +283,7 @@ export function playTalkBlip(blip?: Blip): void {
 
 // ---- room ambience (scene `ambience.sounds`): wind, distant church bells, footsteps ---------------------
 
-type AmbientSound = 'wind' | 'bells' | 'footsteps'
+type AmbientSound = 'wind' | 'bells' | 'footsteps' | 'fire' | 'clock'
 let ambienceStop: (() => void) | null = null
 let footstepsOn = false
 
@@ -351,6 +351,64 @@ export function startAmbience(sounds: AmbientSound[]): void {
       }
       timer = window.setTimeout(ring, 8000 + Math.random() * 8000)
       stops.push(() => clearTimeout(timer))
+    }
+    if (sounds.includes('fire')) {
+      // a hearth: low rumble of band-passed noise and random crackles
+      const src = ctx.createBufferSource()
+      src.buffer = noiseBuffer(ctx, 3)
+      src.loop = true
+      const bp = ctx.createBiquadFilter()
+      bp.type = 'lowpass'
+      bp.frequency.setValueAtTime(220, ctx.currentTime)
+      const gain = ctx.createGain()
+      gain.gain.setValueAtTime(0.05 * masterSfxVolume, ctx.currentTime)
+      src.connect(bp)
+      bp.connect(gain)
+      gain.connect(ctx.destination)
+      src.start()
+      let timer = 0
+      const crackBuf = noiseBuffer(ctx, 0.03)
+      const crackle = () => {
+        const now = ctx.currentTime
+        const n = ctx.createBufferSource()
+        n.buffer = crackBuf
+        const hp = ctx.createBiquadFilter()
+        hp.type = 'highpass'
+        hp.frequency.setValueAtTime(1800 + Math.random() * 2500, now)
+        const g = ctx.createGain()
+        g.gain.setValueAtTime(0.08 * masterSfxVolume * Math.random(), now)
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.03)
+        n.connect(hp)
+        hp.connect(g)
+        g.connect(ctx.destination)
+        n.start(now)
+        timer = window.setTimeout(crackle, 60 + Math.random() * (Math.random() < 0.2 ? 900 : 250))
+      }
+      timer = window.setTimeout(crackle, 200)
+      stops.push(() => { src.stop(); clearTimeout(timer) })
+    }
+    if (sounds.includes('clock')) {
+      // a slow pendulum clock: tick and tock, one per second
+      let k = 0
+      const tick = () => {
+        const now = ctx.currentTime
+        const o = ctx.createOscillator()
+        o.type = 'square'
+        o.frequency.setValueAtTime(k++ % 2 ? 1250 : 1500, now)
+        const bp = ctx.createBiquadFilter()
+        bp.type = 'bandpass'
+        bp.frequency.setValueAtTime(2200, now)
+        const g = ctx.createGain()
+        g.gain.setValueAtTime(0.025 * masterSfxVolume, now)
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.025)
+        o.connect(bp)
+        bp.connect(g)
+        g.connect(ctx.destination)
+        o.start(now)
+        o.stop(now + 0.03)
+      }
+      const timer = window.setInterval(tick, 1000)
+      stops.push(() => clearInterval(timer))
     }
   } catch {
     // audio context not ready: the room stays silent

@@ -8,7 +8,7 @@ import { RoomScene, type RoomCallbacks } from './phaser/RoomScene'
 import { narrate, playDialogue } from './ui/story-panels'
 import { openChat } from './ui/chat'
 import { chapterCard, chapterEndPage, journal, pauseMenu } from './ui/screens'
-import { isModal, toast } from './ui/dom'
+import { clearToasts, isModal, toast } from './ui/dom'
 import { closeVerbMenu, isVerbMenuOpen } from './ui/room-ui'
 import { playMusic, stopMusic } from './audio'
 
@@ -78,7 +78,13 @@ export class Presenter {
       while (this.queue.length) await this.exec(this.queue.shift()!)
     } finally {
       this.busy = false
+      this.refreshRoom()
     }
+  }
+
+  // npcs and hotspots with a `when` follow the state (someone arrives, a door opens)
+  private refreshRoom(): void {
+    if (this.game.scene.isActive('room')) (this.game.scene.getScene('room') as RoomScene).refresh()
   }
 
   private async exec(c: Command): Promise<void> {
@@ -114,6 +120,7 @@ export class Presenter {
     const ch = this.session.content.chapters.find((c) => c.number === n)
     if (!ch) return
     closeVerbMenu()
+    clearToasts() // the end page lists the notes of the chapter
     await this.session.save()
     await chapterEndPage(this.session, ch)
     if (ch.ending.length) await narrate(ch.ending)
@@ -130,7 +137,7 @@ export class Presenter {
     if (!scene) { toast(`Scena mancante: ${id}`); return }
     if (scene.music) playMusic(scene.music)
     const callbacks: RoomCallbacks = {
-      run: (effects) => { this.session.run(effects) },
+      run: (effects) => { this.session.run(effects); if (!this.busy) this.refreshRoom() },
       talk: (npcId, dialogue, chat) => {
         closeVerbMenu()
         const npc = this.session.content.npcs[npcId]

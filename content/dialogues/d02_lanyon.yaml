@@ -1,0 +1,63 @@
+# S 02.2: Utterson and Lanyon. Choices only appear in the book's order (first Jekyll, then Hyde):
+# the player picks when to ask, never what happens. Lines from story/chapters/02-ricerca-di-hyde.md.
+id: d02_lanyon
+start: ask
+nodes:
+  ask:
+    choices:
+      - text: "Parlare del vostro vecchio amico, Henry Jekyll."
+        when: { not: { flag: c2_asked_friends } }
+        next: friends
+      - text: "Chiedere se ha mai incontrato un certo Hyde."
+        when: { all: [{ flag: c2_asked_friends }, { not: { knows: F02.7 } }] }
+        next: hyde
+      - text: "Per ora, niente."
+        next: null
+  friends:
+    lines:
+      - speaker: narrator
+        it: "Dopo un po' di conversazione vaga, l'avvocato arrivò all'argomento che tanto sgradevolmente gli occupava la mente."
+      - speaker: utterson
+        src: D02.2.1
+        emotion: cautious
+        it: "Suppongo, Lanyon, che Lei e io dobbiamo essere i due più vecchi amici che Henry Jekyll abbia?"
+      - speaker: lanyon
+        src: D02.2.2
+        emotion: chuckling
+        it: "Vorrei che gli amici fossero più giovani. Ma suppongo che lo siamo. E con questo? Ormai lo vedo poco."
+      - speaker: utterson
+        src: D02.2.3
+        emotion: surprised
+        it: "Davvero? Credevo che vi legasse un interesse comune."
+      - speaker: lanyon
+        src: D02.2.4
+        emotion: irritated
+        it: "Lo avevamo. Ma sono passati più di dieci anni da quando Henry Jekyll è diventato troppo fantasioso per me. Ha cominciato a sbagliare strada, a sbagliare nella mente; e benché io continui, naturalmente, a interessarmi a lui per amore dei vecchi tempi, come si dice, lo vedo, e l'ho visto, maledettamente poco, quell'uomo. Simili stupidaggini non scientifiche avrebbero allontanato perfino Damone e Pizia."
+      - speaker: narrator
+        it: "Il dottore era diventato d'un tratto paonazzo. Quel piccolo scatto d'umore fu quasi un sollievo per Utterson."
+      - speaker: utterson
+        src: D02.2.5
+        thought: true
+        it: "Hanno solo avuto un dissenso su qualche punto di scienza."
+      - speaker: narrator
+        it: "E poiché era un uomo senza passioni scientifiche (tranne che in materia di atti notarili), aggiunse perfino:"
+      - speaker: utterson
+        src: D02.2.6
+        emotion: relieved
+        it: "Non è niente di peggio!"
+    effects: [{ set: c2_asked_friends }, { learn: F02.6 }]
+    next: ask
+  hyde:
+    lines:
+      - speaker: narrator
+        it: "Diede all'amico qualche secondo per ricomporsi, poi affrontò la domanda che era venuto a fare."
+      - speaker: utterson
+        src: D02.2.7
+        emotion: careful
+        it: "Le è mai capitato di imbattersi in un suo protégé, un certo Hyde?"
+      - speaker: lanyon
+        src: D02.2.8
+        emotion: blank
+        it: "Hyde? No. Mai sentito nominare. È venuto dopo il mio tempo."
+    effects: [{ learn: F02.7 }]
+    next: null

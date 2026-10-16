@@ -238,8 +238,9 @@ def frame_portrait(raw: Image.Image, alpha: Image.Image) -> Image.Image:
     return grid_reduce(raw.convert("RGBA").crop((x0, y0, x0 + w, y0 + h)), config.PORTRAIT_SIZE)
 
 
-def reduce(kind: str, raw: Image.Image, session) -> tuple[Image.Image, Image.Image | None]:
-    """-> (reduced image, full-size cutout or None)."""
+def reduce(kind: str, raw: Image.Image, session, height: int | None = None) -> tuple[Image.Image, Image.Image | None]:
+    """-> (reduced image, full-size cutout or None). `height`: character height in px instead of
+    CHARACTER_HEIGHT (request key `height`, e.g. 51 for a figure 80% as tall as the others)."""
     if kind == "background":
         return grid_reduce(crop_16_9(raw.convert("RGBA")), config.BACKGROUND_SIZE), None
     if kind == "illustration":
@@ -248,7 +249,7 @@ def reduce(kind: str, raw: Image.Image, session) -> tuple[Image.Image, Image.Ima
     if kind == "portrait":
         return frame_portrait(raw, cutout.getchannel("A")), cutout
     if kind == "character":
-        height = config.CHARACTER_HEIGHT
+        height = height or config.CHARACTER_HEIGHT
         width = max(1, round(subject.width * height / subject.height))
         return remove_stray_pixels(grid_reduce(subject, (width, height))), cutout
     inner = (config.ITEM_SIZE[0] - 2, config.ITEM_SIZE[1] - 2)
@@ -265,6 +266,28 @@ def apply_palette(image: Image.Image, palette: np.ndarray | None) -> Image.Image
         pal = sample.quantize(colors=config.PALETTE_COLORS, method=Image.Quantize.MEDIANCUT)
         palette = np.array(pal.getpalette()[: 3 * config.PALETTE_COLORS], dtype=np.uint8).reshape(-1, 3)
     px[opaque, :3] = nearest_palette(px[opaque, :3], palette)
+    return Image.fromarray(px, "RGBA")
+
+
+def despeckle(image: Image.Image, passes: int = 1) -> Image.Image:
+    """Remove isolated pixels after the palette step (request key `despeckle: <passes>`): a pixel whose colour
+    appears at most once among its 8 neighbours (itself + 1) takes the most frequent colour of its neighbours,
+    if that colour fills at least 4 of them. Lines 1 px wide have 2 same-colour neighbours and stay; only
+    their end points and lone dots go. Transparent pixels are left alone."""
+    px = np.asarray(image.convert("RGBA")).copy()
+    h, w, _ = px.shape
+    for _ in range(passes):
+        opaque = px[..., 3] > 0
+        colours, idx = np.unique(px[..., :3].reshape(-1, 3), axis=0, return_inverse=True)
+        idx = idx.reshape(h, w)
+        pad = np.pad(idx, 1, mode="edge")
+        shifts = [pad[1 + dy:1 + dy + h, 1 + dx:1 + dx + w] for dy in (-1, 0, 1) for dx in (-1, 0, 1) if (dy, dx) != (0, 0)]
+        counts = np.stack([sum((s == k).astype(np.int8) for s in shifts) for k in range(len(colours))])  # (K, h, w)
+        same = np.take_along_axis(counts, idx[None], axis=0)[0]
+        mode = counts.argmax(axis=0)
+        top = counts.max(axis=0)
+        fix = opaque & (same <= 1) & (top >= 4)
+        px[fix, :3] = colours[mode[fix]]
     return Image.fromarray(px, "RGBA")
 
 
@@ -370,7 +393,8 @@ def main() -> None:
             session = new_session(config.REMBG_MODEL)
         t = time.perf_counter()
         try:
-            reduced, cutout = reduce(kind, Image.open(raw_path).convert("RGB"), session)
+            reduced, cutout = reduce(kind, Image.open(raw_path).convert("RGB"), session,
+                                     requests[config.parse_file_name(raw_path)[0]].get("height"))
         except ValueError as exc:
             print(f"[{done}/{len(raws)}] {raw_path.name} FAILED: {exc}")
             continue
@@ -412,7 +436,10 @@ def main() -> None:
         out = config.PROCESSED_DIR / kind / raw_path.name
         out.parent.mkdir(parents=True, exist_ok=True)
         size = requests[config.parse_file_name(raw_path)[0]].get("palette_size")
-        apply_palette(Image.open(reduced_path), palette[:size] if size and palette is not None else palette).save(out)
+        result = apply_palette(Image.open(reduced_path), palette[:size] if size and palette is not None else palette)
+        if requests[config.parse_file_name(raw_path)[0]].get("despeckle"):
+            result = despeckle(result, requests[config.parse_file_name(raw_path)[0]]["despeckle"])
+        result.save(out)
     print(f"done in {time.perf_counter() - start:.1f}s -> {config.PROCESSED_DIR}")
 
 
