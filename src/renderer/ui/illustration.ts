@@ -26,6 +26,7 @@ window.addEventListener('resize', layout)
 
 export function showIllustration(key: string | null | undefined): void {
   if (!key) return hideIllustration()
+  clearTimeout(hideTimer) // the next card keeps the frame: no new ink reveal for the same picture
   if (key === current) return
   current = key
   if (!frame) {
@@ -45,7 +46,16 @@ export function showIllustration(key: string | null | undefined): void {
   frame.append(img)
 }
 
+// Hiding waits a moment: two narrations in a row with the same picture keep it on screen, still.
+let hideTimer = 0
+const HIDE_DELAY_MS = 250
+
 export function hideIllustration(): void {
+  clearTimeout(hideTimer)
+  hideTimer = window.setTimeout(hideNow, HIDE_DELAY_MS)
+}
+
+function hideNow(): void {
   current = null
   document.body.classList.remove('has-illustration')
   if (!frame) return

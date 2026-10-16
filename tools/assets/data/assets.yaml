@@ -421,74 +421,343 @@ assets:
   # ---- Chapter 2 backgrounds, second version (2026-10-16): human scale (1 m = 40 px, wall base y185), EVENLY LIT
   # and daylight-like (the game engine adds the night and candle mood), big flat shapes. New sketches in
   # make_layouts.py. palette_size 32 = the day palette; despeckle 1 = isolated pixels removed after the palette.
+
+  # ---- Chapter 2 rooms, fourth version (2026-10-16): EMPTY SHELLS (rich wall/floor/ceiling textures, no furniture,
+  # no doors); furniture and doors are separate `prop` sprites placed by the engine (`props` in the scenes).
+  # Same perspective as before: wall base y185, 1 m = 40 px. The earlier furnished sketches stay in make_layouts.py
+  # (*_furnished, jekyll_square_day) for reference.
   - id: loc_utterson_study
     kind: background
     variants: 3
-    # Patch pass: the first v3 run put an armchair where the safe goes; its v1 is kept (layouts/..._base.png,
-    # strength 0.15) and the safe box is repainted (inpainting).
-    layout: layouts/loc_utterson_study_base.png
-    strength: 0.15
-    noise: 4
-    regions:
-      - box: [924, 392, 1042, 530]    # game x330-372 y140-185
-        strength: 0.95
-        subject: "heavy dark grey iron safe strongbox standing on the floor, brass keyhole and handle"
-        negative_extra: "chair, armchair, bookshelf, books, window, door, fireplace, green"
+    layout: layouts/loc_utterson_study.png   # make_layouts.py
+    strength: 0.75
+    noise: 8
     palette_size: 32
     despeckle: 1
     source: "story/chapters/02-ricerca-di-hyde.md, Luoghi: loc_utterson_study (r. 9-12)"
     subject: >-
-      a bachelor's study, evenly lit, a stone fireplace with a mantel and a small painting, a bookshelf of
-      old books, a writing desk with one candle, a dark iron safe, a panelled door, wooden floor,
-      simple clean flat shapes
-    negative_extra: "night, dark, shadows, noisy texture, window, chandelier, bed, people"
+      an empty room interior seen straight on, patterned green wallpaper, dark wood wainscot,
+      wooden floorboards, ceiling cornice, evenly lit
+    negative_extra: "furniture, door, window, table, chair, bookshelf, fireplace, painting, picture, rug, lamp, candle, people, night"
 
   - id: loc_lanyon_dining_room
     kind: background
     variants: 3
     layout: layouts/loc_lanyon_dining_room.png   # make_layouts.py
-    strength: 0.6
-    noise: 4
+    strength: 0.65   # 0.75 let SDXL add furniture and fixtures (first run); redone
+    noise: 8
     palette_size: 32
     despeckle: 1
     source: "story/chapters/02-ricerca-di-hyde.md, Luoghi: loc_lanyon_dining_room (r. 37-43)"
     subject: >-
-      a wealthy physician's dining room, evenly lit, a dining table with a white cloth, wine decanter and
-      glasses, chairs, a fireplace, gilt framed paintings on red wallpaper, a panelled door, wooden floor,
-      simple clean flat shapes
-    negative_extra: "night, dark, shadows, noisy texture, window, bed, food, people"
-
-  - id: loc_jekyll_square
-    kind: background
-    variants: 3
-    # Patch pass: the fanlight over the door was missing; v2 of the first v3 run kept, box repainted.
-    layout: layouts/loc_jekyll_square_base.png
-    strength: 0.15
-    noise: 4
-    regions:
-      - box: [434, 280, 560, 352]     # game x155-200 y98-120
-        strength: 0.95
-        subject: "semicircular fanlight window above a door, pale glass, white stone arch"
-        negative_extra: "square window, balcony, chimney, sign, lamp"
-    palette_size: 32
-    despeckle: 1
-    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi: loc_jekyll_square (r. 227-235)"
-    subject: >-
-      a square of old houses on an overcast day, decayed with brass plates, the second house from the left
-      whole and rich with a fine door and a semicircular fanlight, grey pavement, simple clean flat shapes
-    negative_extra: "night, street lamp, noisy texture, trees, carriage, sun, people"
+      an empty rich dining room interior seen straight on, red damask wallpaper, dark wainscot,
+      parquet floor, ceiling moulding, evenly lit
+    negative_extra: "furniture, door, window, table, chair, sideboard, fireplace, painting, picture, mirror, rug, lamp, candle, people, night, chandelier, cabinet, bookcase, hanging lamp, bench, arch"
 
   - id: loc_jekyll_hall
     kind: background
     variants: 3
     layout: layouts/loc_jekyll_hall.png   # make_layouts.py
-    strength: 0.6
-    noise: 4
+    strength: 0.65   # 0.75 let SDXL add furniture and fixtures (first run); redone
+    noise: 8
     palette_size: 32
     despeckle: 1
     source: "story/chapters/02-ricerca-di-hyde.md, Luoghi: loc_jekyll_hall (r. 239-254)"
     subject: >-
-      a large low-roofed comfortable hall, evenly lit, a tall oak front door, a big open fire in a wide
-      hearth with a high brass fender, oak cabinets, an inner wooden door, ceiling beams,
-      stone floor, simple clean flat shapes
-    negative_extra: "night, dark, shadows, noisy texture, window, staircase, chandelier, people"
+      an empty low-roofed hall interior seen straight on, plaster wall above dark oak panelling,
+      dark oak ceiling beams, stone flag floor, evenly lit
+    negative_extra: "furniture, door, window, fireplace, painting, picture, rug, lamp, candle, cabinet, people, night, column, pipe, lantern, hanging lamp, window, arch, stone wall"
+
+  # The first square (night, detailed) is the one Fabio prefers: same request as the first run of 2026-10-16.
+  - id: loc_jekyll_square
+    kind: background
+    variants: 3
+    layout: layouts/loc_jekyll_square.png   # make_layouts.py
+    strength: 0.65
+    noise: 12
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi: loc_jekyll_square (r. 227-235)"
+    subject: >-
+      a square of ancient decayed houses at night, brass plates, dark windows, deep blue sky,
+      the second house is whole and rich, all dark except a glowing golden fanlight over its door,
+      empty paved street
+    negative_extra: "daylight, sun, lit windows, street lamp, moon, trees"
+
+  # ---- Chapter 2 props (kind prop): one object each, front view, cut out and stretched to `size` [w, h] game px;
+  # `at` = top-left in the 480x270 frame (read by the scene `props`, not by the pipeline).
+
+  - id: prop_study_painting
+    kind: prop
+    variants: 4
+    prefix: "pixel art, game prop sprite, one small framed picture, front view"
+    size: [40, 30]
+    at: [50, 82]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "small dark landscape oil painting in an ornate gilt frame"
+    negative_extra: "furniture, desk, chair, door"
+  - id: prop_study_fireplace
+    kind: prop
+    variants: 3
+    size: [84, 52]
+    at: [28, 133]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "stone fireplace with a mantelpiece, a mantel clock and a candlestick on the mantel, low glowing embers in the grate"
+
+  - id: prop_study_bookshelf
+    kind: prop
+    variants: 3
+    size: [72, 90]
+    at: [129, 95]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "tall wooden bookshelf full of old dull leather bound theology books"
+
+  - id: prop_study_desk
+    kind: prop
+    variants: 4
+    prefix: "pixel art, game prop sprite, one single writing desk, front view"
+    size: [84, 40]
+    at: [213, 147]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "writing desk with drawers, one lit candle in a brass candlestick at the centre of the top, an inkwell and loose papers"
+    negative_extra: "two candles, candelabra, bookcase, cabinet, wardrobe, multiple desks"
+
+  - id: prop_study_armchair
+    kind: prop
+    variants: 3
+    size: [36, 42]
+    at: [293, 143]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "worn brown leather armchair"
+
+  - id: prop_study_safe
+    kind: prop
+    variants: 3
+    size: [44, 48]
+    at: [330, 137]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "heavy dark iron safe with a brass handle and a brass keyhole"
+    negative_extra: "chair"
+
+  - id: prop_study_coatstand
+    kind: prop
+    variants: 3
+    size: [16, 72]
+    at: [383, 113]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "wooden coat stand with a black top hat hanging on it"
+    negative_extra: "chair, table"
+
+  - id: prop_study_door
+    kind: prop
+    variants: 3
+    size: [44, 88]
+    at: [404, 97]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "closed panelled wooden door in its frame, brass knob"
+    negative_extra: "window"
+
+  - id: prop_study_rug
+    kind: prop
+    variants: 3
+    size: [170, 26]
+    at: [150, 200]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "top-down view of a worn persian rug, red and blue pattern, rectangular"
+    negative_extra: "furniture, chair, fringe tassels"
+
+  - id: prop_lanyon_door
+    kind: prop
+    variants: 3
+    size: [44, 88]
+    at: [18, 97]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "closed panelled mahogany door in its frame, brass knob"
+    negative_extra: "window"
+
+  - id: prop_lanyon_portrait
+    kind: prop
+    variants: 3
+    size: [34, 42]
+    at: [90, 78]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "oil portrait of a gentleman in a gilt frame"
+
+  - id: prop_lanyon_sideboard
+    kind: prop
+    variants: 3
+    size: [66, 46]
+    at: [76, 139]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "mahogany sideboard with a silver tray and a candlestick on top"
+
+  - id: prop_lanyon_landscape
+    kind: prop
+    variants: 4
+    prefix: "pixel art, game prop sprite, one framed picture, front view"
+    size: [46, 30]
+    at: [222, 70]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "landscape oil painting in a gilt frame"
+    negative_extra: "furniture, sofa, cabinet, door"
+  - id: prop_lanyon_table
+    kind: prop
+    variants: 4
+    prefix: "pixel art, game prop sprite, one single long dining table, front view"
+    size: [176, 50]
+    at: [156, 146]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "long dining table with a white tablecloth, a wine decanter, wine glasses, a lit candelabra in the centre, two chairs behind it"
+    negative_extra: "people, food, bed, lamp, sofa, multiple tables, sideboard, bench"
+
+  - id: prop_lanyon_fireplace
+    kind: prop
+    variants: 3
+    size: [84, 52]
+    at: [378, 133]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "marble fireplace with a small fire burning in the grate, mantelpiece"
+
+  - id: prop_lanyon_mirror
+    kind: prop
+    variants: 3
+    size: [40, 34]
+    at: [400, 92]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "gilt framed wall mirror"
+
+  - id: prop_lanyon_rug
+    kind: prop
+    variants: 3
+    size: [200, 28]
+    at: [140, 204]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "top-down view of a rich persian rug, dark red pattern, rectangular"
+    negative_extra: "furniture, chair, fringe tassels"
+
+  - id: prop_hall_front_door
+    kind: prop
+    variants: 3
+    size: [46, 92]
+    at: [14, 93]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "heavy dark oak front door with iron studs and a brass handle, in its frame"
+    negative_extra: "window"
+
+  - id: prop_hall_bench
+    kind: prop
+    variants: 3
+    size: [44, 26]
+    at: [70, 159]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "oak hall bench"
+
+  - id: prop_hall_sconce
+    kind: prop
+    variants: 4
+    prefix: "pixel art, game prop sprite, one small wall candle holder, front view"
+    size: [10, 16]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "brass wall candle sconce with one lit candle"
+    negative_extra: "furniture, painting, door"
+  - id: prop_hall_painting
+    kind: prop
+    variants: 4
+    prefix: "pixel art, game prop sprite, one framed oil painting, front view"
+    size: [48, 32]
+    at: [176, 72]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "landscape oil painting in an ornate gilt frame, dark trees and sky"
+    negative_extra: "cabinet, furniture, door, shelf, drawers, window"
+  - id: prop_hall_hearth
+    kind: prop
+    variants: 4
+    size: [108, 72]
+    at: [146, 121]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "big country house stone hearth with a bright roaring fire and a tall brass fender at the bottom"
+    negative_extra: "chimney pipe, green, lamp, vase, statue, pillar, column, cabinet, plant, mantel clock, tall object"
+
+  - id: prop_hall_cabinet
+    kind: prop
+    variants: 3
+    size: [104, 72]
+    at: [288, 113]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "costly carved oak cabinets with glass doors, polished wood"
+
+  - id: prop_hall_clock
+    kind: prop
+    variants: 3
+    size: [18, 82]
+    at: [398, 103]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "tall oak longcase grandfather clock"
+
+  - id: prop_hall_inner_door
+    kind: prop
+    variants: 3
+    size: [44, 88]
+    at: [420, 97]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "closed plain oak panelled door in its frame, brass knob"
+    negative_extra: "window"
+
+  - id: prop_hall_rug
+    kind: prop
+    variants: 4
+    size: [130, 24]
+    at: [135, 206]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
+    subject: "top-down view of a worn persian rug, rectangular"
+    negative_extra: "furniture, chair, fringe tassels, frame, picture, painting, second object, multiple objects, lamp"

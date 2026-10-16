@@ -157,3 +157,24 @@ blocca la validazione. Corretti due `...` del capitolo 1.
 - Gli sfondi si dipingono con luce neutra e forme semplici; l'atmosfera (notte, candela) la aggiunge `lighting`.
 - Scala: 1 m ≈ 40 px; una porta è alta circa 85 px, Utterson negli interni 75-85 px (`scale` 1.05-1.3). Gli
   sfondi del capitolo 2 sono stati rifatti con questa scala (bozzetti in `tools/assets/make_layouts.py`).
+
+**D29 — Interni composti: stanza vuota + oggetti separati.** (Fabio, 2026-10-16)
+- Gli sfondi rifatti in scala erano leggibili ma spogli. Ora uno sfondo è la stanza vuota (pareti, pavimento,
+  soffitto) e ogni mobile o quadro è un'immagine a parte (`assets/props/`, tipo `prop` in `tools/assets/`),
+  posata dal campo `props` della scena. La profondità è il bordo inferiore dell'oggetto: un personaggio passa
+  davanti quando ha i piedi più in basso; quadri e tappeti hanno `depth: 0`.
+- La zona calpestabile si ferma davanti ai mobili, con una rientranza davanti a camini e tavola, così non si
+  cammina sopra il fuoco o i mobili.
+- La piazza torna alla prima versione, più ricca, che Fabio preferiva.
+- Luci, ombre e atmosfera restano al motore (`lighting`, D28): meno lavoro sulle immagini.
+
+**D30 — Taccuino solo per gli appunti, HUD per il resto.** (Fabio, 2026-10-16)
+- Il taccuino (J o clic sull'icona) contiene solo gli appunti, sulle righe di due pagine affiancate, senza
+  scorrimento: un appunto che non entra va alla pagina dopo (impaginazione misurata sullo spazio vero). Le
+  frecce fanno girare un foglio sul dorso (fronte = pagina girata, retro = pagina nuova).
+- In alto a sinistra una lampadina: accesa finché l'obiettivo corrente ha ancora un suggerimento da leggere
+  (tre per obiettivo), spenta quando non ne ha più; un clic apre il riquadro con capitolo, cosa fare,
+  *Rifletti* e tasche. Quando un obiettivo è completato la lampadina lampeggia e l'obiettivo si barra.
+- Niente più notifiche per gli appunti: in alto a destra un piccolo taccuino; quando si annota qualcosa una
+  penna ci scrive sopra, con il suono del pennino, e finché ci sono appunti non letti il taccuino ogni tanto si
+  agita appena. I clic sull'HUD non arrivano alla stanza sotto (non fanno camminare).

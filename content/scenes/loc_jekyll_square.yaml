@@ -6,16 +6,17 @@ background: backgrounds/loc_jekyll_square
 music: audio/music/mus_night_watch.mp3
 ambience:
   sounds: [footsteps]
-walkable: [[0, 195], [480, 195], [480, 268], [0, 268]]
-scale: { far_y: 195, far: 0.9, near_y: 268, near: 1.1 }
-# painted by day, shown at night: "plunged in darkness except for the fanlight" (r. 233-234, D28)
+walkable: [[0, 207], [480, 207], [480, 268], [0, 268]]
+scale: { far_y: 207, far: 0.95, near_y: 268, near: 1.1 }
+# the picture is already a night one (D29): a light ambient only darkens the characters a little;
+# "plunged in darkness except for the fanlight" (r. 233-234)
 lighting:
-  ambient: "#2a3150"
+  ambient: "#8a92bc"
   lights:
-    - { at: [178, 112], radius: 75, color: "#ffc070", intensity: 1.6, halo: 8 }
+    - { at: [178, 116], radius: 80, color: "#ffc070", intensity: 1.6, halo: 8 }
     - { at: [-20, 110], radius: 160, color: "#ffc070", intensity: 0.9, flicker: true }
 entries:
-  corner: [45, 230]
+  corner: [45, 235]
 on_enter:
   # r. 227-234
   - when: { not: { flag: c2_square_seen } }
@@ -28,8 +29,8 @@ on_enter:
 hotspots:
   - id: jekyll_door
     name: La porta con la lunetta accesa
-    shape: { x: 160, y: 106, w: 36, h: 86 }
-    walk_to: [178, 210]
+    shape: { x: 160, y: 105, w: 36, h: 100 }
+    walk_to: [178, 220]
     verbs:
       look:
         - effects:
@@ -41,7 +42,7 @@ hotspots:
             - dialogue: d02_poole_door
   - id: houses
     name: Le altre case
-    shape: { x: 200, y: 30, w: 280, h: 162 }
+    shape: { x: 200, y: 30, w: 280, h: 172 }
     verbs:
       look:
         - effects:

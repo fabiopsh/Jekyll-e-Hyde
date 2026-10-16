@@ -18,6 +18,7 @@ export const GAME_WIDTH = 480
 export const GAME_HEIGHT = 270
 const WALK_SPEED = 70 // px per second at scale 1
 const FOLLOW_GAP = 26 // px between a companion and the player
+const TALK_DISTANCE = 80 // px: nearer than this, talking needs no walk
 const STEP_MS = 330
 
 type Pt = { x: number; y: number }
@@ -35,6 +36,7 @@ export class RoomScene extends Phaser.Scene {
   private cb!: RoomCallbacks
   private player!: Phaser.GameObjects.Sprite
   private followers: Phaser.GameObjects.Sprite[] = []
+  private followSide = -1 // followers keep this side of the player: -1 left (walking right), 1 right
   private conditional: { when: Condition | undefined; obj: Phaser.GameObjects.Sprite | Phaser.GameObjects.Zone }[] = []
   private ambience: (time: number) => void = () => undefined
   private lastStep = 0
@@ -51,7 +53,7 @@ export class RoomScene extends Phaser.Scene {
   }
 
   preload(): void {
-    const keys = [this.room.background, ...this.room.foreground]
+    const keys = [this.room.background, ...this.room.foreground, ...this.room.props.map((p) => p.image)]
     for (const k of keys) if (!this.textures.exists(k)) this.load.image(k, assetUrl(`${k}.png`))
     for (const id of [this.session.state.player, ...this.room.npcs.map((n) => n.npc)]) {
       const key = this.spriteKey(id)
@@ -65,6 +67,11 @@ export class RoomScene extends Phaser.Scene {
     const s = this.session.state
     this.cameras.main.fadeIn(250)
     this.addImageOrPlaceholder(this.room.background, 0)
+    for (const p of this.room.props) {
+      if (!this.textures.exists(p.image) || this.textures.get(p.image).key === '__MISSING') continue // npm run validate lists it
+      const img = this.add.image(p.at[0], p.at[1], p.image).setOrigin(0)
+      img.setDepth(p.depth ?? p.at[1] + img.height)
+    }
     this.walkable = new Phaser.Geom.Polygon(this.room.walkable.flat())
 
     // player
@@ -77,13 +84,22 @@ export class RoomScene extends Phaser.Scene {
       const npc = this.makeCharacter(n.npc, n.at[0], n.at[1])
       this.conditional.push({ when: n.when, obj: npc })
       npc.setFlipX(n.facing === 'left')
-      if (n.follow) this.followers.push(npc)
+      if (n.follow) {
+        this.followers.push(npc)
+        this.followSide = npc.x >= this.player.x ? 1 : -1 // a companion stays on the side where it starts
+      }
       const name = this.session.content.characters[n.npc]?.name ?? n.npc
       this.interactive(npc, name, () => {
         const opts: VerbOption[] = [{ label: 'Osserva', run: () => this.cb.run([{ narrate: `È ${name}.` }]) }]
         if (n.talk) opts.unshift({ label: 'Parla', run: () => this.cb.talk(n.npc, n.talk, false) })
         if (n.chat) opts.splice(n.talk ? 1 : 0, 0, { label: 'Conversa', run: () => this.cb.talk(n.npc, undefined, true) })
-        // walk next to where the npc is now (a follower is not at its start point any more)
+        // close enough: the two just turn to each other (walking would move a follower too)
+        if (Phaser.Math.Distance.Between(npc.x, npc.y, this.player.x, this.player.y) < TALK_DISTANCE) {
+          this.player.setFlipX(npc.x < this.player.x)
+          npc.setFlipX(this.player.x < npc.x)
+          return { at: { x: this.player.x, y: this.player.y }, options: opts }
+        }
+        // otherwise walk next to where the npc is now (a follower is not at its start point any more)
         const side = npc.x >= this.player.x ? -18 : 18
         return { at: this.nearestWalkable({ x: npc.x + side, y: npc.y }), options: opts }
       }, 'talk')
@@ -180,7 +196,8 @@ export class RoomScene extends Phaser.Scene {
 
   // A companion keeps FOLLOW_GAP px behind the player, on the side the player comes from.
   private follow(f: Phaser.GameObjects.Sprite, delta: number): void {
-    const behind = this.player.flipX ? FOLLOW_GAP : -FOLLOW_GAP
+    // the side is set by the last walk, not by where the player looks: turning to talk moves nobody
+    const behind = this.followSide * FOLLOW_GAP
     const target = this.nearestWalkable({ x: this.player.x + behind, y: this.player.y + 3 })
     const dx = target.x - f.x
     const dy = target.y - f.y
@@ -283,6 +300,7 @@ export class RoomScene extends Phaser.Scene {
     const dist = Phaser.Math.Distance.BetweenPoints(from, target)
     if (dist < 2) { then?.(); return }
     this.player.setFlipX(target.x < from.x)
+    if (Math.abs(target.x - from.x) > 2) this.followSide = target.x < from.x ? 1 : -1
     const key = this.player.texture.key
     if (this.anims.exists(`${key}:walk`)) this.player.play(`${key}:walk`)
     this.walkTween = this.tweens.add({

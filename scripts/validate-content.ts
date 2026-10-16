@@ -12,7 +12,7 @@ const counts = `${content.chapters.length} chapters, ${Object.keys(content.scene
   `${content.bookLines.size} book lines in story/`
 
 // Any string that looks like an asset key (backgrounds/x, illustrations/x, audio/music/x.mp3, ...).
-const ASSET = /^(backgrounds|characters|portraits|illustrations|items|ui|audio)\//
+const ASSET = /^(backgrounds|characters|portraits|illustrations|items|props|ui|audio)\//
 const keys = new Set<string>()
 const walk = (v: unknown): void => {
   if (typeof v === 'string') { if (ASSET.test(v)) keys.add(v) }

@@ -11,19 +11,20 @@ import { chapterCard, chapterEndPage, journal, pauseMenu } from './ui/screens'
 import { clearToasts, isModal, toast } from './ui/dom'
 import { closeVerbMenu, isVerbMenuOpen } from './ui/room-ui'
 import { playMusic, stopMusic } from './audio'
+import { Hud } from './ui/hud'
 
 export class Presenter {
   private queue: Command[] = []
   private busy = false
   private ended: (() => void) | null = null
   private cleanupKeydown: (() => void) | null = null
+  private readonly hud: Hud
 
   constructor(private readonly game: Phaser.Game, private readonly session: Session) {
     session.onCommands((cmds) => this.enqueue(cmds))
     const onKey = (e: KeyboardEvent) => {
       if ((e.key === 'j' || e.key === 'J') && !isModal()) {
-        closeVerbMenu()
-        void journal(session)
+        this.openJournal()
       } else if (e.key === 'Escape') {
         if (isVerbMenuOpen()) {
           closeVerbMenu()
@@ -33,14 +34,21 @@ export class Presenter {
       }
     }
     window.addEventListener('keydown', onKey)
-    this.cleanupKeydown = () => window.removeEventListener('keydown', onKey)
+    this.hud = new Hud(session, () => { if (!isModal()) this.openJournal() })
+    session.onCommands((cmds) => this.hud.update(cmds.filter((c) => c.kind === 'objective').length))
+    this.cleanupKeydown = () => { window.removeEventListener('keydown', onKey); this.hud.destroy() }
+  }
+
+  private openJournal(): void {
+    closeVerbMenu()
+    void journal(this.session).then(() => this.hud.update()) // the unread counter goes back to zero
   }
 
   private async openPauseMenu(): Promise<void> {
     closeVerbMenu()
     await pauseMenu(this.session, {
       onResume: () => {},
-      onJournal: () => void journal(this.session),
+      onJournal: () => this.openJournal(),
       onMainMenu: async () => {
         await this.session.save()
         this.game.scene.stop('room')
@@ -93,9 +101,9 @@ export class Presenter {
     switch (c.kind) {
       case 'narrate': return narrate([{ text: c.text, image: c.image }])
       case 'dialogue': return playDialogue(this.session, content.dialogues[c.id])
-      case 'learned': return toast(`Nel diario: ${content.facts[c.fact]?.text ?? c.fact}`, 'fact')
+      case 'learned': case 'noted': return this.hud.noteWritten() // the pen on the notebook, no notification
       case 'got': return toast(`Preso: ${content.items[c.item]?.name ?? c.item}`, 'item')
-      case 'objective': return toast('Obiettivo completato', 'objective')
+      case 'objective': return this.hud.objectiveDone()
       case 'chapter':
         await this.chapterEnd(c.number - 1)
         return this.chapterIntro(c.number)

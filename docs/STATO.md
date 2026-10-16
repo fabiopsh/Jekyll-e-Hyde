@@ -102,6 +102,16 @@ Aggiornato: 2026-10-16. Chi lavora qui aggiorna questo file a fine sessione (ved
   cassaforte ha bordi verdi; nell'atrio i mobili di quercia sembrano una finestra; nella piazza la lunetta è
   debole.
 
+- Secondo giro di Fabio (2026-10-16, D29): *Parla* vicino all'NPC non fa più camminare nessuno; la stessa
+  illustrazione in due narrazioni di fila resta ferma; interni = stanza vuota + 26 oggetti separati
+  (`assets/props/`, tipo `prop`), zone calpestabili che si fermano davanti a mobili e fuoco; piazza tornata alla
+  prima versione (ricostruita con lo stesso seed, non identica al byte). Da confermare da Fabio sugli screenshot.
+
+- Taccuino e HUD (2026-10-16, D30): taccuino solo appunti, a righe, impaginato per spazio, foglio che gira;
+  lampadina dei suggerimenti in alto a sinistra (clic: obiettivo, *Rifletti*, tasche); piccolo taccuino in alto
+  a destra con penna che scrive e leggero scuotimento finché ci sono appunti non letti; niente notifiche per gli appunti. Scenario `npm run shot -- notebook`. Corretto anche Enfield che
+  girava intorno a Utterson quando si cliccava su di lui (scenario `talkstill`).
+
 ## Prossimi passi
 
 1. Prova manuale di Fabio dei capitoli 1 e 2 (sotto) e revisione delle immagini del capitolo 2.
@@ -117,7 +127,9 @@ Capitolo 1:
 3. Nella stradina: Enfield ti segue; i piccioni si alzano quando ti avvicini; fumo dal camino; passi, vento,
    campane ogni tanto. Il cursore cambia: lente sugli oggetti, fumetto su Enfield.
 4. Porta → *Osserva*: il racconto di Enfield con le illustrazioni che cambiano.
-5. Tasto J: il taccuino; gli appunti nuovi si scrivono uno dopo l'altro.
+5. Quando si annota qualcosa la penna scrive sul taccuino in alto a destra, che poi si agita ogni tanto finché
+   non lo apri. Tasto J o clic: solo appunti sulle righe; frecce: il foglio gira. In alto a sinistra la
+   lampadina (accesa = c'è un suggerimento): clic, riquadro con cosa fare e *Rifletti*.
 6. Enfield → *Parla* tre volte (firmatario, nome, chiave) → stretta di mano → pagina di fine capitolo →
    anticipazione → cartolina "Capitolo II".
 

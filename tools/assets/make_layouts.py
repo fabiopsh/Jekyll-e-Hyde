@@ -401,7 +401,7 @@ def _door(d, x, y, w, h, wood, panel, knob=(214, 170, 70)):
     _r(d, x + w - 8, y + h * 0.52, 4, 4, knob)
 
 
-def utterson_study() -> Image.Image:
+def utterson_study_furnished() -> Image.Image:
     """Utterson's study, evenly lit (the game adds the candle mood). 1 m = 40 px, wall base y185, ceiling to y55.
     Fireplace x30-110 (mantel y137), bookshelf x130-200 y97-185, desk with one candle x215-295 y153-185,
     iron safe x330-372 y140-185, panelled door x405-447 y100-185."""
@@ -435,7 +435,7 @@ def utterson_study() -> Image.Image:
     return im
 
 
-def lanyon_dining_room() -> Image.Image:
+def lanyon_dining_room_furnished() -> Image.Image:
     """Dining room, evenly lit. 1 m = 40 px, wall base y185. Door x20-62 y100-185, table with white cloth,
     decanter and glasses x160-330 y150-192 with chairs, fireplace x380-460 y137-185, framed pictures."""
     im, d = _bg_canvas((0, 0, 0))
@@ -468,7 +468,7 @@ def lanyon_dining_room() -> Image.Image:
     return im
 
 
-def jekyll_square() -> Image.Image:
+def jekyll_square_day() -> Image.Image:
     """Overcast day, façades seen across the pavement (engine adds the night light). 1 m = 40 px, façade base y192,
     pavement y195-268. Passage to a side street x0-35, second house from it: door x160-196 y118-192 under a
     semicircular fanlight y106-118; neighbours decayed with brass plates."""
@@ -508,7 +508,41 @@ def jekyll_square() -> Image.Image:
     return im
 
 
-def jekyll_hall() -> Image.Image:
+def jekyll_square() -> Image.Image:
+    """Night, a square of old houses: passage to the by-street at far left (x0-40, y60-200), the second house
+    from that corner whole and rich (door x155-191, y125-193), all dark except the fanlight above its door
+    (about y107-125); neighbours decayed with brass plates; pavement y200-268."""
+    im, d = _bg_canvas((28, 30, 54))
+    _r(d, 0, 0, 480, 40, (24, 24, 44))
+    _r(d, 40, 30, 80, 172, (58, 50, 56))                                     # first house: decayed
+    _r(d, 120, 22, 112, 180, (70, 52, 50))                                   # second house: whole, rich
+    _r(d, 232, 34, 110, 168, (56, 50, 58))
+    _r(d, 342, 28, 138, 174, (60, 52, 56))
+    for x0, x1 in ((40, 120), (120, 232), (232, 342), (342, 480)):
+        _r(d, x0, 18, x1 - x0, 6, (40, 36, 44))                               # cornice
+    for x0 in (50, 84, 132, 200, 244, 280, 312, 352, 394, 436):
+        for y0 in (44, 86):
+            _r(d, x0, y0, 22, 30, (20, 22, 36), outline=(70, 60, 62), width=2)  # dark windows
+    for x0 in (132, 200):
+        _r(d, x0, 128, 14, 28, (20, 22, 36), outline=(84, 62, 58), width=2)
+    for x0 in (54, 250, 352, 400):
+        _r(d, x0, 140, 28, 55, (38, 30, 34), outline=(24, 22, 28), width=3)  # decayed doors
+        _r(d, x0 + 30, 150, 6, 10, (190, 150, 70))                            # brass plates
+        _r(d, x0 + 30, 164, 6, 10, (190, 150, 70))
+    _r(d, 155, 125, 36, 68, (40, 26, 26), outline=(20, 14, 14), width=4)     # the door of the whole house
+    d.pieslice((155 * S, 107 * S, 191 * S, 143 * S), 180, 360, fill=(238, 196, 100))  # fanlight
+    _r(d, 150, 193, 46, 8, (96, 92, 98))                                      # step
+    _r(d, 0, 60, 40, 140, (12, 12, 20))                                       # passage to the by-street
+    _r(d, 0, 200, 480, 70, (50, 52, 66))                                      # pavement
+    for k in range(0, 480, 60):
+        d.line([(k * S, 200 * S), ((k - 40) * S, 270 * S)], fill=(40, 42, 56), width=3)
+    _r(d, 0, 200, 480, 4, (84, 88, 108))                                      # kerb
+    im = _glow(im, 173, 118, 36, (150, 112, 40), 0.9)
+    im = _glow(im, 173, 215, 40, (100, 80, 40), 0.35)
+    return im
+
+
+def jekyll_hall_furnished() -> Image.Image:
     """Hall, evenly lit. 1 m = 40 px, wall base y185, low beamed ceiling y0-45. Front door x15-60 y95-185, open hearth
     x150-250 y120-185 with a high brass fender, oak cabinets x290-390 y115-185, inner door x420-462 y100-185."""
     im, d = _bg_canvas((0, 0, 0))
@@ -541,9 +575,57 @@ def jekyll_hall() -> Image.Image:
     return im
 
 
+def _shell_study() -> Image.Image:
+    """Empty study shell (props cover the furniture): patterned wallpaper, dark wainscot, floorboards, cornice."""
+    im, d = _bg_canvas((0, 0, 0))
+    _wall_floor(d, (122, 138, 100), (150, 108, 72), (206, 190, 160), line=(124, 88, 58))
+    _r(d, 0, 140, 480, 45, (84, 56, 40))                                     # dark wainscot
+    _r(d, 0, 138, 480, 3, (120, 88, 60))
+    for x in range(0, 480, 24):
+        for y in range(64, 136, 24):
+            _r(d, x + 8, y + 6, 8, 12, (98, 116, 80))                         # wallpaper pattern hints
+    return im
+
+
+def _shell_dining() -> Image.Image:
+    """Empty dining room shell: rich red wallpaper, wainscot, parquet, ceiling moulding."""
+    im, d = _bg_canvas((0, 0, 0))
+    _wall_floor(d, (168, 84, 80), (150, 106, 70), (222, 210, 186), line=(120, 84, 56))
+    _r(d, 0, 140, 480, 45, (98, 64, 46))
+    _r(d, 0, 138, 480, 3, (176, 136, 90))
+    for x in range(0, 480, 22):
+        for y in range(64, 136, 22):
+            _r(d, x + 7, y + 5, 8, 12, (146, 66, 66))
+    for x in range(0, 480, 40):
+        d.line([(x * S, 185 * S), ((x - 20) * S, 270 * S)], fill=(120, 84, 56), width=2)   # parquet pattern
+    return im
+
+
+def _shell_hall() -> Image.Image:
+    """Empty hall shell: plaster above oak panelling, dark oak beams under a low ceiling, stone flags."""
+    im, d = _bg_canvas((0, 0, 0))
+    _r(d, 0, 0, 480, 45, (150, 128, 100))                                    # plaster ceiling
+    for x in range(0, 480, 80):
+        _r(d, x + 10, 0, 16, 48, (74, 48, 32))                               # beams across
+    _r(d, 0, 40, 480, 8, (74, 48, 32))
+    _r(d, 0, 48, 480, 140, (206, 190, 160))                                  # plaster wall
+    _r(d, 0, 140, 480, 45, (130, 88, 58))                                    # oak panelling
+    for x in range(0, 480, 40):
+        _r(d, x, 143, 2, 42, (96, 62, 40))
+    _r(d, 0, 138, 480, 3, (84, 56, 38))
+    _r(d, 0, 185, 480, 85, (150, 146, 140))
+    for y in range(185, 270, 14):
+        d.line([(0, y * S), (1344, y * S)], fill=(116, 112, 108), width=2)
+        for x in range(((y // 14) % 2) * 20, 480, 40):
+            d.line([(x * S, y * S), (x * S, (y + 14) * S)], fill=(116, 112, 108), width=2)
+    return im
+
+
 LAYOUTS = {"pose_profile_lanyon": pose_lanyon, "pose_profile_poole": pose_poole, "pose_profile_hyde": pose_hyde,
-           "loc_utterson_study": utterson_study, "loc_lanyon_dining_room": lanyon_dining_room,
-           "loc_jekyll_square": jekyll_square, "loc_jekyll_hall": jekyll_hall,
+           "loc_utterson_study": _shell_study, "loc_lanyon_dining_room": _shell_dining,
+           "loc_jekyll_square": jekyll_square, "loc_jekyll_hall": _shell_hall,
+           "loc_jekyll_square_day": jekyll_square_day, "loc_utterson_study_furnished": utterson_study_furnished,
+           "loc_lanyon_dining_room_furnished": lanyon_dining_room_furnished, "loc_jekyll_hall_furnished": jekyll_hall_furnished,
            "loc_by_street_night": by_street_night, "ill_c1_sunday_walk": sunday_walk, "ill_c1_corner": corner, "ill_c1_crowd": crowd, "ill_c1_door_key": door_key, "ill_c1_court": court,
            "ill_c1_door_closeup": door_closeup, "ill_c1_cheque": cheque}
 

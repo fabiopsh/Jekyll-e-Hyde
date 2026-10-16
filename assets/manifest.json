@@ -215,13 +215,13 @@
   {
     "id": "loc_utterson_study",
     "kind": "background",
-    "variant": 1,
+    "variant": 2,
     "files": [
       "backgrounds/loc_utterson_study.png"
     ],
-    "seed": 9422501,
-    "prompt": "pixel art, adventure game background, victorian london 1880s, a bachelor's study, evenly lit, a stone fireplace with a mantel and a small painting, a bookshelf of old books, a writing desk with one candle, a dark iron safe, a panelled door, wooden floor, simple clean flat shapes, flat colors, muted browns and dark greens",
-    "exported_at": "2026-10-16T12:42:44+00:00"
+    "seed": 9422502,
+    "prompt": "pixel art, adventure game background, victorian london 1880s, an empty room interior seen straight on, patterned green wallpaper, dark wood wainscot, wooden floorboards, ceiling cornice, evenly lit, flat colors, muted browns and dark greens",
+    "exported_at": "2026-10-16T13:38:33+00:00"
   },
   {
     "id": "loc_lanyon_dining_room",
@@ -231,19 +231,19 @@
       "backgrounds/loc_lanyon_dining_room.png"
     ],
     "seed": 4391700,
-    "prompt": "pixel art, adventure game background, victorian london 1880s, a wealthy physician's dining room, evenly lit, a dining table with a white cloth, wine decanter and glasses, chairs, a fireplace, gilt framed paintings on red wallpaper, a panelled door, wooden floor, simple clean flat shapes, flat colors, muted browns and dark greens",
-    "exported_at": "2026-10-16T12:40:52+00:00"
+    "prompt": "pixel art, adventure game background, victorian london 1880s, an empty rich dining room interior seen straight on, red damask wallpaper, dark wainscot, parquet floor, ceiling moulding, evenly lit, flat colors, muted browns and dark greens",
+    "exported_at": "2026-10-16T13:46:52+00:00"
   },
   {
     "id": "loc_jekyll_square",
     "kind": "background",
-    "variant": 2,
+    "variant": 1,
     "files": [
       "backgrounds/loc_jekyll_square.png"
     ],
-    "seed": 2030402,
-    "prompt": "pixel art, adventure game background, victorian london 1880s, a square of old houses on an overcast day, decayed with brass plates, the second house from the left whole and rich with a fine door and a semicircular fanlight, grey pavement, simple clean flat shapes, flat colors, muted browns and dark greens",
-    "exported_at": "2026-10-16T12:42:44+00:00"
+    "seed": 2030401,
+    "prompt": "pixel art, adventure game background, victorian london 1880s, a square of ancient decayed houses at night, brass plates, dark windows, deep blue sky, the second house is whole and rich, all dark except a glowing golden fanlight over its door, empty paved street, flat colors, muted browns and dark greens",
+    "exported_at": "2026-10-16T13:38:33+00:00"
   },
   {
     "id": "loc_jekyll_hall",
@@ -253,8 +253,8 @@
       "backgrounds/loc_jekyll_hall.png"
     ],
     "seed": 7483300,
-    "prompt": "pixel art, adventure game background, victorian london 1880s, a large low-roofed comfortable hall, evenly lit, a tall oak front door, a big open fire in a wide hearth with a high brass fender, oak cabinets, an inner wooden door, ceiling beams, stone floor, simple clean flat shapes, flat colors, muted browns and dark greens",
-    "exported_at": "2026-10-16T12:40:52+00:00"
+    "prompt": "pixel art, adventure game background, victorian london 1880s, an empty low-roofed hall interior seen straight on, plaster wall above dark oak panelling, dark oak ceiling beams, stone flag floor, evenly lit, flat colors, muted browns and dark greens",
+    "exported_at": "2026-10-16T13:46:52+00:00"
   },
   {
     "id": "lanyon",
@@ -459,5 +459,291 @@
     "seed": 8769200,
     "prompt": "pixel art, adventure game illustration, victorian london 1880s, tall lean middle-aged gentleman, long rugged unsmiling face, clean-shaven, greying hair, dark grey frock coat walking home alone at night along a foggy lamplit street, head bowed, hands behind his back, deep blue night, dramatic lighting, flat colors",
     "exported_at": "2026-10-16T10:54:55+00:00"
+  },
+  {
+    "id": "prop_study_painting",
+    "kind": "prop",
+    "variant": 0,
+    "files": [
+      "props/prop_study_painting.png"
+    ],
+    "seed": 59300,
+    "prompt": "pixel art, game prop sprite, one small framed picture, front view, small dark landscape oil painting in an ornate gilt frame, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_study_fireplace",
+    "kind": "prop",
+    "variant": 1,
+    "files": [
+      "props/prop_study_fireplace.png"
+    ],
+    "seed": 1391401,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, stone fireplace with a mantelpiece, a mantel clock and a candlestick on the mantel, low glowing embers in the grate, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_study_bookshelf",
+    "kind": "prop",
+    "variant": 2,
+    "files": [
+      "props/prop_study_bookshelf.png"
+    ],
+    "seed": 259302,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, tall wooden bookshelf full of old dull leather bound theology books, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_study_desk",
+    "kind": "prop",
+    "variant": 3,
+    "files": [
+      "props/prop_study_desk.png"
+    ],
+    "seed": 8287103,
+    "prompt": "pixel art, game prop sprite, one single writing desk, front view, writing desk with drawers, one lit candle in a brass candlestick at the centre of the top, an inkwell and loose papers, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_study_armchair",
+    "kind": "prop",
+    "variant": 2,
+    "files": [
+      "props/prop_study_armchair.png"
+    ],
+    "seed": 9737902,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, worn brown leather armchair, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_study_safe",
+    "kind": "prop",
+    "variant": 1,
+    "files": [
+      "props/prop_study_safe.png"
+    ],
+    "seed": 7689401,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, heavy dark iron safe with a brass handle and a brass keyhole, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_study_coatstand",
+    "kind": "prop",
+    "variant": 1,
+    "files": [
+      "props/prop_study_coatstand.png"
+    ],
+    "seed": 5910801,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, wooden coat stand with a black top hat hanging on it, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_study_door",
+    "kind": "prop",
+    "variant": 2,
+    "files": [
+      "props/prop_study_door.png"
+    ],
+    "seed": 2738802,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, closed panelled wooden door in its frame, brass knob, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_study_rug",
+    "kind": "prop",
+    "variant": 1,
+    "files": [
+      "props/prop_study_rug.png"
+    ],
+    "seed": 5949201,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, top-down view of a worn persian rug, red and blue pattern, rectangular, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_lanyon_door",
+    "kind": "prop",
+    "variant": 0,
+    "files": [
+      "props/prop_lanyon_door.png"
+    ],
+    "seed": 5783000,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, closed panelled mahogany door in its frame, brass knob, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_lanyon_portrait",
+    "kind": "prop",
+    "variant": 2,
+    "files": [
+      "props/prop_lanyon_portrait.png"
+    ],
+    "seed": 5439602,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, oil portrait of a gentleman in a gilt frame, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_lanyon_sideboard",
+    "kind": "prop",
+    "variant": 1,
+    "files": [
+      "props/prop_lanyon_sideboard.png"
+    ],
+    "seed": 5205801,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, mahogany sideboard with a silver tray and a candlestick on top, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_lanyon_landscape",
+    "kind": "prop",
+    "variant": 1,
+    "files": [
+      "props/prop_lanyon_landscape.png"
+    ],
+    "seed": 7513001,
+    "prompt": "pixel art, game prop sprite, one framed picture, front view, landscape oil painting in a gilt frame, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_lanyon_table",
+    "kind": "prop",
+    "variant": 2,
+    "files": [
+      "props/prop_lanyon_table.png"
+    ],
+    "seed": 7670502,
+    "prompt": "pixel art, game prop sprite, one single long dining table, front view, long dining table with a white tablecloth, a wine decanter, wine glasses, a lit candelabra in the centre, two chairs behind it, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_lanyon_fireplace",
+    "kind": "prop",
+    "variant": 1,
+    "files": [
+      "props/prop_lanyon_fireplace.png"
+    ],
+    "seed": 2047401,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, marble fireplace with a small fire burning in the grate, mantelpiece, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_lanyon_mirror",
+    "kind": "prop",
+    "variant": 0,
+    "files": [
+      "props/prop_lanyon_mirror.png"
+    ],
+    "seed": 8903800,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, gilt framed wall mirror, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_lanyon_rug",
+    "kind": "prop",
+    "variant": 1,
+    "files": [
+      "props/prop_lanyon_rug.png"
+    ],
+    "seed": 8635901,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, top-down view of a rich persian rug, dark red pattern, rectangular, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_hall_front_door",
+    "kind": "prop",
+    "variant": 1,
+    "files": [
+      "props/prop_hall_front_door.png"
+    ],
+    "seed": 7696501,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, heavy dark oak front door with iron studs and a brass handle, in its frame, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_hall_bench",
+    "kind": "prop",
+    "variant": 2,
+    "files": [
+      "props/prop_hall_bench.png"
+    ],
+    "seed": 9408202,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, oak hall bench, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_hall_sconce",
+    "kind": "prop",
+    "variant": 2,
+    "files": [
+      "props/prop_hall_sconce.png"
+    ],
+    "seed": 7254402,
+    "prompt": "pixel art, game prop sprite, one small wall candle holder, front view, brass wall candle sconce with one lit candle, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_hall_painting",
+    "kind": "prop",
+    "variant": 2,
+    "files": [
+      "props/prop_hall_painting.png"
+    ],
+    "seed": 7230402,
+    "prompt": "pixel art, game prop sprite, one framed oil painting, front view, landscape oil painting in an ornate gilt frame, dark trees and sky, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_hall_hearth",
+    "kind": "prop",
+    "variant": 3,
+    "files": [
+      "props/prop_hall_hearth.png"
+    ],
+    "seed": 6728403,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, big country house stone hearth with a bright roaring fire and a tall brass fender at the bottom, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_hall_cabinet",
+    "kind": "prop",
+    "variant": 0,
+    "files": [
+      "props/prop_hall_cabinet.png"
+    ],
+    "seed": 3156700,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, costly carved oak cabinets with glass doors, polished wood, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_hall_clock",
+    "kind": "prop",
+    "variant": 2,
+    "files": [
+      "props/prop_hall_clock.png"
+    ],
+    "seed": 1243702,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, tall oak longcase grandfather clock, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_hall_inner_door",
+    "kind": "prop",
+    "variant": 0,
+    "files": [
+      "props/prop_hall_inner_door.png"
+    ],
+    "seed": 3995600,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, closed plain oak panelled door in its frame, brass knob, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "prop_hall_rug",
+    "kind": "prop",
+    "variant": 3,
+    "files": [
+      "props/prop_hall_rug.png"
+    ],
+    "seed": 2297203,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, top-down view of a worn persian rug, rectangular, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-16T13:56:44+00:00"
   }
 ]

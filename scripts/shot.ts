@@ -72,6 +72,61 @@ const scenarios: Record<string, (page: Page) => Promise<void>> = {
     await shot(page, 'pause')
   },
 
+  // HUD and notebook: the task card, the pen writing on the notebook, the pages and a leaf turning
+  notebook: async (page) => {
+    await page.waitForSelector('.menu-btn.new', { timeout: 30_000 })
+    await page.click('.menu-btn.new')
+    await page.waitForSelector('.chapter-card', { timeout: 10_000 })
+    await advanceAll(page)
+    await wait(1200)
+    await shot(page, 'hud')
+    await page.locator('.hud-bulb').click() // the card of the bulb, then a hint
+    await page.locator('.hud-hint').click()
+    await wait(400)
+    await shot(page, 'bulb-card')
+    await page.locator('.hud-bulb').click()
+    await clickGame(page, 259, 146) // the door: Enfield's story adds notes
+    await page.locator('.verb-menu button', { hasText: 'Osserva' }).click()
+    await page.waitForSelector('.dialogue', { timeout: 15_000 })
+    await advanceUntil(page, '.hud-notebook.writing', 200)
+    await wait(500)
+    await shot(page, 'pen')
+    await advanceAll(page, 200)
+    await playRestOfChapter1(page)
+    await advanceUntil(page, '.chapter-card', 20)
+    await advanceAll(page)
+    await wait(1000)
+    await page.locator('.hud-notebook').click()
+    await wait(5000)
+    await shot(page, 'notebook')
+    await page.keyboard.press('ArrowRight')
+    await wait(350)
+    await shot(page, 'leaf')
+    await wait(900)
+    await shot(page, 'turned')
+  },
+
+  // talking to the companion moves nobody: positions before and after "Parla" are printed
+  talkstill: async (page) => {
+    await page.waitForSelector('.menu-btn.new', { timeout: 30_000 })
+    await page.click('.menu-btn.new')
+    await page.waitForSelector('.chapter-card', { timeout: 10_000 })
+    await advanceAll(page)
+    await wait(1500)
+    const npcs = () => page.evaluate(() => (window as unknown as { __jhNpcs: () => { x: number; y: number }[] }).__jhNpcs())
+    // the floor must reach the game canvas, not an overlay (the HUD once covered the whole screen)
+    const box = (await page.locator('#game canvas').boundingBox())!
+    const onFloor = await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.tagName, [box.x + box.width / 2, box.y + box.height * 0.85])
+    console.log(`element on the floor: ${onFloor}`)
+    if (onFloor !== 'CANVAS') throw new Error('the floor is covered: clicks do not reach the room')
+    const before = await npcs()
+    await openTalk(page)
+    await wait(1500)
+    await shot(page, 'talk')
+    const after = await npcs()
+    console.log(`npc before ${JSON.stringify(before)} after ${JSON.stringify(after)}`)
+  },
+
   // chapter 1 played to the end: story, the three questions to Enfield, end page and teaser
   c1full: (page) => playChapter1(page, true),
 
@@ -189,6 +244,20 @@ async function playChapter1(page: Page, shots: boolean): Promise<void> {
     await page.keyboard.press('Space')
     await wait(2500)
     await shot(page, 'teaser')
+  }
+}
+
+// The three questions to Enfield, up to the end page of chapter 1.
+async function playRestOfChapter1(page: Page): Promise<void> {
+  for (const pick of ['firmato', 'nome', 'chiave']) {
+    await openTalk(page)
+    await page.locator('.choice', { hasText: pick }).click()
+    await wait(500)
+    if (pick === 'chiave') {
+      await advanceUntil(page, '.choice', 40)
+      await page.locator('.choice').first().click()
+    }
+    await advanceAll(page, 120, '.chapter-end')
   }
 }
 

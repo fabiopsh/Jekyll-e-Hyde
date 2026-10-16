@@ -35,9 +35,9 @@ selections:
   # 2026-10-16 third pass: the 4 backgrounds redone evenly lit at human scale (best sketch correlation).
   # (second pass, inpainted safe/doors): study v2, hall v2.
   # backgrounds: variant with the best luminance correlation with the composition sketch (study redone at strength 0.55)
-  loc_utterson_study: 1
+  loc_utterson_study: 2
   loc_lanyon_dining_room: 0
-  loc_jekyll_square: 2
+  loc_jekyll_square: 1
   loc_jekyll_hall: 0
   lanyon: 1
   poole: 2
@@ -57,3 +57,34 @@ selections:
   ill_c2_fanlight: 0
   ill_c2_hall_fire: 0
   ill_c2_walk_home: 0
+
+  # 2026-10-16 fourth pass: square = first (night) one again (best sketch correlation); study/dining/hall = empty shells
+  # (lowest edge density = emptiest); props: variant that fills most of its rectangle after the cut-out.
+  prop_study_painting: 0
+  prop_study_fireplace: 1
+  prop_study_bookshelf: 2
+  prop_study_desk: 3
+  prop_study_armchair: 2
+  prop_study_safe: 1
+  prop_study_coatstand: 1
+  prop_study_door: 2
+  prop_study_rug: 1
+  prop_lanyon_door: 0
+  prop_lanyon_portrait: 2
+  prop_lanyon_sideboard: 1
+  prop_lanyon_landscape: 1
+  prop_lanyon_table: 2
+  prop_lanyon_fireplace: 1
+  prop_lanyon_mirror: 0
+  prop_lanyon_rug: 1
+  prop_hall_front_door: 1
+  prop_hall_bench: 2
+  prop_hall_sconce: 2
+  prop_hall_painting: 2
+  prop_hall_hearth: 3
+  prop_hall_cabinet: 0
+  prop_hall_clock: 2
+  prop_hall_inner_door: 0
+  prop_hall_rug: 3
+  # (painting, desk, table, landscape, sconce and the dining/hall shells redone with their own prefix / strength 0.65 and re-picked by eye)
+  # (hall painting/rug/hearth redone with 4 variants after the cut-out kept only the largest object)

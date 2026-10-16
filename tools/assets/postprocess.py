@@ -145,7 +145,7 @@ def hard_alpha(alpha: Image.Image) -> Image.Image:
     return alpha.point(lambda a: 255 if a >= config.ALPHA_THRESHOLD else 0)
 
 
-def keep_main_parts(alpha: Image.Image) -> Image.Image:
+def keep_main_parts(alpha: Image.Image, fraction: float = KEEP_FRACTION) -> Image.Image:
     """Drop opaque fragments much smaller than the main body (specks, ground lines)."""
     from scipy import ndimage
 
@@ -153,7 +153,7 @@ def keep_main_parts(alpha: Image.Image) -> Image.Image:
     if count == 0:
         return alpha
     sizes = ndimage.sum(np.ones_like(labels), labels, index=range(1, count + 1))
-    keep = [i + 1 for i, n in enumerate(sizes) if n >= KEEP_FRACTION * sizes.max()]
+    keep = [i + 1 for i, n in enumerate(sizes) if n >= fraction * sizes.max()]
     return Image.fromarray(np.where(np.isin(labels, keep), 255, 0).astype(np.uint8))
 
 
@@ -186,12 +186,12 @@ def remove_stray_pixels(image: Image.Image) -> Image.Image:
     return Image.fromarray(px, "RGBA")
 
 
-def cut_out(raw: Image.Image, session) -> tuple[Image.Image, Image.Image]:
+def cut_out(raw: Image.Image, session, largest_only: bool = False) -> tuple[Image.Image, Image.Image]:
     """-> (full-size cutout RGBA, subject cropped to its bounding box)."""
     from rembg import remove
 
     soft = remove(raw, session=session).convert("RGBA").getchannel("A")
-    alpha = fill_holes(keep_main_parts(hard_alpha(soft)), soft, raw)
+    alpha = fill_holes(keep_main_parts(hard_alpha(soft), 1.0 if largest_only else KEEP_FRACTION), soft, raw)  # props: only the largest connected object
     subject = raw.convert("RGBA")
     subject.putalpha(alpha)  # colours from the raw image: rembg darkens the pixels it made transparent
     bbox = alpha.getbbox()
@@ -238,20 +238,22 @@ def frame_portrait(raw: Image.Image, alpha: Image.Image) -> Image.Image:
     return grid_reduce(raw.convert("RGBA").crop((x0, y0, x0 + w, y0 + h)), config.PORTRAIT_SIZE)
 
 
-def reduce(kind: str, raw: Image.Image, session, height: int | None = None) -> tuple[Image.Image, Image.Image | None]:
+def reduce(kind: str, raw: Image.Image, session, height: int | None = None, size: tuple | None = None) -> tuple[Image.Image, Image.Image | None]:
     """-> (reduced image, full-size cutout or None). `height`: character height in px instead of
     CHARACTER_HEIGHT (request key `height`, e.g. 51 for a figure 80% as tall as the others)."""
     if kind == "background":
         return grid_reduce(crop_16_9(raw.convert("RGBA")), config.BACKGROUND_SIZE), None
     if kind == "illustration":
         return grid_reduce(crop_aspect(raw.convert("RGBA"), 4, 5), config.ILLUSTRATION_SIZE), None
-    cutout, subject = cut_out(raw, session)
+    cutout, subject = cut_out(raw, session, largest_only=(kind == "prop"))
     if kind == "portrait":
         return frame_portrait(raw, cutout.getchannel("A")), cutout
     if kind == "character":
         height = height or config.CHARACTER_HEIGHT
         width = max(1, round(subject.width * height / subject.height))
         return remove_stray_pixels(grid_reduce(subject, (width, height))), cutout
+    if kind == "prop":  # the whole object, stretched to exactly `size` (w, h) of the request
+        return remove_stray_pixels(grid_reduce(subject, tuple(size))), cutout
     inner = (config.ITEM_SIZE[0] - 2, config.ITEM_SIZE[1] - 2)
     return fit(subject, inner, config.ITEM_SIZE, "centre"), cutout
 
@@ -278,16 +280,29 @@ def despeckle(image: Image.Image, passes: int = 1) -> Image.Image:
     h, w, _ = px.shape
     for _ in range(passes):
         opaque = px[..., 3] > 0
-        colours, idx = np.unique(px[..., :3].reshape(-1, 3), axis=0, return_inverse=True)
+        colours, idx = np.unique(px.reshape(-1, 4), axis=0, return_inverse=True)  # RGBA: transparent is its own colour
         idx = idx.reshape(h, w)
+        visible = colours[:, 3] > 0
         pad = np.pad(idx, 1, mode="edge")
         shifts = [pad[1 + dy:1 + dy + h, 1 + dx:1 + dx + w] for dy in (-1, 0, 1) for dx in (-1, 0, 1) if (dy, dx) != (0, 0)]
         counts = np.stack([sum((s == k).astype(np.int8) for s in shifts) for k in range(len(colours))])  # (K, h, w)
         same = np.take_along_axis(counts, idx[None], axis=0)[0]
+        counts[~visible] = 0  # a transparent neighbour never wins
         mode = counts.argmax(axis=0)
         top = counts.max(axis=0)
         fix = opaque & (same <= 1) & (top >= 4)
-        px[fix, :3] = colours[mode[fix]]
+        px[fix, :3] = colours[mode[fix], :3]
+    return Image.fromarray(px, "RGBA")
+
+
+def outline(image: Image.Image, colour: tuple) -> Image.Image:
+    """1 px dark outline for props: every opaque pixel that touches transparency (4 neighbours, the canvas edge
+    counts as transparent) takes `colour`, so the sprite keeps its exact size."""
+    px = np.asarray(image.convert("RGBA")).copy()
+    opaque = px[..., 3] > 0
+    p = np.pad(opaque, 1)
+    edge = opaque & ~(p[:-2, 1:-1] & p[2:, 1:-1] & p[1:-1, :-2] & p[1:-1, 2:])
+    px[edge, :3] = colour
     return Image.fromarray(px, "RGBA")
 
 
@@ -394,7 +409,8 @@ def main() -> None:
         t = time.perf_counter()
         try:
             reduced, cutout = reduce(kind, Image.open(raw_path).convert("RGB"), session,
-                                     requests[config.parse_file_name(raw_path)[0]].get("height"))
+                                     requests[config.parse_file_name(raw_path)[0]].get("height"),
+                                     requests[config.parse_file_name(raw_path)[0]].get("size"))
         except ValueError as exc:
             print(f"[{done}/{len(raws)}] {raw_path.name} FAILED: {exc}")
             continue
@@ -439,6 +455,9 @@ def main() -> None:
         result = apply_palette(Image.open(reduced_path), palette[:size] if size and palette is not None else palette)
         if requests[config.parse_file_name(raw_path)[0]].get("despeckle"):
             result = despeckle(result, requests[config.parse_file_name(raw_path)[0]]["despeckle"])
+        if kind == "prop":
+            pal = palette[:size] if size else palette
+            result = outline(result, tuple(int(c) for c in pal[0]))  # palette.hex is sorted dark to light
         result.save(out)
     print(f"done in {time.perf_counter() - start:.1f}s -> {config.PROCESSED_DIR}")
 

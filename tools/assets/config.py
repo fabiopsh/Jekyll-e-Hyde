@@ -32,9 +32,9 @@ SHEETS_DIR = OUTPUT_DIR / "sheets"        # contact sheets for manual choice
 GAME_ASSETS_DIR = REPO / "assets"
 GAME_MANIFEST = GAME_ASSETS_DIR / "manifest.json"
 GAME_FOLDERS = {"background": "backgrounds", "character": "characters", "portrait": "portraits", "item": "items",
-                "illustration": "illustrations"}
+                "illustration": "illustrations", "prop": "props"}
 
-KINDS = ("background", "character", "portrait", "item", "illustration")
+KINDS = ("background", "character", "portrait", "item", "illustration", "prop")
 
 # Image generation
 BASE_MODEL = "stabilityai/stable-diffusion-xl-base-1.0"

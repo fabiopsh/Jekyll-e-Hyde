@@ -39,13 +39,25 @@ DEFAULT_STRENGTH = 0.8  # img2img with a layout sketch: 1.0 ignores the sketch, 
 os.environ.setdefault("HF_HUB_DISABLE_SYMLINKS_WARNING", "1")
 
 
+GEN_SIZES = [(1344, 768), (1216, 832), (1024, 1024), (832, 1216), (768, 1344)]  # SDXL buckets
+
+
+def gen_size(request: dict, block: dict) -> tuple[int, int]:
+    """Generation size: the style block's, or for a prop (`size: [w, h]` in the game) the SDXL bucket whose
+    aspect ratio is closest to the final one (so the object is stretched as little as possible)."""
+    if request.get("size"):
+        aspect = request["size"][0] / request["size"][1]
+        return min(GEN_SIZES, key=lambda s: abs(s[0] / s[1] - aspect))
+    return block["width"], block["height"]
+
+
 def build_prompt(request: dict, style: dict, characters: dict) -> tuple[str, str]:
     """Return (prompt, negative prompt) for a request."""
     kind = request["kind"]
     block = style[kind]
     sheet = {}
     extra_negative = [request.get("negative_extra", "")]
-    if kind in ("background", "item", "illustration"):
+    if kind in ("background", "item", "illustration", "prop"):
         subject = request["subject"]
         # Illustrations may show a character: `{utterson}` in the subject becomes that character's sheet
         # (`illustration` text if present, else `appearance`) and its negative_extra is added.
@@ -189,7 +201,7 @@ def main() -> None:
         prompt, negative = build_prompt(request, style, characters)
         tokens = len(tokenizer(prompt).input_ids)
         block = style[request["kind"]]
-        print(f"\n{request['id']} ({request['kind']}, {block['width']}x{block['height']}) prompt {tokens} tokens"
+        print(f"\n{request['id']} ({request['kind']}, {gen_size(request, block)[0]}x{gen_size(request, block)[1]}) prompt {tokens} tokens"
               + ("  WARNING: over the 77-token limit, the end is ignored" if tokens > config.MAX_PROMPT_TOKENS else ""))
         if args.dry_run:
             print(f"  prompt:   {prompt}\n  negative: {negative}")
@@ -245,7 +257,7 @@ def main() -> None:
                     # Same modules, no copy. (from_pipe re-cast them here: VRAM full, >10x slower.)
                     img2img = StableDiffusionXLImg2ImgPipeline(**pipe.components)
                     img2img.set_progress_bar_config(disable=True)
-                sketch = load_layout(request, (block["width"], block["height"]))
+                sketch = load_layout(request, gen_size(request, block))
                 noise = request.get("noise", LAYOUT_NOISE)
                 image = img2img(image=add_noise(sketch, seed, noise), strength=strength, **common).images[0]
                 for region in request.get("regions", []):
@@ -270,7 +282,7 @@ def main() -> None:
                         generator=torch.Generator("cuda").manual_seed(seed + 1),
                     ).images[0]
             else:
-                image = pipe(width=block["width"], height=block["height"], **common).images[0]
+                image = pipe(width=gen_size(request, block)[0], height=gen_size(request, block)[1], **common).images[0]
             path.parent.mkdir(parents=True, exist_ok=True)
             image.save(path)
             seconds = time.perf_counter() - t_img
@@ -280,7 +292,7 @@ def main() -> None:
                 "prompt": prompt, "negative_prompt": negative,
                 "base_model": config.BASE_MODEL, "lora": config.PIXEL_LORA, "lcm": args.lcm,
                 "steps": steps, "guidance": guidance, "lora_weight": lora_weight,
-                "width": block["width"], "height": block["height"],
+                "width": gen_size(request, block)[0], "height": gen_size(request, block)[1],
                 "layout": layout, "strength": strength if layout else None,
                 "noise": request.get("noise", LAYOUT_NOISE) if layout else None,
                 "layout_grade": request.get("layout_grade") if layout else None,

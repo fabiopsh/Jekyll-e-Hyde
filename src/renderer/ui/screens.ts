@@ -194,71 +194,50 @@ async function showRun(content: Content, run: RunMeta, into: HTMLElement): Promi
   into.replaceChildren(h('pre', { class: 'history-log' }, lines.join('\n') || 'Nessun evento registrato.'))
 }
 
-// The lawyer's notebook (tasto J): left page = chapter, what to do, a hint, pockets; right page = notes in
-// order, 6 per page, turned with the arrows. Notes written since the last opening appear one after the other,
-// as if written now, with a pen sound.
-const NOTES_PER_PAGE = 6
-
+// The lawyer's notebook (tasto J, or the notebook in the corner): only the notes, written on the ruled lines of
+// two facing pages. A note that does not fit goes on the next page; the arrows turn a leaf. Notes written since
+// the last opening appear one after the other, as if written now, with a pen sound. What to do now, the hint
+// and the pockets are on screen in the HUD (ui/hud.ts, D30).
 export function journal(session: Session): Promise<void> {
   return modal(() => new Promise<void>((resolve) => {
     const { state, content } = session
-    const ch = chapterOf(content, state.chapter)
-    const obj = session.objective()
     const owner = content.characters[state.player]?.name ?? state.player
     const notes = state.journal
     const firstNew = Math.min(session.journalSeen, notes.length)
     session.journalSeen = notes.length
-    const pages = Math.max(1, Math.ceil(notes.length / NOTES_PER_PAGE))
-    let page = pages - 1 // open where the newest notes are
 
-    const hintBox = h('p', { class: 'notebook-hint' })
-    const left = h('div', { class: 'notebook-page left' },
-      h('div', { class: 'notebook-owner' }, `Taccuino di ${owner}`),
-      h('div', { class: 'notebook-chapter' }, `Capitolo ${roman(ch.number)} · ${ch.title}`),
-      h('h3', {}, 'Da fare'),
-      h('p', { class: 'notebook-task' }, obj ? obj.text : 'Nulla, per ora.'),
-      obj ? h('button', { class: 'notebook-btn', onclick: () => { const t = session.nextHint(); if (t) hintBox.textContent = t } }, 'Rifletti (un suggerimento)') : null,
-      hintBox,
-      h('h3', {}, 'In tasca'),
-      state.inventory.length
-        ? h('ul', { class: 'notebook-items' }, ...state.inventory.map((i) => h('li', {}, `${content.items[i]?.name ?? i}: ${content.items[i]?.description ?? ''}`)))
-        : h('p', { class: 'notebook-task' }, 'Niente di particolare.'),
-    )
-    const right = h('div', { class: 'notebook-page right' })
-    const prev = h('button', { class: 'notebook-nav', onclick: () => turn(-1) }, '◂')
-    const next = h('button', { class: 'notebook-nav', onclick: () => turn(1) }, '▸')
+    // every line-sized piece in order: the owner, a heading when the chapter changes, the notes
+    const items: HTMLElement[] = [h('div', { class: 'notebook-owner' }, `Taccuino di ${owner}`)]
+    let chapter = 0
+    let delay = 0
+    notes.forEach((n, i) => {
+      if (n.chapter !== chapter) {
+        chapter = n.chapter
+        const ch = content.chapters.find((c) => c.number === n.chapter)
+        items.push(h('div', { class: 'note-heading' }, `Capitolo ${roman(n.chapter)}${ch ? ` · ${ch.title}` : ''}`))
+      }
+      const li = h('div', { class: 'note' }, h('span', { class: 'note-mark' }, '—'), ' ', n.text)
+      if (i >= firstNew) {
+        li.classList.add('new')
+        li.style.setProperty('--w', `${delay}s`)
+        li.dataset.delay = String(delay)
+        delay += 0.9
+      }
+      items.push(li)
+    })
+    if (!notes.length) items.push(h('p', { class: 'note' }, 'Ancora nessun appunto.'))
+
+    const pageEl = (lines: HTMLElement[], index: number) =>
+      h('div', { class: `notebook-page ${index % 2 ? 'right' : 'left'}` },
+        h('div', { class: 'page-lines' }, ...lines),
+        h('div', { class: 'page-number' }, String(index + 1)))
+
+    const leftSlot = h('div', { class: 'page-slot left' })
+    const rightSlot = h('div', { class: 'page-slot right' })
+    const book = h('div', { class: 'notebook' }, leftSlot, rightSlot)
+    const prev = h('button', { class: 'notebook-nav', onclick: () => turn(-1) }, '◂ Pagina prima')
+    const next = h('button', { class: 'notebook-nav', onclick: () => turn(1) }, 'Pagina dopo ▸')
     const counter = h('span', { class: 'notebook-counter' })
-
-    const draw = () => {
-      const start = page * NOTES_PER_PAGE
-      const items = notes.slice(start, start + NOTES_PER_PAGE).map((n, k) => {
-        const index = start + k
-        const li = h('li', { class: index >= firstNew ? 'note new' : 'note' }, h('span', { class: 'note-chapter' }, `${roman(n.chapter)}.`), ' ', n.text)
-        if (index >= firstNew) {
-          const delay = (index - Math.max(firstNew, start)) * 0.9
-          li.style.setProperty('--w', `${delay}s`)
-          setTimeout(() => { if (li.isConnected) playPenScratch() }, delay * 1000 + 100)
-        }
-        return li
-      })
-      right.replaceChildren(
-        h('h3', {}, 'Appunti'),
-        notes.length ? h('ol', { class: 'notebook-notes' }, ...items) : h('p', { class: 'notebook-task' }, 'Ancora nessun appunto.'),
-      )
-      counter.textContent = `pagina ${page + 1} di ${pages}`
-      prev.toggleAttribute('disabled', page === 0)
-      next.toggleAttribute('disabled', page === pages - 1)
-    }
-    const turn = (d: number) => {
-      const to = page + d
-      if (to < 0 || to >= pages) return
-      right.classList.remove('turn-next', 'turn-prev')
-      void right.offsetWidth // restart the page-turn animation
-      right.classList.add(d > 0 ? 'turn-next' : 'turn-prev')
-      page = to
-      setTimeout(draw, 180)
-    }
-
     const close = () => {
       window.removeEventListener('keydown', key)
       screen.classList.add('closing')
@@ -269,13 +248,65 @@ export function journal(session: Session): Promise<void> {
       else if (e.key === 'ArrowRight') turn(1)
       else if (e.key === 'ArrowLeft') turn(-1)
     }
-    const screen = h('div', { class: 'screen notebook-screen' },
-      h('div', { class: 'notebook' }, left, right),
-      h('div', { class: 'notebook-bar' }, prev, counter, next, h('button', { onclick: close }, 'Chiudi (J)')),
-    )
-    draw()
-    setTimeout(() => window.addEventListener('keydown', key), 0)
+    const screen = h('div', { class: 'screen notebook-screen' }, book,
+      h('div', { class: 'notebook-bar' }, prev, counter, next, h('button', { onclick: close }, 'Chiudi (J)')))
     ui().append(screen)
+
+    // pagination: fill a hidden page with the same size until it overflows, then start the next one
+    const probe = pageEl([], 0)
+    probe.classList.add('probe')
+    leftSlot.append(probe)
+    const box = probe.querySelector<HTMLElement>('.page-lines')!
+    const pages: HTMLElement[][] = [[]]
+    for (const it of items) {
+      box.append(it)
+      if (box.scrollHeight > box.clientHeight + 1 && pages[pages.length - 1].length) {
+        pages.push([])
+        box.replaceChildren(it)
+      }
+      pages[pages.length - 1].push(it)
+    }
+    probe.remove()
+    if (pages.length % 2) pages.push([]) // a spread has two pages
+    const spreads = pages.length / 2
+    const newSpread = notes.length > firstNew ? Math.floor(pages.findIndex((p) => p.some((x) => x.classList.contains('new'))) / 2) : spreads - 1
+    let spread = Math.max(0, newSpread)
+    let turning = false
+
+    const show = (i: number) => pageEl(pages[i].map((x) => x.cloneNode(true) as HTMLElement), i)
+    const draw = () => {
+      leftSlot.replaceChildren(show(spread * 2))
+      rightSlot.replaceChildren(show(spread * 2 + 1))
+      counter.textContent = `pagine ${spread * 2 + 1}-${spread * 2 + 2} di ${pages.length}`
+      prev.toggleAttribute('disabled', spread === 0)
+      next.toggleAttribute('disabled', spread === spreads - 1)
+    }
+    // a leaf turns on the spine: its front is the page being turned, its back the page that comes next
+    const turn = (d: 1 | -1) => {
+      const to = spread + d
+      if (turning || to < 0 || to >= spreads) return
+      turning = true
+      const front = (d > 0 ? rightSlot : leftSlot).firstElementChild!.cloneNode(true) as HTMLElement
+      const back = show(d > 0 ? to * 2 : to * 2 + 1)
+      const leaf = h('div', { class: `leaf ${d > 0 ? 'leaf-next' : 'leaf-prev'}` },
+        h('div', { class: 'leaf-face front' }, front), h('div', { class: 'leaf-face back' }, back))
+      ;(d > 0 ? rightSlot : leftSlot).replaceChildren(show(d > 0 ? to * 2 + 1 : to * 2)) // revealed underneath
+      book.append(leaf)
+      playPenScratch()
+      leaf.addEventListener('animationend', () => {
+        leaf.remove()
+        spread = to
+        draw()
+        turning = false
+      }, { once: true })
+    }
+
+    draw()
+    // the new notes are written once: the copies on screen animate, the originals do not any more
+    for (const el of rightSlot.querySelectorAll<HTMLElement>('.note.new')) setTimeout(() => { if (el.isConnected) playPenScratch() }, Number(el.dataset.delay) * 1000 + 100)
+    for (const el of leftSlot.querySelectorAll<HTMLElement>('.note.new')) setTimeout(() => { if (el.isConnected) playPenScratch() }, Number(el.dataset.delay) * 1000 + 100)
+    for (const it of items) it.classList.remove('new')
+    setTimeout(() => window.addEventListener('keydown', key), 0)
   }))
 }
 

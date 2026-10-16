@@ -57,6 +57,8 @@ def make_contact_sheets(ids: str | None = None, kind: str | None = None) -> None
             scale = 4
         elif req_kind in ("portrait", "illustration"):
             scale = 2
+        elif req_kind == "prop":
+            scale = 4
 
         scaled_imgs = []
         for vnum, im in images:
@@ -84,7 +86,7 @@ def make_contact_sheets(ids: str | None = None, kind: str | None = None) -> None
             border_width = 3 if is_chosen else 1
 
             # Background checkerboard for transparent images
-            if req_kind in ("character", "portrait", "item"):
+            if req_kind in ("character", "portrait", "item", "prop"):
                 checker = Image.new("RGBA", (im.width, im.height), (40, 36, 44, 255))
                 sheet.paste(checker, (x, y))
 

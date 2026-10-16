@@ -72,3 +72,15 @@ illustration:
 sampler:
   standard: {steps: 30, guidance: 7.0, lora_weight: 1.0}
   lcm: {steps: 8, guidance: 1.5, lora_weight: 1.2}
+
+# Props (chapter 2): one piece of furniture or decoration, front view as in a room seen straight on at eye level,
+# cut out (rembg) and stretched to the exact size of the request (`size: [w, h]`), then day palette, despeckle
+# and a 1 px dark outline. The engine lights them (neutral even light here).
+prop:
+  width: 1024
+  height: 1024
+  prefix: "pixel art, game prop sprite, detailed victorian furniture, front view, straight on"
+  suffix: "single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline"
+  negative: >-
+    multiple objects, room, interior, wall, floor, scenery, person, hand, shadow, side view, top view, perspective,
+    cut off, cropped, out of frame, text, letters, watermark, blurry, realistic, photo, 3d render

@@ -118,6 +118,10 @@ export const Scene = z.strictObject({
   name: z.string(),
   background: z.string(), // asset key, e.g. backgrounds/loc_door
   foreground: z.array(z.string()).default([]),
+  // Objects of the room, each from its own picture, laid over the background (D29): furniture, paintings, rugs.
+  // `at` = top-left corner in game pixels. Depth = the prop's bottom edge, so a character stands in front of it
+  // when its feet are lower; `depth: 0` keeps it behind everyone (a painting on the wall, a rug).
+  props: z.array(z.strictObject({ image: z.string(), at: Point, depth: z.number().optional() })).default([]),
   walkable: Polygon,
   scale: z.strictObject({ far_y: z.number(), far: z.number(), near_y: z.number(), near: z.number() }).optional(),
   entries: z.record(id, Point),

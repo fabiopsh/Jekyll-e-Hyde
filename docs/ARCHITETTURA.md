@@ -80,6 +80,8 @@ Unico oggetto serializzato nel salvataggio.
 ### Scena (`content/scenes/*.yaml`)
 Sfondo, eventuali livelli in primo piano, poligono calpestabile, punti di ingresso, hotspot (forma, nome,
 verbi *guarda/usa/parla/prendi* → effetti), uscite (verso scena, condizione), NPC presenti (posizione, condizione).
+Oggetti di scena (`props`, D29): immagini separate sopra lo sfondo, ordinate in profondità con i personaggi.
+Luce (`lighting`, D28): luce ambiente e luci puntiformi (Light2D), così una scena di notte usa lo sfondo di giorno.
 NPC e hotspot con `when` seguono lo stato mentre si è nella stanza: dopo ogni gruppo di effetti la stanza li
 mostra o li nasconde (`RoomScene.refresh()`), così qualcuno può arrivare o andarsene senza cambiare scena.
 

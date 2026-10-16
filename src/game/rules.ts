@@ -22,6 +22,7 @@ export type Command =
   | { kind: 'learned'; fact: string }
   | { kind: 'got'; item: string }
   | { kind: 'objective'; id: string }
+  | { kind: 'noted' } // a note added to the journal by a `journal` effect
   | { kind: 'chapter'; number: number }
   | { kind: 'end' }
 
@@ -51,7 +52,10 @@ export function apply(effects: Effect[], state: GameState, content: Content): Ou
       commands.push({ kind: 'goto', scene: e.goto, at: e.at ?? null })
     } else if ('dialogue' in e) commands.push({ kind: 'dialogue', id: e.dialogue })
     else if ('narrate' in e) commands.push({ kind: 'narrate', text: e.narrate, image: e.image })
-    else if ('journal' in e) s = { ...s, journal: [...s.journal, { chapter: s.chapter, text: e.journal }] }
+    else if ('journal' in e) {
+      s = { ...s, journal: [...s.journal, { chapter: s.chapter, text: e.journal }] }
+      commands.push({ kind: 'noted' })
+    }
     else if ('complete' in e) s = completeObjective(s, e.complete, commands)
     else if ('chapter' in e) s = startChapter(s, e.chapter, content, commands)
     else if ('end' in e) {
