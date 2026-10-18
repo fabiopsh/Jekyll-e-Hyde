@@ -190,3 +190,23 @@ scelta dell'agente, 2026-10-17)
   del capitolo 5 e per gli indizi del capitolo 8.
 - Battute con `portrait`: un ritratto diverso per una battuta (Jekyll pallido quando sente il nome di Hyde).
 - Il capitolo 3 non si presta ad altri minigiochi: è un dialogo al camino; tutto il resto resterebbe inventato.
+
+**D32 — Tutorial della prima partita e scelta del capitolo.** (Fabio, 2026-10-18)
+- Tutorial: alla prima visita della stradina (in ogni nuova partita) un cartellino in alto al centro spiega, un
+  passo alla volta, come camminare, come si interagisce con le cose (cursore, menu delle azioni, tasto destro per
+  osservare), la differenza tra *Parla* (dialogo del libro) e *Conversa* (chat libera che non cambia la storia),
+  la lampadina e il taccuino; un anello pulsa su ciò di cui parla. I passi avanzano da soli quando il giocatore
+  fa la cosa, o con *Avanti*; *Salta il tutorial* lo chiude. Testi in `content/game.yaml` (`tutorial`).
+- *Scegli un capitolo* nel menu: una nuova partita dal capitolo scelto. Il personaggio sa già tutti i fatti dei
+  capitoli precedenti (nel taccuino) e i loro obiettivi sono fatti; i flag dei capitoli precedenti no, quindi un
+  capitolo non deve dipendere da flag di un altro. Il segnalibro *Riprendi* continua l'ultima partita in corso.
+
+**D33 — Menu in pelle, scelta del capitolo con le tavole, Cronache come resoconti.** (Fabio, 2026-10-18)
+- Una sola texture di pelle per copertina, menu di pausa, impostazioni, scelta del capitolo, fascicoli delle
+  Cronache e copertina del taccuino: due rumori SVG procedurali (grana e macchie) su un fondo bruno, bordo
+  dorato doppio. Nessuna immagine da generare.
+- *Scegli un capitolo*: uno scaffale di schede, ognuna con la tavola del capitolo (`cover` nel file del capitolo).
+- Pagina iniziale: *Esci dal gioco* accanto a *Impostazioni*.
+- *Cronache delle indagini*: a sinistra un fascicolo per partita (numero, stato, capitolo raggiunto, data, tempo,
+  suggerimenti; *Riprendi* se è in corso); a destra il resoconto su carta, capitolo per capitolo: scoperte,
+  scelte, conversazioni libere riportate parola per parola, ragionamenti risolti, suggerimenti usati.

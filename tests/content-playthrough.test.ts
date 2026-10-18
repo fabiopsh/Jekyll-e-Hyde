@@ -2,7 +2,7 @@
 // by following its scripted dialogues. Add one walkthrough per chapter.
 import { describe, expect, it } from 'vitest'
 import { loadContent } from '../src/shared/content-loader'
-import { apply, check, currentObjective, progress } from '../src/game/rules'
+import { apply, check, currentObjective, progress, stateAtChapter } from '../src/game/rules'
 import { newGameState, type GameState } from '../src/game/state'
 import type { Content, Effect } from '../src/shared/content-schema'
 
@@ -114,6 +114,17 @@ describe('content', () => {
     expect(s.objectivesDone).toEqual(['c2_read_will', 'c2_ask_lanyon', 'c2_see_hyde', 'c2_find_jekyll'])
     expect(s.chapter).toBe(3)
     expect(s.scene).toBe('loc_jekyll_dining_room')
+  })
+
+  it('a game started at a later chapter knows the facts of the earlier ones', () => {
+    const s = stateAtChapter(content, 3)
+    expect(s.chapter).toBe(3)
+    expect(s.scene).toBe('loc_jekyll_dining_room')
+    // the chapter 3 deduction can be solved: its right answers are known
+    for (const sl of content.deductions.d03_thoughts.slots) expect(sl.accept.some((f) => s.facts.includes(f))).toBe(true)
+    expect(s.journal.length).toBe(s.facts.length)
+    expect(currentObjective(s, content)?.id).toBe('c3_prepare')
+    expect(stateAtChapter(content, 1).facts).toEqual([])
   })
 
   it('chapter 3: the thoughts in order, then the talk by the fire up to the promise', () => {

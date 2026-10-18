@@ -2,6 +2,7 @@
 number: 1
 title: Storia della porta
 player: utterson
+cover: illustrations/ill_c1_door_closeup
 start_scene: loc_by_street
 start_at: west
 intro:

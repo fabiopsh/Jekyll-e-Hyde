@@ -69,7 +69,7 @@ async function main(): Promise<void> {
     }
     playMusic(content.game.menu_music)
     const choice = await mainMenu(content)
-    const session = choice.kind === 'new' ? await Session.create(content) : await Session.resume(content, choice.id)
+    const session = choice.kind === 'new' ? await Session.create(content, choice.chapter ?? 1) : await Session.resume(content, choice.id)
     window.addEventListener('beforeunload', () => void session.save())
     await new Presenter(game, session).start(choice.kind === 'new')
   }

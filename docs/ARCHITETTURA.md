@@ -98,6 +98,11 @@ Rompicapo "metti in ordine i pensieri": domande con un appunto da scegliere cias
 `options` = appunti offerti, solo se il giocatore li ha), `wrong` se non torna, `done` = effetti quando torna.
 Si apre con l'effetto `deduce: <id>` (`src/renderer/ui/deduction.ts`).
 
+### Tutorial e avvio da un capitolo (D32)
+`content/game.yaml` → `tutorial`: scena e passi (testo, `target` = punto della stanza / prima persona / pulsante
+dell'HUD, `until` = walk / menu / next); `src/renderer/ui/tutorial.ts`, eventi `jh:walk` e `jh:verbmenu`.
+`stateAtChapter()` (`src/game/rules.ts`) costruisce la partita che parte da un capitolo scelto nel menu.
+
 ### Capitolo (`content/chapters/*.yaml`)
 Personaggio giocato (Utterson; Lanyon e Jekyll/Hyde nei flashback), scena iniziale, obiettivi in ordine con
 condizione di completamento, per ogni obiettivo tre suggerimenti scritti a mano (vago → preciso).

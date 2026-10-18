@@ -202,6 +202,7 @@ export const Chapter = z.strictObject({
   number: z.number().int().min(1).max(10),
   title: z.string(),
   player: id, // utterson, lanyon, jekyll, hyde
+  cover: z.string().optional(), // illustration that stands for the chapter in "Scegli un capitolo"
   start_scene: id,
   start_at: id.optional(),
   // narration cards shown at chapter start; a card can carry an illustration
@@ -302,5 +303,20 @@ export const GameSettings = z.strictObject({
     figure: z.string().optional(), // character sprite whose silhouette (black, smaller) is the shadow
   }).optional(),
   menu_quote: z.string().optional(), // line under the menu buttons
+  // First-game tutorial (D32), shown once per game when `scene` is first entered. A step ends when the player
+  // walks (`walk`), opens the menu of a thing (`menu`) or presses "Avanti" (`next`). `target`: where the ring
+  // pulses: a point of the room (game pixels), the first person in the room, or a HUD button.
+  tutorial: z.strictObject({
+    scene: id,
+    steps: z.array(z.strictObject({
+      text: z.string(),
+      target: z.union([
+        z.strictObject({ point: Point }),
+        z.strictObject({ npc: z.literal(true) }),
+        z.strictObject({ ui: z.enum(['bulb', 'notebook']) }),
+      ]).optional(),
+      until: z.enum(['walk', 'menu', 'next']),
+    })).min(1),
+  }).optional(),
 })
 export type GameSettings = z.infer<typeof GameSettings>

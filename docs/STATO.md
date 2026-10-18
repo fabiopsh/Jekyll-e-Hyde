@@ -120,6 +120,14 @@ Aggiornato: 2026-10-16. Chi lavora qui aggiorna questo file a fine sessione (ved
   Dubbi dell'agente sulle immagini: Jekyll sembra più giovane di cinquant'anni e ha un abito marrone; la
   finestra sembra un mobile; poltrona destra = sinistra specchiata; `ill_c3_dinner` ha un lampadario.
 
+- **Tutorial e scelta del capitolo (2026-10-18, D32)**: tutorial a passi nella stradina del capitolo 1;
+  *Scegli un capitolo* nel menu (nuova partita da un capitolo, con i fatti dei precedenti). Scenari
+  `npm run shot -- tutorial` e `npm run shot -- chapters`.
+
+- **Menu (2026-10-18, D33)**: texture di pelle su tutti i menu; *Scegli un capitolo* con le tavole; *Esci dal
+  gioco* nella pagina iniziale; Cronache rifatte (fascicoli + resoconto per capitolo). Scenario
+  `npm run shot -- menus`.
+
 ## Prossimi passi
 
 1. Prova manuale di Fabio dei capitoli 1 e 2 (sotto) e revisione delle immagini del capitolo 2.
@@ -140,6 +148,11 @@ Capitolo 1:
    lampadina (accesa = c'è un suggerimento): clic, riquadro con cosa fare e *Rifletti*.
 6. Enfield → *Parla* tre volte (firmatario, nome, chiave) → stretta di mano → pagina di fine capitolo →
    anticipazione → cartolina "Capitolo II".
+
+Tutorial e menu:
+- Nuova partita: nella stradina compare il cartellino *Come si gioca*: cammina, clicca la porta, poi *Avanti*
+  fino a *Ho capito* (o *Salta il tutorial*). Menu → *Scegli un capitolo* → Capitolo III: il taccuino ha gli
+  appunti dei capitoli I e II; il segnalibro *Riprendi* riapre l'ultima partita in corso.
 
 Capitolo 2:
 7. Studio: orologio e fuoco si sentono. La porta non si apre prima del testamento. Cassaforte → *Usa*: il

@@ -3,6 +3,7 @@
 number: 3
 title: Il dottor Jekyll era perfettamente a suo agio
 player: utterson
+cover: illustrations/ill_c3_fireside
 start_scene: loc_jekyll_dining_room
 start_at: table
 intro:

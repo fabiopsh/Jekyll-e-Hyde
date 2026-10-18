@@ -14,7 +14,7 @@ const fmtTime = (ms: number) => {
 }
 const fmtDate = (iso: string) => new Date(iso).toLocaleString('it-IT', { dateStyle: 'medium', timeStyle: 'short' })
 
-export type MenuChoice = { kind: 'new' } | { kind: 'resume'; id: string }
+export type MenuChoice = { kind: 'new'; chapter?: number } | { kind: 'resume'; id: string }
 
 // Main menu: the animated title scene behind a book cover. "Comincia la lettura" opens the cover.
 export function mainMenu(content: Content): Promise<MenuChoice> {
@@ -35,8 +35,13 @@ export function mainMenu(content: Content): Promise<MenuChoice> {
         h('p', { class: 'book-edition' }, 'Londra, 1886 · Avventura grafica dal romanzo'),
         h('div', { class: 'menu-buttons' },
           h('button', { class: 'menu-btn new', onclick: () => open({ kind: 'new' }) }, 'Comincia la lettura (Nuova partita)'),
-          h('button', { class: 'menu-btn history', onclick: () => history(content, runs) }, `Cronache delle indagini (${runs.length} registrate)`),
-          h('button', { class: 'menu-btn settings', onclick: () => settingsScreen() }, 'Impostazioni'),
+          h('button', { class: 'menu-btn history', onclick: () => history(content, runs, (id) => open({ kind: 'resume', id })) }, `Cronache delle indagini (${runs.length})`),
+          content.chapters.length > 1
+            ? h('button', { class: 'menu-btn chapters', onclick: () => chapterSelect(content, (n) => open({ kind: 'new', chapter: n })) }, 'Scegli un capitolo')
+            : null,
+          h('div', { class: 'menu-row' },
+            h('button', { class: 'menu-btn settings', onclick: () => settingsScreen() }, 'Impostazioni'),
+            h('button', { class: 'menu-btn quit', onclick: () => void (window.api?.app?.quit ? window.api.app.quit() : window.close()) }, 'Esci dal gioco')),
         ),
         content.game.menu_quote ? h('div', { class: 'book-quote' }, content.game.menu_quote) : null,
       ),
@@ -155,44 +160,79 @@ export function chapterCard(ch: Chapter): Promise<void> {
   }))
 }
 
-async function history(content: Content, runs: RunMeta[]): Promise<void> {
+// "Cronache delle indagini" (D33): every game is an investigation. Left: one file per game (when it began, how
+// far it went, how long, hints used; "Riprendi" if still open). Right: the report of the chosen one, chapter by
+// chapter: what was discovered, the choices made, the deductions, the free conversations word by word.
+async function history(content: Content, runs: RunMeta[], resume: (id: string) => void): Promise<void> {
+  const detail = h('div', { class: 'history-detail paper' },
+    h('p', { class: 'history-empty' }, 'Scegli un\'indagine a sinistra per rileggerne il resoconto.'))
   const list = h('div', { class: 'history-list' })
-  const detail = h('div', { class: 'history-detail' }, h('p', {}, 'Scegli una partita per rileggerla.'))
   const screen = h('div', { class: 'screen history' },
-    h('h2', {}, 'Cronache delle indagini'),
+    h('div', { class: 'history-head' },
+      h('h2', {}, 'Cronache delle indagini'),
+      h('p', { class: 'history-intro' }, 'Ogni partita è un\'indagine. Qui rileggi che cosa hai scoperto, le scelte fatte e le conversazioni.')),
     h('div', { class: 'history-body' }, list, detail),
-    h('button', { onclick: () => screen.remove() }, 'Indietro'),
+    h('button', { class: 'history-back', onclick: () => screen.remove() }, 'Indietro'),
   )
-  for (const r of runs) {
-    const status = r.endedAt ? `conclusa il ${fmtDate(r.endedAt)}` : 'in corso'
-    list.append(h('button', { class: 'history-item', onclick: () => showRun(content, r, detail) },
-      h('b', {}, fmtDate(r.startedAt)), h('br'), `Cap. ${r.chapter} · ${fmtTime(r.playtimeMs)} · ${r.hintsUsed} suggerimenti · ${status}`))
-  }
-  if (!runs.length) list.append(h('p', {}, 'Nessuna partita ancora.'))
+  const sorted = [...runs].sort((a, b) => b.startedAt.localeCompare(a.startedAt))
+  sorted.forEach((r, k) => {
+    const ch = content.chapters.find((c) => c.number === r.chapter)
+    const open = !r.endedAt
+    const card = h('div', { class: 'history-card leather' },
+      h('div', { class: 'history-card-top' },
+        h('span', { class: 'history-card-num' }, `Indagine n. ${sorted.length - k}`),
+        h('span', { class: `history-status ${open ? 'open' : 'closed'}` }, open ? 'In corso' : 'Conclusa')),
+      h('div', { class: 'history-card-chapter' }, `Capitolo ${roman(r.chapter)}${ch ? ` · ${ch.title}` : ''}`),
+      h('div', { class: 'history-card-meta' }, `Iniziata il ${fmtDate(r.startedAt)}`),
+      h('div', { class: 'history-card-meta' }, `Tempo di gioco ${fmtTime(r.playtimeMs)} · suggerimenti ${r.hintsUsed}`),
+      h('div', { class: 'history-card-bar' },
+        h('button', { onclick: () => { for (const c of list.children) c.classList.remove('selected'); card.classList.add('selected'); void showRun(content, r, detail) } }, 'Leggi il resoconto'),
+        open ? h('button', { onclick: () => { screen.remove(); resume(r.id) } }, 'Riprendi') : null))
+    list.append(card)
+  })
+  if (!runs.length) list.append(h('p', { class: 'history-empty' }, 'Nessuna indagine ancora: comincia la lettura.'))
   ui().append(screen)
 }
 
-function describe(content: Content, e: LogEvent): string | null {
-  const d = e.data as Record<string, any>
-  switch (e.kind) {
-    case 'chapter': return `— Capitolo ${d.number}: ${content.chapters.find((c) => c.number === d.number)?.title ?? ''}`
-    case 'scene': return `Luogo: ${content.scenes[d.id]?.name ?? d.id}`
-    case 'fact': return `Scoperto: ${content.facts[d.id]?.text ?? d.id}`
-    case 'item': return `Ottenuto: ${content.items[d.id]?.name ?? d.id}`
-    case 'choice': return `Scelta: «${d.text}»`
-    case 'hint': return `Suggerimento usato (livello ${d.level})`
-    case 'deduction': return d.ok ? 'Pensieri messi in ordine.' : 'Un ragionamento che non tornava.'
-    case 'chat': return `Conversazione con ${content.characters[d.npc]?.name ?? d.npc}:\n` +
-      (d.turns as { role: string; text: string }[]).map((t) => `  ${t.role === 'player' ? '›' : '‹'} ${t.text}`).join('\n')
-    case 'end': return '— Fine'
-    default: return null
-  }
-}
+interface ChapterReport { number: number; facts: string[]; choices: string[]; deductions: number; hints: number; chats: { who: string; turns: { role: string; text: string }[] }[]; ended: boolean }
 
 async function showRun(content: Content, run: RunMeta, into: HTMLElement): Promise<void> {
   const events = await window.api.runs.readLog(run.id)
-  const lines = events.map((e) => describe(content, e)).filter((x): x is string => !!x)
-  into.replaceChildren(h('pre', { class: 'history-log' }, lines.join('\n') || 'Nessun evento registrato.'))
+  const chapters: ChapterReport[] = []
+  const current = () => {
+    if (!chapters.length) chapters.push({ number: 1, facts: [], choices: [], deductions: 0, hints: 0, chats: [], ended: false })
+    return chapters[chapters.length - 1]
+  }
+  for (const e of events) {
+    const d = e.data as Record<string, any>
+    if (e.kind === 'chapter') chapters.push({ number: d.number, facts: [], choices: [], deductions: 0, hints: 0, chats: [], ended: false })
+    else if (e.kind === 'fact') current().facts.push(content.facts[d.id]?.text ?? d.id)
+    else if (e.kind === 'choice') current().choices.push(d.text)
+    else if (e.kind === 'hint') current().hints++
+    else if (e.kind === 'deduction' && d.ok) current().deductions++
+    else if (e.kind === 'chat') current().chats.push({ who: content.characters[d.npc]?.name ?? d.npc, turns: d.turns })
+    else if (e.kind === 'end') current().ended = true
+  }
+  const player = content.characters[content.chapters[0]?.player ?? '']?.name ?? 'Tu'
+  const section = (title: string, body: (HTMLElement | null)[]) => body.length ? h('div', { class: 'report-section' }, h('h4', {}, title), ...body) : null
+  const report = chapters.map((c) => {
+    const ch = content.chapters.find((x) => x.number === c.number)
+    return h('div', { class: 'report-chapter' },
+      h('h3', {}, `Capitolo ${roman(c.number)}${ch ? ` · ${ch.title}` : ''}`),
+      section('Scoperte', c.facts.length ? [h('ul', {}, ...c.facts.map((f) => h('li', {}, f)))] : []),
+      section('Scelte', c.choices.length ? [h('ul', {}, ...c.choices.map((t) => h('li', {}, t)))] : []),
+      section('Conversazioni libere', c.chats.map((chat) => h('div', { class: 'report-chat' },
+        h('div', { class: 'report-chat-who' }, `Con ${chat.who}`),
+        ...chat.turns.map((t) => h('p', { class: `report-turn ${t.role === 'player' ? 'me' : 'them'}` },
+          h('b', {}, `${t.role === 'player' ? player : chat.who}: `), t.text))))),
+      h('p', { class: 'report-meta' }, [
+        c.deductions ? `Ragionamenti risolti: ${c.deductions}` : '',
+        `Suggerimenti usati: ${c.hints}`,
+        c.ended ? 'Capitolo concluso.' : '',
+      ].filter(Boolean).join(' · ')))
+  })
+  into.replaceChildren(...(report.length ? report : [h('p', { class: 'history-empty' }, 'Nessun evento registrato.')]))
+  into.scrollTop = 0
 }
 
 // The lawyer's notebook (tasto J, or the notebook in the corner): only the notes, written on the ruled lines of
@@ -401,7 +441,7 @@ export function pauseMenu(session: Session, actions: PauseActions): Promise<void
           h('button', {
             class: 'pause-btn journal-btn',
             onclick: () => { close(); actions.onJournal() },
-          }, 'Diario delle indagini (J)'),
+          }, 'Taccuino (J)'),
           h('button', {
             class: 'pause-btn mainmenu-btn',
             onclick: async () => { close(); await actions.onMainMenu() },
@@ -478,6 +518,23 @@ export function settingsBlock(): HTMLElement {
     h('label', {}, 'Schermo'),
     h('div', { class: 'settings-options' }, h('button', { onclick: () => void toggleFullscreen() }, 'Schermo intero / finestra')),
   )
+}
+
+// A new game from any chapter of the content (D32). The bookmark of the menu still resumes the last game.
+function chapterSelect(content: Content, pick: (n: number) => void): void {
+  const screen = h('div', { class: 'screen settings-screen chapter-select' },
+    h('div', { class: 'chapter-select-card leather' },
+      h('h2', { class: 'pause-title' }, 'Scegli un capitolo'),
+      h('p', { class: 'chapter-select-note' }, 'Una nuova partita comincia dal capitolo scelto; Utterson sa già quello che ha scoperto nei capitoli precedenti.'),
+      h('div', { class: 'chapter-select-list' },
+        ...content.chapters.map((ch) => h('button', { class: 'chapter-select-item', onclick: () => { screen.remove(); pick(ch.number) } },
+          ch.cover ? h('img', { class: 'chapter-select-plate', src: assetUrl(`${ch.cover}.png`), alt: '' }) : h('div', { class: 'chapter-select-plate empty' }),
+          h('span', { class: 'chapter-select-num' }, `Capitolo ${roman(ch.number)}`),
+          h('span', { class: 'chapter-select-title' }, ch.title)))),
+      h('button', { class: 'chapter-select-back', onclick: () => screen.remove() }, 'Indietro'),
+    ),
+  )
+  ui().append(screen)
 }
 
 function settingsScreen(): void {

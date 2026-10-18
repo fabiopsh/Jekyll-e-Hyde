@@ -13,6 +13,10 @@ import { closeVerbMenu, isVerbMenuOpen } from './ui/room-ui'
 import { playMusic, stopMusic } from './audio'
 import { Hud } from './ui/hud'
 import { deduction } from './ui/deduction'
+import { runTutorial } from './ui/tutorial'
+import { GAME_HEIGHT, GAME_WIDTH } from './phaser/RoomScene'
+
+const TUTORIAL_FLAG = '_tutorial_done' // engine flag: the tutorial was shown in this game
 
 export class Presenter {
   private queue: Command[] = []
@@ -20,6 +24,7 @@ export class Presenter {
   private ended: (() => void) | null = null
   private cleanupKeydown: (() => void) | null = null
   private readonly hud: Hud
+  private tutorialOn = false
 
   constructor(private readonly game: Phaser.Game, private readonly session: Session) {
     session.onCommands((cmds) => this.enqueue(cmds))
@@ -160,6 +165,25 @@ export class Presenter {
     const args = { scene, session: this.session, callbacks }
     if (this.game.scene.isActive('room')) this.game.scene.getScene('room').scene.restart(args)
     else this.game.scene.start('room', args)
+    this.maybeTutorial(id)
+  }
+
+  // The first-game tutorial, once per game, the first time its scene is shown (content/game.yaml, D32).
+  private maybeTutorial(sceneId: string): void {
+    const t = this.session.content.game.tutorial
+    if (!t || t.scene !== sceneId || this.session.state.flags.includes(TUTORIAL_FLAG) || this.tutorialOn) return
+    this.tutorialOn = true
+    const room = () => this.game.scene.getScene('room') as RoomScene
+    const gamePoint = (x: number, y: number) => {
+      const r = this.game.canvas.getBoundingClientRect()
+      return { x: r.left + (x * r.width) / GAME_WIDTH, y: r.top + (y * r.height) / GAME_HEIGHT }
+    }
+    setTimeout(() => {
+      void runTutorial(t.steps, {
+        gamePoint,
+        npcPoint: () => { const p = room().npcPoint(); return p ? gamePoint(p.x, p.y) : null },
+      }).then(() => { this.tutorialOn = false; this.session.run([{ set: TUTORIAL_FLAG }]) })
+    }, 900)
   }
 }
 

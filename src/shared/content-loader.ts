@@ -183,6 +183,8 @@ function checkReferences(c: Content, errors: string[]): void {
     }
   }
 
+  const tut = c.game.tutorial
+  if (tut && !c.scenes[tut.scene]) errors.push(`game.yaml tutorial: unknown scene ${tut.scene}`)
   for (const d of Object.values(c.deductions)) {
     const w = `deduction ${d.id}`
     for (const f of d.options) if (!c.facts[f]) errors.push(`${w}: unknown fact ${f}`)

@@ -2,8 +2,8 @@
 // Phaser scenes and UI panels talk to the game only through this object.
 import type { Content, Effect } from '../shared/content-schema'
 import type { LogEvent, RunMeta } from '../shared/ipc'
-import { apply, chapterOf, currentObjective, progress, type Command } from '../game/rules'
-import { newGameState, type GameState } from '../game/state'
+import { apply, chapterOf, currentObjective, stateAtChapter, type Command } from '../game/rules'
+import type { GameState } from '../game/state'
 
 type Listener = (commands: Command[]) => void
 
@@ -17,9 +17,10 @@ export class Session {
 
   static async create(content: Content, chapter = 1): Promise<Session> {
     const ch = chapterOf(content, chapter)
-    const first = progress(newGameState(ch.number, ch.start_scene, ch.player, ch.start_at ?? null), content).state
+    const first = stateAtChapter(content, ch.number) // chapter 1: an empty state; later: the facts known by then
     const meta = await window.api.runs.create(first)
     const s = new Session(content, meta, first)
+    s.journalSeen = first.journal.length // notes of the earlier chapters are not new
     s.log('chapter', { number: ch.number })
     return s
   }

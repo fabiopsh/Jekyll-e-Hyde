@@ -161,6 +161,7 @@ export class RoomScene extends Phaser.Scene {
       if (isModal() || over.length || p.rightButtonDown()) return
       closeVerbMenu()
       this.walkTo(this.nearestWalkable({ x: p.worldX, y: p.worldY }))
+      window.dispatchEvent(new CustomEvent('jh:walk')) // the tutorial listens
     })
     this.input.mouse?.disableContextMenu()
 
@@ -172,6 +173,12 @@ export class RoomScene extends Phaser.Scene {
     // on_enter: every matching interaction runs once per visit
     const enter = this.room.on_enter.filter((i) => check(i.when, s)).flatMap((i) => i.effects)
     if (enter.length) this.time.delayedCall(300, () => this.cb.run(enter))
+  }
+
+  // Where the first visible person of the room stands now (game pixels, about the chest), for the tutorial.
+  npcPoint(): { x: number; y: number } | null {
+    const npc = this.conditional.map((c) => c.obj).find((o): o is Phaser.GameObjects.Sprite => o instanceof Phaser.GameObjects.Sprite && o.visible)
+    return npc ? { x: npc.x, y: npc.y - npc.displayHeight * 0.55 } : null
   }
 
   // Shows or hides npcs and hotspots with a `when`, after the state changed (e.g. someone arrives).

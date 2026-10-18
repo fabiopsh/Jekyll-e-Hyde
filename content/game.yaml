@@ -10,3 +10,24 @@ menu_scene:
   figure: characters/utterson
 # Chapter 1, D01.1.1-2: no spoilers on the cover.
 menu_quote: "«Io propendo per l’eresia di Caino. Lascio che mio fratello vada al diavolo a modo suo.»"
+# First-game tutorial (docs/DECISIONI.md D32): shown once per game, on the first visit of the by-street.
+tutorial:
+  scene: loc_by_street
+  steps:
+    - text: "Per camminare, clicca sulla strada nel punto dove vuoi andare."
+      target: { point: [330, 236] }
+      until: walk
+    - text: "Le cose con cui puoi fare qualcosa hanno un nome: passaci sopra con il mouse e il cursore cambia forma. Clicca sulla porta: si apre un piccolo menu con le azioni."
+      target: { point: [259, 146] }
+      until: menu
+    - text: "Scegli un'azione dal menu (Osserva, Usa…), oppure clicca altrove per chiuderlo. Con il tasto destro osservi subito una cosa, senza menu."
+      until: next
+    - text: "Con le persone hai due modi. «Parla» segue il dialogo del libro: le battute sono quelle di Stevenson e tu scegli quando dirle. «Conversa» è una chiacchierata libera: scrivi tu le domande e il personaggio risponde a modo suo, senza cambiare la storia; a volte ti dà un suggerimento."
+      target: { npc: true }
+      until: next
+    - text: "In alto a sinistra, la lampadina: accesa vuol dire che c'è un suggerimento. Cliccala per rivedere che cosa fare."
+      target: { ui: bulb }
+      until: next
+    - text: "In alto a destra, il taccuino (tasto J): Utterson vi annota ciò che scopre, e quando scrive la penna si muove. Il tasto Esc apre il menu di pausa."
+      target: { ui: notebook }
+      until: next

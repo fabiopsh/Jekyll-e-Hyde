@@ -42,6 +42,7 @@ export function closeVerbMenu(): void {
 
 export function verbMenu(title: string, at: MouseEvent, options: VerbOption[]): void {
   closeVerbMenu()
+  window.dispatchEvent(new CustomEvent('jh:verbmenu')) // the tutorial listens
   const menu = h('div', { class: 'verb-menu panel' },
     h('div', { class: 'verb-title' }, title),
     ...options.map((o) =>

@@ -3,6 +3,7 @@
 number: 2
 title: La ricerca del signor Hyde
 player: utterson
+cover: illustrations/ill_c2_key
 start_scene: loc_utterson_study
 start_at: desk
 intro:

@@ -115,6 +115,77 @@ const scenarios: Record<string, (page: Page) => Promise<void>> = {
     await shot(page, 'c3-end')
   },
 
+  // menus: a short game, the pause menu, back to the main menu, the chronicles with its report, the chapters
+  menus: async (page) => {
+    await page.waitForSelector('.menu-btn.new', { timeout: 30_000 })
+    await page.click('.menu-btn.new')
+    await page.waitForSelector('.chapter-card', { timeout: 10_000 })
+    await advanceAll(page)
+    await page.waitForSelector('.tutorial-card', { timeout: 10_000 })
+    await page.locator('.tutorial-skip').click()
+    await clickGame(page, 259, 146)
+    await page.locator('.verb-menu button', { hasText: 'Osserva' }).click()
+    await page.waitForSelector('.dialogue', { timeout: 15_000 })
+    await advanceAll(page, 200)
+    await page.keyboard.press('Escape')
+    await wait(600)
+    await shot(page, 'pause')
+    await page.locator('button', { hasText: 'Menu' }).first().click()
+    await page.waitForSelector('.menu-btn.history', { timeout: 15_000 })
+    await wait(2500)
+    await shot(page, 'main-menu')
+    await page.click('.menu-btn.history')
+    await wait(500)
+    await page.locator('.history-card button', { hasText: 'Leggi' }).first().click()
+    await wait(800)
+    await shot(page, 'chronicles')
+    await page.locator('.history-back').click()
+    await page.click('.menu-btn.chapters')
+    await wait(800)
+    await shot(page, 'chapters')
+  },
+
+  // the first-game tutorial, step by step
+  tutorial: async (page) => {
+    await page.waitForSelector('.menu-btn.new', { timeout: 30_000 })
+    await page.click('.menu-btn.new')
+    await page.waitForSelector('.chapter-card', { timeout: 10_000 })
+    await advanceAll(page)
+    await page.waitForSelector('.tutorial-card', { timeout: 10_000 })
+    await wait(800)
+    await shot(page, 'walk')
+    await clickGame(page, 330, 236)
+    await wait(1200)
+    await shot(page, 'thing')
+    await clickGame(page, 259, 146)
+    await wait(1200)
+    await shot(page, 'menu')
+    for (const name of ['people', 'bulb', 'notebook']) {
+      await page.locator('.tutorial-next').click()
+      await wait(700)
+      await shot(page, name)
+    }
+    await page.locator('.tutorial-next').click()
+    await wait(500)
+    if (await page.locator('.tutorial-card').count()) throw new Error('the tutorial did not close')
+  },
+
+  // a new game from chapter III, chosen in the menu; the notebook has the notes of chapters I and II
+  chapters: async (page) => {
+    await page.waitForSelector('.menu-btn.chapters', { timeout: 30_000 })
+    await page.click('.menu-btn.chapters')
+    await wait(500)
+    await shot(page, 'list')
+    await page.locator('.chapter-select-item', { hasText: 'Capitolo III' }).click()
+    await page.waitForSelector('.chapter-card', { timeout: 10_000 })
+    await advanceAll(page)
+    await wait(1200)
+    await shot(page, 'room')
+    await page.keyboard.press('j')
+    await wait(1500)
+    await shot(page, 'notebook')
+  },
+
   // HUD and notebook: the task card, the pen writing on the notebook, the pages and a leaf turning
   notebook: async (page) => {
     await page.waitForSelector('.menu-btn.new', { timeout: 30_000 })

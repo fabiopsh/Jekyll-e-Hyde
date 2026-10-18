@@ -1,7 +1,7 @@
 // Interpreter of the content mini-language: conditions are evaluated against the state, effects
 // produce a new state plus a list of commands for the presentation layer (dialogues, narration, scene changes).
 import type { Chapter, Condition, Content, Effect } from '../shared/content-schema'
-import { addUnique, type GameState } from './state'
+import { addUnique, newGameState, type GameState } from './state'
 
 export function check(cond: Condition | undefined, s: GameState): boolean {
   if (cond === undefined) return true
@@ -119,4 +119,19 @@ export function progress(state: GameState, content: Content, commands: Command[]
 
 export function currentObjective(s: GameState, content: Content) {
   return chapterOf(content, s.chapter).objectives.find((o) => !s.objectivesDone.includes(o.id))
+}
+
+// A new game that starts at chapter `n` (main menu, "Scegli un capitolo"): what the player character knows
+// by then comes from the book, so every fact of the earlier chapters is known and in the journal, and their
+// objectives are done. Flags of earlier chapters are not set: a chapter must not depend on them.
+export function stateAtChapter(content: Content, n: number): GameState {
+  const ch = chapterOf(content, n)
+  const before = Object.values(content.facts).filter((f) => f.chapter < n).sort((a, b) => a.chapter - b.chapter)
+  const s: GameState = {
+    ...newGameState(ch.number, ch.start_scene, ch.player, ch.start_at ?? null),
+    facts: before.map((f) => f.id),
+    journal: before.map((f) => ({ chapter: f.chapter, text: f.text })),
+    objectivesDone: content.chapters.filter((c) => c.number < n).flatMap((c) => c.objectives.map((o) => o.id)),
+  }
+  return progress(s, content).state
 }
