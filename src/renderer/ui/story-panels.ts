@@ -35,8 +35,8 @@ export function narrate(cards: Card[]): Promise<void> {
   })
 }
 
-function portraitFor(content: Content, speaker: string): HTMLElement | null {
-  const key = content.characters[speaker]?.portrait
+function portraitFor(content: Content, speaker: string, override?: string): HTMLElement | null {
+  const key = override ?? content.characters[speaker]?.portrait
   if (!key) return null
   // the frame breathes slowly and the lamp light on it wavers (CSS), so the speaker looks alive
   const img = h('img', { class: 'portrait', src: assetUrl(`${key}.png`), alt: '' })
@@ -62,7 +62,7 @@ export function playDialogue(session: Session, dialogue: Dialogue): Promise<void
           const p = h('p', { class: line.speaker === 'narrator' ? 'line narrator' : line.thought ? 'line thought' : 'line' })
           const advance = h('div', { class: 'advance' }, '▸')
           box.replaceChildren(
-            ...[portraitFor(session.content, line.speaker)].filter((x): x is HTMLElement => !!x),
+            ...[portraitFor(session.content, line.speaker, line.portrait)].filter((x): x is HTMLElement => !!x),
             h('div', { class: 'dialogue-body' },
               name ? h('div', { class: 'speaker' }, line.thought ? `${name}, tra sé` : name) : null,
               p,

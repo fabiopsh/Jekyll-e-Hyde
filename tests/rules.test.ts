@@ -23,6 +23,7 @@ const content: Content = {
   ],
   scenes: {},
   dialogues: {},
+  deductions: {},
   npcs: {},
   items: { obj_key: { id: 'obj_key', name: 'chiave', description: 'una chiave' } },
   facts: { 'F01.1': { id: 'F01.1', text: 'Hyde ha la chiave', chapter: 1, known_by: [] } },

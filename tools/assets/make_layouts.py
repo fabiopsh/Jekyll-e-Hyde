@@ -621,7 +621,60 @@ def _shell_hall() -> Image.Image:
     return im
 
 
-LAYOUTS = {"pose_profile_lanyon": pose_lanyon, "pose_profile_poole": pose_poole, "pose_profile_hyde": pose_hyde,
+def _shell_jdining() -> Image.Image:
+    """Empty dining room shell of Jekyll's house: dark green wallpaper, oak wainscot, parquet, ceiling cornice."""
+    im, d = _bg_canvas((0, 0, 0))
+    _wall_floor(d, (70, 98, 76), (150, 106, 70), (214, 202, 178), line=(120, 84, 56))
+    _r(d, 0, 140, 480, 45, (128, 90, 58))                                    # oak wainscot
+    _r(d, 0, 138, 480, 3, (176, 136, 90))
+    for x in range(0, 480, 22):
+        for y in range(64, 136, 22):
+            _r(d, x + 7, y + 5, 8, 12, (60, 84, 64))
+    for x in range(0, 480, 40):
+        d.line([(x * S, 185 * S), ((x - 20) * S, 270 * S)], fill=(120, 84, 56), width=2)   # parquet pattern
+    return im
+
+
+def pose_jekyll() -> Image.Image:
+    """Large, well-made smooth-faced man of fifty: dark blue frock coat, buff waistcoat, no hat."""
+    return pose_profile(1060, hair=(110, 84, 62), face=(224, 188, 164), coat=(26, 32, 62), coat_len=0.71,
+                        torso=1.22, waistcoat=(196, 184, 156), shirt=None, trousers=(44, 44, 54))
+
+
+
+def c3_hand() -> Image.Image:
+    """Two men side by side at a fireside, seen from the side: the larger man (left, blue frock coat, no hat) leans
+    towards the tall thin lawyer (right, dark grey coat) and lays ONE bare hand on his forearm. Fire glow low right."""
+    import numpy as np
+
+    im = Image.new("RGB", (W, H), (40, 30, 30))
+    d = ImageDraw.Draw(im)
+    d.rectangle((0, 760, W, H), fill=(70, 46, 34))                                   # floor
+    d.rectangle((560, 640, 896, 1152), fill=(60, 42, 36))                            # hearth stone
+    skin, hand = (170, 120, 96), (240, 206, 182)
+    # right man: tall, thin, dark grey coat, forearm held across the body (horizontal sleeve)
+    d.ellipse((600, 170, 760, 340), fill=skin)                                        # head, profile to the left
+    d.polygon([(590, 330), (790, 330), (810, 1152), (560, 1152)], fill=(62, 62, 70))  # body
+    d.polygon([(520, 640), (700, 620), (710, 720), (520, 740)], fill=(86, 86, 96))    # forearm sleeve
+    d.ellipse((470, 640, 540, 740), fill=skin)                                        # his cuff and hand
+    # left man: large, blue frock coat, bent towards the right, bare head
+    d.ellipse((190, 230, 370, 420), fill=(176, 126, 102))                              # head
+    d.ellipse((180, 200, 360, 320), fill=(96, 70, 52))                                 # hair
+    d.polygon([(60, 420), (430, 400), (470, 1152), (20, 1152)], fill=(30, 40, 96))     # body
+    d.polygon([(340, 440), (440, 440), (560, 640), (500, 700)], fill=(38, 50, 110))    # arm reaching out
+    d.ellipse((500, 590, 640, 690), fill=hand)                                         # one bare hand on the sleeve
+    for k in range(4):
+        d.line([(600 + k * 12, 610), (640 + k * 14, 690)], fill=(214, 180, 156), width=7)  # fingers on the cloth
+    px = np.asarray(im).astype(np.float32)
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    g = np.exp(-(((xx - 820) / 360) ** 2 + ((yy - 900) / 300) ** 2))[..., None]
+    px = np.clip(px + g * np.array([190, 100, 30], np.float32), 0, 255)
+    return Image.fromarray(px.astype(np.uint8))
+
+
+LAYOUTS = {"ill_c3_hand": c3_hand,
+           "pose_profile_jekyll": pose_jekyll, "loc_jekyll_dining_room": _shell_jdining,
+           "pose_profile_lanyon": pose_lanyon, "pose_profile_poole": pose_poole, "pose_profile_hyde": pose_hyde,
            "loc_utterson_study": _shell_study, "loc_lanyon_dining_room": _shell_dining,
            "loc_jekyll_square": jekyll_square, "loc_jekyll_hall": _shell_hall,
            "loc_jekyll_square_day": jekyll_square_day, "loc_utterson_study_furnished": utterson_study_furnished,

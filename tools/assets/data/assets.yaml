@@ -761,3 +761,204 @@ assets:
     source: "story/chapters/02-ricerca-di-hyde.md, Luoghi (generic period object)"
     subject: "top-down view of a worn persian rug, rectangular"
     negative_extra: "furniture, chair, fringe tassels, frame, picture, painting, second object, multiple objects, lamp"
+
+  # ==== Chapter 3 (story/chapters/03-jekyll-era-tranquillo.md), 2026-10-17 ======================================
+  # Same method as chapter 2: empty shell + props, evenly lit (the engine adds the light), 1 m = 40 px, wall base y185.
+  - id: loc_jekyll_dining_room
+    kind: background
+    variants: 3
+    layout: layouts/loc_jekyll_dining_room.png   # make_layouts.py
+    strength: 0.65
+    noise: 8
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/03-jekyll-era-tranquillo.md, Luoghi: loc_jekyll_house (r. 3-17; the room is deduced, see Note di fedelta)"
+    subject: >-
+      an empty rich dining room interior seen straight on, dark green damask wallpaper, oak wainscot,
+      parquet floor, ceiling cornice, evenly lit
+    negative_extra: "furniture, door, window, table, chair, sideboard, fireplace, painting, picture, mirror, rug, lamp, candle, chandelier, cabinet, bookcase, hanging lamp, bench, arch, people, night"
+
+  - id: jekyll
+    kind: character
+    variants: 4
+    source: "story/chapters/03-jekyll-era-tranquillo.md, Profili personaggio: jekyll; story/bible.md jekyll"
+    character: jekyll
+    pose: base
+    layout: layouts/pose_profile_jekyll.png
+    strength: 0.75
+    noise: 6
+
+  - id: jekyll_neutral
+    kind: portrait
+    variants: 3
+    source: "story/chapters/03-jekyll-era-tranquillo.md, Profili personaggio: jekyll (r. 14-16, 40)"
+    character: jekyll
+    mood: cordial
+    prefix: "pixel art, portrait, head and shoulders"
+
+  # Same man, same framing and backdrop: same prompt but the mood, same seeds as jekyll_neutral (seed_id).
+  - id: jekyll_pale
+    kind: portrait
+    variants: 3
+    seed_id: jekyll_neutral
+    source: "story/chapters/03-jekyll-era-tranquillo.md, Profili personaggio: jekyll (r. 40-41: pale to the lips, darkness about the eyes)"
+    character: jekyll
+    mood: pale
+    prefix: "pixel art, portrait, head and shoulders"
+
+
+  # ---- Chapter 3 props (kind prop, see chapter 2): `at` = top-left in the 480x270 frame.
+
+  - id: prop_jdin_door
+    kind: prop
+    variants: 4
+    size: [44, 88]
+    at: [18, 97]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/03-jekyll-era-tranquillo.md, Luoghi: loc_jekyll_house (generic period object)"
+    subject: "closed panelled mahogany door in its frame, brass knob"
+    negative_extra: "window"
+
+  - id: prop_jdin_portrait
+    kind: prop
+    variants: 4
+    prefix: "pixel art, game prop sprite, one framed oil portrait, front view"
+    size: [36, 46]
+    at: [86, 74]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/03-jekyll-era-tranquillo.md, Luoghi: loc_jekyll_house (generic period object)"
+    subject: "oil portrait of a gentleman in a gilt frame"
+    negative_extra: "furniture, door, cabinet"
+
+  - id: prop_jdin_table
+    kind: prop
+    variants: 4
+    prefix: "pixel art, game prop sprite, one single long dining table, front view"
+    size: [160, 48]
+    at: [64, 148]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/03-jekyll-era-tranquillo.md, Luoghi: loc_jekyll_house (generic period object)"
+    subject: "dining table after a dinner for six, white tablecloth, wine glasses, decanters, a lit silver candelabra, chairs pushed back"
+    negative_extra: "bed, lamp, sofa, multiple tables, sideboard, people, food"
+
+  - id: prop_jdin_window
+    kind: prop
+    variants: 4
+    prefix: "pixel art, game prop sprite, one tall window, front view"
+    size: [50, 80]
+    at: [234, 62]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/03-jekyll-era-tranquillo.md, Luoghi: loc_jekyll_house (generic period object)"
+    subject: "tall window with heavy drawn dark red velvet curtains and a pelmet"
+    negative_extra: "furniture, door, cabinet, outdoors"
+
+  - id: prop_jdin_armchair_l
+    kind: prop
+    variants: 4
+    size: [38, 44]
+    at: [262, 147]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/03-jekyll-era-tranquillo.md, Luoghi: loc_jekyll_house (generic period object)"
+    subject: "leather wing armchair seen from the front, dark brown leather"
+    negative_extra: "multiple chairs, sofa"
+
+  - id: prop_jdin_fireplace
+    kind: prop
+    variants: 4
+    size: [84, 56]
+    at: [300, 129]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/03-jekyll-era-tranquillo.md, Luoghi: loc_jekyll_house (generic period object)"
+    subject: "marble fireplace with a bright fire in the grate, a mantelpiece and a brass fender"
+    negative_extra: "chimney pipe, tall object, green, lamp, vase, statue, plant"
+
+  - id: prop_jdin_mirror
+    kind: prop
+    variants: 4
+    prefix: "pixel art, game prop sprite, one gilt framed wall mirror, front view"
+    size: [44, 36]
+    at: [320, 84]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/03-jekyll-era-tranquillo.md, Luoghi: loc_jekyll_house (generic period object)"
+    subject: "gilt framed wall mirror with an ornate frame"
+    negative_extra: "furniture, door, cabinet"
+
+  - id: prop_jdin_bookcase
+    kind: prop
+    variants: 4
+    size: [36, 85]
+    at: [438, 100]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/03-jekyll-era-tranquillo.md, Luoghi: loc_jekyll_house (generic period object)"
+    subject: "tall glass-front mahogany bookcase full of books"
+    negative_extra: "multiple, desk, door"
+
+  - id: prop_jdin_rug
+    kind: prop
+    variants: 4
+    size: [180, 28]
+    at: [250, 202]
+    palette_size: 32
+    despeckle: 1
+    source: "story/chapters/03-jekyll-era-tranquillo.md, Luoghi: loc_jekyll_house (generic period object)"
+    subject: "top-down view of a rich persian rug, dark red pattern, rectangular"
+    negative_extra: "furniture, chair, frame, picture, second object, multiple objects, lamp, fringe tassels"
+
+  # The right armchair is the left one turned around (export.py mirror_of): not generated.
+  - id: prop_jdin_armchair_r
+    kind: prop
+    mirror_of: prop_jdin_armchair_l
+    size: [38, 44]
+    at: [388, 147]
+    source: "mirror of prop_jdin_armchair_l"
+    subject: "mirror"
+
+  # ---- Illustrations of chapter 3 (r. = lines of book/chapters/03-jekyll-era-tranquillo.txt) ---------------------
+  - id: ill_c3_dinner
+    kind: illustration
+    variants: 3
+    source: "cap. 3 r. 3-6 (one of his pleasant dinners to five or six old cronies, good judges of wine)"
+    subject: >-
+      five respectable gentlemen in black evening dress at a candlelit dinner table, wine glasses and
+      decanters, a silver candelabra, the host at the head of the table, convivial
+    negative_extra: "women, crowd, waiter, food on plates, angry"
+
+  - id: ill_c3_guests_leave
+    kind: illustration
+    variants: 3
+    source: "cap. 3 r. 7-10 (the others have a foot on the threshold; Utterson stays behind)"
+    subject: >-
+      gentlemen in dark overcoats and top hats taking their leave at a front door in a hall,
+      one tall dry gentleman in a dark grey frock coat, bare headed, staying behind
+    negative_extra: "women, crowd, fight, night street"
+
+  - id: ill_c3_fireside
+    kind: illustration
+    variants: 3
+    source: "cap. 3 r. 13-17 (they sit on opposite sides of the fire; Jekyll shows a sincere warm affection)"
+    subject: >-
+      two gentlemen in black coats sitting in armchairs on opposite sides of a lit fireplace at night,
+      talking quietly, intimate, warm firelight
+    negative_extra: "women, crowd, standing, angry, three people"
+
+  - id: ill_c3_hand
+    kind: illustration
+    variants: 4
+    # Redone 2026-10-17: the text alone gave one man clutching his own chest in gloves. Sketch: two men side by side,
+    # one bare hand on the other's forearm (make_layouts.py c3_hand).
+    layout: layouts/ill_c3_hand.png
+    strength: 0.7
+    noise: 12
+    source: "cap. 3 r. 81 (Jekyll lays his hand on Utterson's arm, pleading; Jekyll is the larger, smooth-faced man, r. 14)"
+    subject: >-
+      a large smooth-faced man in a dark blue frock coat leans toward a tall thin lawyer in a dark grey coat
+      and lays one bare hand on his forearm, side view, two men beside a fire at night, firelight
+    negative_extra: "gloves, hat, beard, third person, crossed arms, close-up face, clutching chest, two hands on chest"

@@ -36,3 +36,9 @@
   sprite: characters/hyde
   portrait: portraits/hyde_neutral
   blip: { freq: 92, wave: square, cutoff: 260 }
+
+- id: jekyll
+  name: Jekyll
+  sprite: characters/jekyll
+  portrait: portraits/jekyll_neutral
+  blip: { freq: 150, wave: triangle, cutoff: 700 } # warm, genial

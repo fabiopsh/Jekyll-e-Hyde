@@ -1,0 +1,141 @@
+# S 03.2-03.3, r. 19-85: by the fire, the will, young Hyde, the promise. Lines from
+# story/chapters/03-jekyll-era-tranquillo.md; segments of one speech split by a narrator tag are one line with the
+# src of the first segment (story/README.md, the "…" convention), punctuation adapted at the join. Each choice
+# is the only one the book allows: the player chooses when Utterson speaks, never what happens.
+id: d03_fireside
+music: audio/music/mus_fireside.mp3
+start: ask
+nodes:
+  ask:
+    choices:
+      - text: "Prima, mettere in ordine i pensieri."
+        when: { not: { flag: c3_prepared } }
+        effects: [{ deduce: d03_thoughts }]
+        next: null
+      - text: "Parlargli del testamento."
+        when: { all: [{ flag: c3_prepared }, { not: { flag: c3_promise } }] }
+        effects: [{ set: c3_will_raised }]
+        next: will
+      - text: "Restare ancora un poco in silenzio, accanto al fuoco."
+        next: null
+  will:
+    lines:
+      - speaker: utterson
+        src: D03.2.1
+        emotion: grave
+        it: "Desideravo parlarLe, Jekyll. Si ricorda di quel Suo testamento?"
+      - speaker: narrator
+        it: "Un osservatore attento avrebbe potuto capire che l'argomento era sgradito; ma il dottore lo affrontò con allegria."
+      - speaker: jekyll
+        src: D03.2.3
+        emotion: jovial
+        it: "Mio povero Utterson, Lei è sfortunato ad avere un cliente come me. Non ho mai visto un uomo tanto afflitto quanto Lei per il mio testamento, a meno che non fosse quel pedante chiuso e rigido di Lanyon, davanti a quelle che lui chiamava le mie eresie scientifiche. Oh, so che è un brav'uomo — non aggrotti la fronte — un uomo eccellente, e ho sempre intenzione di vederlo di più; ma un pedante chiuso e rigido, nonostante tutto; un pedante ignorante e fracassone. Non sono mai rimasto così deluso da nessun uomo come da Lanyon."
+    effects: [{ learn: F03.3 }]
+    choices:
+      - text: "Lasciar cadere Lanyon e tornare al testamento."
+        next: approve
+  approve:
+    lines:
+      - speaker: narrator
+        it: "Utterson proseguì, senza badare per nulla al nuovo argomento."
+      - speaker: utterson
+        src: D03.2.5
+        emotion: firm
+        it: "Sa che non l'ho mai approvato."
+      - speaker: narrator
+        it: "Il dottore rispose, un poco bruscamente."
+      - speaker: jekyll
+        src: D03.2.6
+        emotion: curt
+        it: "Il mio testamento? Sì, certo, lo so. Me l'ha detto."
+    effects: [{ learn: F03.4 }]
+    choices:
+      - text: "Nominare il giovane Hyde."
+        next: hyde
+  hyde:
+    lines:
+      - speaker: utterson
+        src: D03.2.8
+        emotion: grave
+        it: "Bene, Glielo ripeto. Ho saputo qualcosa del giovane Hyde."
+      - speaker: narrator
+        it: "Il grande bel viso del dottor Jekyll divenne pallido fino alle labbra, e gli si fece un'oscurità intorno agli occhi."
+      - speaker: jekyll
+        src: D03.2.10
+        portrait: portraits/jekyll_pale
+        emotion: shaken
+        it: "Non desidero sentire altro. È una questione che credevo avessimo deciso di lasciar cadere."
+      - speaker: utterson
+        src: D03.2.12
+        emotion: grave
+        it: "Ciò che ho sentito era abominevole."
+      - speaker: narrator
+        it: "Il dottore rispose con una certa incoerenza nei modi."
+      - speaker: jekyll
+        src: D03.2.13
+        portrait: portraits/jekyll_pale
+        emotion: shaken
+        it: "Non può cambiare nulla. Lei non capisce la mia posizione. Mi trovo in una situazione dolorosa, Utterson; la mia posizione è molto strana, molto strana. È una di quelle faccende che non si possono aggiustare a parole."
+    effects: [{ learn: F03.5 }, { learn: F03.6 }]
+    choices:
+      - text: "Offrirgli aiuto, in confidenza."
+        next: help
+  help:
+    lines:
+      - speaker: utterson
+        src: D03.2.15
+        emotion: warm
+        it: "Jekyll, Lei mi conosce: sono un uomo di cui ci si può fidare. Si apra con me, in confidenza; e non ho dubbi che potrò tirarLa fuori da questa faccenda."
+      - speaker: jekyll
+        src: D03.2.17
+        emotion: grateful
+        it: "Mio buon Utterson, è molto gentile da parte Sua, è davvero generoso, e non trovo le parole per ringraziarLa. Le credo pienamente; mi fiderei di Lei più che di qualunque altro uomo vivo, sì, più che di me stesso, se potessi scegliere; ma davvero non è ciò che Lei immagina; non è grave fino a questo punto; e solo per mettere in pace il Suo buon cuore Le dirò una cosa: nel momento in cui lo vorrò, potrò liberarmi del signor Hyde. Le do la mia mano su questo; e La ringrazio ancora e ancora; e aggiungerò solo una piccola parola, Utterson, che sono certo accoglierà di buon grado: questa è una faccenda privata, e La prego di lasciarla dormire."
+      - speaker: narrator
+        image: illustrations/ill_c3_fireside
+        it: "Utterson rifletté un poco, guardando il fuoco."
+    effects: [{ learn: F03.7 }]
+    choices:
+      - text: "Dargli ragione."
+        next: rise
+  rise:
+    lines:
+      - speaker: utterson
+        src: D03.2.19
+        emotion: resigned
+        it: "Non ho dubbi che Lei abbia perfettamente ragione."
+      - speaker: narrator
+        it: "Lo disse alla fine, alzandosi in piedi. Il dottore proseguì."
+      - speaker: jekyll
+        src: D03.3.1
+        emotion: earnest
+        it: "Ma, giacché abbiamo toccato questo argomento, e spero per l'ultima volta, c'è un punto che vorrei che Lei comprendesse. Ho davvero un grandissimo interesse per il povero Hyde. So che l'ha visto; me l'ha detto lui; e temo sia stato scortese. Ma mi interesso sinceramente, molto, moltissimo, a quel giovane; e se io dovessi essere portato via, Utterson, desidero che mi prometta che avrà pazienza con lui e che gli farà ottenere i suoi diritti. Credo che lo farebbe, se sapesse tutto; e per me sarebbe un peso in meno sull'animo se lo promettesse."
+    effects: [{ learn: F03.8 }, { learn: F03.9 }]
+    choices:
+      - text: "Rispondere con franchezza."
+        next: plea
+  plea:
+    lines:
+      - speaker: utterson
+        src: D03.3.3
+        emotion: honest
+        it: "Non posso fingere che mi piacerà mai."
+      - speaker: narrator
+        image: illustrations/ill_c3_hand
+        it: "Jekyll implorò, posando la mano sul braccio dell'altro."
+      - speaker: jekyll
+        src: D03.3.4
+        emotion: pleading
+        it: "Non Le chiedo questo. Chiedo soltanto giustizia; Le chiedo soltanto di aiutarlo per amor mio, quando io non ci sarò più."
+    choices:
+      - text: "Promettere."
+        next: promise
+  promise:
+    lines:
+      - speaker: narrator
+        it: "Utterson emise un sospiro irrefrenabile."
+      - speaker: utterson
+        src: D03.3.6
+        emotion: resigned
+        it: "Bene, lo prometto."
+    effects: [{ learn: F03.10 }, { set: c3_promise }]
+    next: null

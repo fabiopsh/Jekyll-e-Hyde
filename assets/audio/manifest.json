@@ -75,5 +75,27 @@
     "file": "music/mus_jekyll_hall.mp3",
     "prompt": "victorian london 1886, large comfortable hall with an open fire at night, warm low strings slowly turning unsettled, uneasy shiver, slow, muted, no vocals, gothic chamber music",
     "generated_at": "2026-10-16T10:35:52+00:00"
+  },
+  {
+    "id": "mus_jekyll_dinner",
+    "scene": "loc_jekyll_dining_room",
+    "title": "La Cena di Jekyll",
+    "model": "facebook/musicgen-small",
+    "duration": 22,
+    "sampling_rate": 32000,
+    "file": "music/mus_jekyll_dinner.mp3",
+    "prompt": "victorian london 1886, refined convivial dinner party in a well-appointed dining room, warm chamber strings and gentle victorian parlour piano, genteel, cordial, slow tempo, no vocals",
+    "generated_at": "2026-10-17T13:50:50+00:00"
+  },
+  {
+    "id": "mus_fireside",
+    "scene": "loc_fireside",
+    "title": "Accanto al Fuoco",
+    "model": "facebook/musicgen-small",
+    "duration": 22,
+    "sampling_rate": 32000,
+    "file": "music/mus_fireside.mp3",
+    "prompt": "victorian london 1886, two old friends by the fire at night, intimate, slow solo cello and soft piano, a growing unease underneath, quiet, brooding, no vocals, gothic chamber music",
+    "generated_at": "2026-10-17T13:51:09+00:00"
   }
 ]

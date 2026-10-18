@@ -37,6 +37,7 @@ export const Effect = z.union([
   z.strictObject({ learn: factId }),
   z.strictObject({ goto: id, at: id.optional() }),
   z.strictObject({ dialogue: id }),
+  z.strictObject({ deduce: id }), // opens a deduction (content/deductions/, D31)
   // `image`: illustration shown on the right while the text is read (docs/DECISIONI.md D20)
   z.strictObject({ narrate: z.string().min(1), image: z.string().optional() }),
   z.strictObject({ journal: z.string().min(1) }),
@@ -161,6 +162,7 @@ const Line = z.strictObject({
   emotion: z.string().optional(),
   image: z.string().optional(), // illustration shown on the right from this line on (D20)
   thought: z.boolean().default(false), // a thought, not said aloud ("he thought"): shown as such
+  portrait: z.string().optional(), // a different portrait for this line (e.g. portraits/jekyll_pale)
 })
 
 const Choice = z.strictObject({
@@ -257,12 +259,27 @@ export const Npc = z.strictObject({
 })
 export type Npc = z.infer<typeof Npc>
 
+// ---- deductions: the player puts the notes in order (content/deductions/*.yaml, D31) -------------
+// A gameplay idea, not an event of the book: Utterson sorts what he already knows before he acts. Each slot is
+// a question answered with one of the player's notes; the deduction holds when every slot gets an accepted one.
+export const Deduction = z.strictObject({
+  id,
+  title: z.string(),
+  intro: z.string(), // what Utterson asks himself
+  slots: z.array(z.strictObject({ question: z.string(), accept: z.array(factId).min(1) })).min(1),
+  options: z.array(factId).min(2), // notes offered (only those the player has are shown)
+  wrong: z.string(), // shown when the answer does not hold
+  done: Effects,
+})
+export type Deduction = z.infer<typeof Deduction>
+
 // ---- the whole content bundle ------------------------------------------------------------------
 
 export interface Content {
   chapters: Chapter[]
   scenes: Record<string, Scene>
   dialogues: Record<string, Dialogue>
+  deductions: Record<string, Deduction>
   characters: Record<string, Character>
   npcs: Record<string, Npc>
   items: Record<string, Item>

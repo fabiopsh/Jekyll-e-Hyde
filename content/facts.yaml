@@ -160,3 +160,38 @@
 - id: F02.23
   text: "Utterson teme che Hyde, se sa del testamento, diventi impaziente di ereditare; vuole intervenire, se Jekyll glielo permetterà."
   chapter: 2
+
+# ---- chapter 3 ----
+- id: F03.1
+  text: "Jekyll dà piacevoli cene a pochi vecchi amici; Utterson resta spesso dopo che gli altri se ne sono andati."
+  chapter: 3
+  known_by: [jekyll]
+- id: F03.2
+  text: "Jekyll è un uomo di cinquant'anni, grande, ben fatto, dal viso liscio, con ogni segno di capacità e di bontà; vuole bene a Utterson."
+  chapter: 3
+- id: F03.3
+  text: "Jekyll chiama Lanyon un pedante chiuso e rigido per le sue «eresie scientifiche», e si dice deluso da lui."
+  chapter: 3
+  known_by: [jekyll]
+- id: F03.4
+  text: "Utterson non ha mai approvato il testamento di Jekyll, e glielo ha già detto."
+  chapter: 3
+  known_by: [jekyll]
+- id: F03.5
+  text: "Utterson ha detto a Jekyll di aver saputo del giovane Hyde qualcosa di abominevole."
+  chapter: 3
+- id: F03.6
+  text: "Al nome di Hyde Jekyll impallidisce: la sua posizione è «molto strana» e non si aggiusta a parole."
+  chapter: 3
+- id: F03.7
+  text: "Jekyll dice che, nel momento in cui lo vorrà, potrà liberarsi del signor Hyde, e chiede di lasciar dormire la faccenda."
+  chapter: 3
+- id: F03.8
+  text: "Hyde ha detto a Jekyll di aver visto Utterson; Jekyll teme che sia stato scortese."
+  chapter: 3
+- id: F03.9
+  text: "Jekyll chiede a Utterson, se lui dovesse essere portato via, di avere pazienza con Hyde e di fargli avere i suoi diritti."
+  chapter: 3
+- id: F03.10
+  text: "Utterson ha promesso a Jekyll di aiutare Hyde, pur dicendo che non gli piacerà mai."
+  chapter: 3

@@ -1,0 +1,36 @@
+# Chapter 3 — DR. JEKYLL WAS QUITE AT EASE. Story: story/chapters/03-jekyll-era-tranquillo.md. Design: docs/DESIGN.md §3.
+# Its first line (S 03.1, r. 3-6) is the `ending` of chapter 2.
+number: 3
+title: Il dottor Jekyll era perfettamente a suo agio
+player: utterson
+start_scene: loc_jekyll_dining_room
+start_at: table
+intro:
+  # S 03.1, r. 5-17 (the first sentence, r. 3-5, closes chapter 2)
+  - text: "Il signor Utterson fece in modo di restare dopo che gli altri se ne furono andati. Non era una novità, ma una cosa accaduta molte decine di volte."
+    image: illustrations/ill_c3_dinner
+  - text: "Dove Utterson era benvoluto, lo era davvero. Gli ospiti amavano trattenere l'asciutto avvocato, quando i più allegri e chiacchieroni avevano già il piede sulla soglia; amavano sedere un poco nella sua discreta compagnia, esercitandosi alla solitudine e rasserenando la mente nel ricco silenzio di quell'uomo, dopo la fatica e la spesa dell'allegria."
+    image: illustrations/ill_c3_guests_leave
+  - text: "A questa regola il dottor Jekyll non faceva eccezione; e mentre sedeva ora dall'altro lato del fuoco (un uomo di cinquant'anni, grande, ben fatto, dal viso liscio, forse con un'aria un po' furba, ma con ogni segno di capacità e di bontà) si vedeva dal suo sguardo che nutriva per il signor Utterson un affetto sincero e caloroso."
+    image: illustrations/ill_c3_fireside
+# After the end-of-chapter page: the first line of chapter 4 (story/chapters/04-omicidio-carew.md, r. 3-5)
+ending:
+  - "Quasi un anno dopo, nel mese di ottobre del 18—, Londra fu sconvolta da un delitto di singolare ferocia, reso ancor più notevole dall'alto rango della vittima."
+objectives:
+  - id: c3_prepare
+    text: Metti in ordine ciò che sai, prima di parlare a Jekyll.
+    done_when: { flag: c3_prepared }
+    hints:
+      - "Utterson è rimasto per una ragione. Che cosa sa, di preciso?"
+      - "Siediti nella poltrona di fronte a Jekyll, o parlagli: prima, i pensieri vanno messi in fila."
+      - "Il testamento che non ha mai approvato, la bambina calpestata, il timore che Hyde voglia ereditare."
+  - id: c3_speak
+    text: Parla a Jekyll del testamento.
+    done_when: { flag: c3_promise }
+    hints:
+      - "Jekyll aspetta, dall'altro lato del fuoco."
+      - "Parla con Jekyll e torna sul testamento, anche se lui cambia argomento."
+      - "Parla con Jekyll: il testamento, poi il giovane Hyde, poi l'offerta di aiuto, fino alla promessa."
+next_when: { flag: c3_promise }
+# Nothing that comes after chapter 3 (story/bible.md §7): the secret, Carew, the letter, Lanyon's end.
+banned_words: [trasform, pozion, sostanza, sdoppia, doppia natura, stessa persona, sono hyde, carew, omicid, assassin, fiala, cassetto, confession, lettera]

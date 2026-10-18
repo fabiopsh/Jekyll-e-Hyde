@@ -186,7 +186,7 @@ def main() -> None:
 
     style = config.load_yaml(config.STYLE_FILE)
     characters = config.load_yaml(config.CHARACTERS_FILE)
-    requests = config.select_requests(config.load_requests(), args.ids, args.kind)
+    requests = [r for r in config.select_requests(config.load_requests(), args.ids, args.kind) if not r.get("mirror_of")]
     if not requests:
         raise SystemExit("no matching requests")
 
@@ -216,7 +216,7 @@ def main() -> None:
             path = config.RAW_DIR / request["kind"] / config.file_name(request["id"], variant)
             exists = path.exists()
             if args.dry_run:
-                print(f"  v{variant} seed {config.seed_for(request['id'], variant)} -> "
+                print(f"  v{variant} seed {config.seed_for(request.get('seed_id', request['id']), variant)} -> "
                       f"{path.relative_to(config.ROOT)}{'  (exists, skipped)' if exists and not args.force else ''}")
             if exists and not args.force:
                 continue
@@ -242,7 +242,7 @@ def main() -> None:
     with config.MANIFEST_FILE.open("a", encoding="utf-8") as manifest:
         for done, (request, variant, prompt, negative, path) in enumerate(jobs, start=1):
             block = style[request["kind"]]
-            seed = config.seed_for(request["id"], variant)
+            seed = config.seed_for(request.get("seed_id", request["id"]), variant)  # seed_id: same seeds as another asset
             t_img = time.perf_counter()
             common = dict(prompt=prompt, negative_prompt=negative, num_inference_steps=steps,
                           guidance_scale=guidance, generator=torch.Generator("cuda").manual_seed(seed))

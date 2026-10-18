@@ -29,6 +29,10 @@ Tracce del Capitolo 2:
 - `mus_night_watch`: Strada deserta e gelata, attesa nel silenzio (archi bassi tenuti, pizzicato come passi lontani, suspense).
 - `mus_jekyll_hall`: Atrio con camino acceso nella casa di Jekyll (archi bassi caldi che diventano inquieti, lenti, smorzati).
 
+Tracce del Capitolo 3:
+- `mus_jekyll_dinner`: Cena raffinata e conviviale in casa Jekyll (archi caldi da camera e pianoforte da salotto, dolce).
+- `mus_fireside`: Due vecchi amici accanto al fuoco di notte (violoncello lento e pianoforte morbido, intimo, con un disagio crescente).
+
 ## 2. Integrazione nel gioco
 
 - La musica sfuma con crossfade tra menu, stanze e narrazione (`src/renderer/audio.ts`).

@@ -34,6 +34,21 @@ def export_assets(ids: str | None = None) -> None:
     for req in selected_requests:
         asset_id = req["id"]
         kind = req["kind"]
+        if req.get("mirror_of"):  # e.g. the right armchair is the left one turned around
+            src = req["mirror_of"]
+            if src not in selections:
+                print(f"skipping {asset_id}: {src} has no selection")
+                continue
+            sv = selections[src]["variant"]
+            src_file = config.PROCESSED_DIR / requests[src]["kind"] / config.file_name(src, sv)
+            target = config.GAME_ASSETS_DIR / config.GAME_FOLDERS.get(kind, f"{kind}s")
+            target.mkdir(parents=True, exist_ok=True)
+            from PIL import Image
+            Image.open(src_file).transpose(Image.Transpose.FLIP_LEFT_RIGHT).save(target / f"{asset_id}.png")
+            print(f"exported {asset_id} (mirror of {src} v{sv})")
+            manifest_records.append({"id": asset_id, "kind": kind, "variant": sv, "mirror_of": src,
+                                     "files": [f"{target.name}/{asset_id}.png"], "exported_at": now})
+            continue
         if asset_id not in selections:
             print(f"skipping {asset_id}: no selection in data/selections.yaml")
             continue

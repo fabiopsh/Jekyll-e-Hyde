@@ -104,3 +104,23 @@ hyde:
   anim:
     chest: 0.30
     hip: 0.58
+
+# ---- Chapter 3 (story/chapters/03-jekyll-era-tranquillo.md, Profili personaggio; story/bible.md jekyll) -------------
+
+jekyll:
+  book:
+    - "a man of fifty, large, well made, smooth-faced (ch. 3, r. 14)"
+    - "something of a slyish cast perhaps, but every mark of capacity and kindness (ch. 3, r. 15-16)"
+    - "the large handsome face (ch. 3, r. 40); pale to the very lips, with darkness about the eyes when Hyde is named (r. 40-41)"
+  period:
+    - "dark blue frock coat of good cut, waistcoat with a watch chain, white shirt, silk cravat (bible: design choice)"
+    - "short brown hair, clean-shaven (not in the book; chosen for consistency); no hat indoors"
+  appearance: >-
+    large well made victorian gentleman of fifty, handsome smooth clean-shaven face, kindly look,
+    short brown hair, dark blue frock coat, waistcoat with watch chain, silk cravat, black shoes
+  illustration: >-
+    large handsome smooth-faced gentleman of fifty, short brown hair, clean-shaven, dark blue frock coat
+  negative_extra: "hat, top hat, cap, beard, moustache, thin, frail, bald, grey hair, ugly, monster, scar"
+  anim:
+    chest: 0.30
+    hip: 0.62

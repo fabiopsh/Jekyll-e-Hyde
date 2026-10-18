@@ -112,6 +112,14 @@ Aggiornato: 2026-10-16. Chi lavora qui aggiorna questo file a fine sessione (ved
   a destra con penna che scrive e leggero scuotimento finché ci sono appunti non letti; niente notifiche per gli appunti. Scenario `npm run shot -- notebook`. Corretto anche Enfield che
   girava intorno a Utterson quando si cliccava su di lui (scenario `talkstill`).
 
+- **Capitolo 3 giocabile (2026-10-17, D31)**: sala da pranzo di Jekyll (stanza + 10 oggetti), cena narrata con
+  illustrazioni, rompicapo *Mettere in ordine i pensieri* (tre domande, risposte dagli appunti; un errore si
+  riprova), dialogo al camino con 26 battute del libro fino alla promessa; Jekyll impallidisce (ritratto
+  `jekyll_pale`); chat libera con Jekyll prima del testamento. Musica `mus_jekyll_dinner`, `mus_fireside`.
+  Giro in `tests/content-playthrough.test.ts`, scenario `npm run shot -- c3` (gioca i capitoli 1-3).
+  Dubbi dell'agente sulle immagini: Jekyll sembra più giovane di cinquant'anni e ha un abito marrone; la
+  finestra sembra un mobile; poltrona destra = sinistra specchiata; `ill_c3_dinner` ha un lampadario.
+
 ## Prossimi passi
 
 1. Prova manuale di Fabio dei capitoli 1 e 2 (sotto) e revisione delle immagini del capitolo 2.
@@ -142,6 +150,13 @@ Capitolo 2:
 11. Di notte: ingresso del cortile → *Usa*: Hyde compare alla porta. *Parla*: l'incontro; poi Hyde sparisce.
 12. Bordo destro → la piazza; porta con la lunetta → *Usa*: Poole apre, l'atrio. Fuoco → *Osserva*: Poole
     torna. *Parla* quattro volte; ritorno a casa con i pensieri; pagina di fine capitolo senza notifiche sopra.
+
+Capitolo 3:
+13. Cartolina "Capitolo III", cena narrata. Nella sala: lampadina accesa; *Parla* con Jekyll → "Prima, mettere
+    in ordine i pensieri" → il foglio: scegli una domanda, poi un appunto; *Verifica*. Prova una risposta
+    sbagliata (diventa rossa), poi quella giusta.
+14. *Parla* → "Parlargli del testamento": scelte una alla volta; al nome di Hyde il ritratto di Jekyll impallidisce;
+    la mano sul braccio; la promessa; pagina di fine capitolo.
 
 Da riportare: testi con spazi o punteggiatura sbagliati, illustrazioni che non corrispondono al testo, punti
 cliccabili che non coincidono con il disegno (porte, cassaforte, fuoco), animazioni fastidiose o lente.

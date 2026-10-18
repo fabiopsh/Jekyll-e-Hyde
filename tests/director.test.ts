@@ -16,7 +16,7 @@ const content: Content = {
     next_when: { knows: 'F02.1' },
     banned_words: ['pozione'],
   }],
-  scenes: {}, dialogues: {}, items: {},
+  scenes: {}, dialogues: {}, deductions: {}, items: {},
   npcs: { poole },
   facts: {
     'F02.1': { id: 'F02.1', text: 'Hyde ha una chiave del laboratorio', chapter: 2, known_by: ['poole'] },

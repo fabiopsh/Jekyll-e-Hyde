@@ -42,6 +42,8 @@ portrait:
     neutral: "calm neutral expression"
     worried: "worried frown"
     stern: "stern severe look"
+    cordial: "cordial warm kindly relaxed face"
+    pale: "face pale to the lips, dark shadows about the eyes, troubled"
     shadowed: "face in deep shadow under the hat brim, pale chin lit from below"
   negative: >-
     multiple views, two people, full body, hands, cut off, out of frame, cropped hat, scenery, white background,

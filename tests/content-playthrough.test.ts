@@ -112,6 +112,31 @@ describe('content', () => {
     for (let i = 0; i < 4; i++) s = talk(s, content, 'd02_poole')
 
     expect(s.objectivesDone).toEqual(['c2_read_will', 'c2_ask_lanyon', 'c2_see_hyde', 'c2_find_jekyll'])
-    expect(s.ended).toBe(true) // no chapter 3 yet
+    expect(s.chapter).toBe(3)
+    expect(s.scene).toBe('loc_jekyll_dining_room')
+  })
+
+  it('chapter 3: the thoughts in order, then the talk by the fire up to the promise', () => {
+    const ch = content.chapters.find((x) => x.number === 3)!
+    let s = progress(newGameState(3, ch.start_scene, ch.player, ch.start_at ?? null), content).state
+    const d = content.deductions.d03_thoughts
+    // the right answer of every slot is among the options, and each slot accepts something
+    d.slots.forEach((sl) => expect(sl.accept.every((f) => d.options.includes(f))).toBe(true))
+
+    // talking first only offers to put the thoughts in order
+    let t = talk(s, content, 'd03_fireside')
+    expect(t.flags).not.toContain('c3_will_raised')
+    expect(hotspot(s, content, 'loc_jekyll_dining_room', 'armchair', 'use')).toEqual([{ deduce: 'd03_thoughts' }])
+
+    // the deduction holds: its effects run (the UI checks the answers against `accept`)
+    s = apply(d.done, s, content).state
+    expect(currentObjective(s, content)?.id).toBe('c3_speak')
+    expect(hotspot(s, content, 'loc_jekyll_dining_room', 'armchair', 'use')).toEqual([{ dialogue: 'd03_fireside' }])
+
+    s = talk(s, content, 'd03_fireside', ['testamento'])
+    expect(s.facts).toEqual(expect.arrayContaining(['F03.3', 'F03.4', 'F03.6', 'F03.7', 'F03.9', 'F03.10']))
+    expect(s.objectivesDone).toEqual(['c3_prepare', 'c3_speak'])
+    expect(s.ended).toBe(true) // no chapter 4 yet
+    t = s
   })
 })

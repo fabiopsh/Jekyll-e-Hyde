@@ -72,6 +72,49 @@ const scenarios: Record<string, (page: Page) => Promise<void>> = {
     await shot(page, 'pause')
   },
 
+  // chapters 1 and 2 played through, then chapter 3: the deduction (one wrong try) and the talk by the fire
+  c3: async (page) => {
+    await scenarios.c2(page)
+    await advanceUntil(page, '.chapter-card', 20)
+    await wait(1200)
+    await shot(page, 'c3-card')
+    await advanceAll(page)
+    await wait(1500)
+    await shot(page, 'c3-room')
+    await openTalk(page)
+    await page.locator('.choice', { hasText: 'pensieri' }).click()
+    await page.waitForSelector('.deduction-sheet', { timeout: 10_000 })
+    await wait(600)
+    await shot(page, 'c3-deduction')
+    for (const note of ['benefattore', 'calpestare', 'Lanyon non ha mai']) await page.locator('.deduction-slip', { hasText: note }).click()
+    await page.locator('.deduction-check').click()
+    await wait(500)
+    await shot(page, 'c3-deduction-wrong')
+    await page.locator('.deduction-slot').nth(2).click()
+    await page.locator('.deduction-slip', { hasText: 'impaziente' }).click()
+    await page.locator('.deduction-check').click()
+    await advanceAll(page, 20)
+    await wait(800)
+    await openTalk(page)
+    await page.locator('.choice', { hasText: 'testamento' }).click()
+    await advanceUntil(page, '.portrait[src*="jekyll_pale"], .choice', 40)
+    for (let i = 0; i < 8; i++) {
+      if (await page.locator('.portrait[src*="jekyll_pale"]').count()) { await wait(1500); await shot(page, 'c3-pale'); break }
+      await page.locator('.choice').first().click()
+      await advanceUntil(page, '.portrait[src*="jekyll_pale"], .choice', 40)
+    }
+    let handShot = false
+    for (let i = 0; i < 8; i++) {
+      await advanceUntil(page, '.choice, .chapter-end, .illustration img[src*="ill_c3_hand"]', 60)
+      if (!handShot && await page.locator('.illustration img[src*="ill_c3_hand"]').count()) { handShot = true; await wait(1500); await shot(page, 'c3-hand') }
+      if (await page.locator('.chapter-end').count()) break
+      if (await page.locator('.choice').count()) await page.locator('.choice').first().click()
+    }
+    await advanceAll(page, 80, '.chapter-end')
+    await wait(800)
+    await shot(page, 'c3-end')
+  },
+
   // HUD and notebook: the task card, the pen writing on the notebook, the pages and a leaf turning
   notebook: async (page) => {
     await page.waitForSelector('.menu-btn.new', { timeout: 30_000 })

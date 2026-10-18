@@ -68,7 +68,10 @@ di `story/chapters/`.
 - Narrato: la cena, gli ospiti che se ne vanno.
 - Scritto: dialogo al camino con Jekyll, fino alla promessa (S 03.2–03.3). Chat libera con Jekyll prima di
   sollevare la questione del testamento.
-- Obiettivo: *Parla a Jekyll del testamento*.
+- Rompicapo (D31, proposta di gioco): prima di parlare, *mettere in ordine i pensieri*: tre domande, risposte
+  scelte dagli appunti del taccuino (il testamento, la bambina calpestata, il timore che Hyde voglia ereditare).
+- Il volto di Jekyll impallidisce al nome di Hyde (ritratto `jekyll_pale`).
+- Obiettivi: *Metti in ordine ciò che sai* → *Parla a Jekyll del testamento*.
 
 ### Cap. 4 — Il caso dell'omicidio Carew
 - Narrato: il delitto visto dalla cameriera, tutto fuori campo (S 04.1–04.2).

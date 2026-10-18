@@ -5,7 +5,7 @@ import { join, basename } from 'node:path'
 import { parse, parseAllDocuments } from 'yaml'
 import { z } from 'zod'
 import {
-  Chapter, Character, Condition, Content, Dialogue, Effect, Fact, GameSettings, Item, Npc, Scene,
+  Chapter, Character, Condition, Content, Deduction, Dialogue, Effect, Fact, GameSettings, Item, Npc, Scene,
 } from './content-schema'
 
 export interface LoadResult {
@@ -67,6 +67,7 @@ export function loadContent(root: string): LoadResult {
   const scenes = yamlFiles(join(dir, 'scenes')).map((f) => read(f, Scene, errors)).filter((x) => x !== undefined)
   const dialogues = yamlFiles(join(dir, 'dialogues')).map((f) => read(f, Dialogue, errors)).filter((x) => x !== undefined)
   const npcs = yamlFiles(join(dir, 'npcs')).map((f) => read(f, Npc, errors)).filter((x) => x !== undefined)
+  const deductions = yamlFiles(join(dir, 'deductions')).map((f) => read(f, Deduction, errors)).filter((x) => x !== undefined)
   const itemsFile = join(dir, 'items.yaml')
   const factsFile = join(dir, 'facts.yaml')
   const items = existsSync(itemsFile) ? read(itemsFile, z.array(Item), errors) ?? [] : []
@@ -77,7 +78,7 @@ export function loadContent(root: string): LoadResult {
   const game = (existsSync(gameFile) ? read(gameFile, GameSettings, errors) : undefined) ?? {}
 
   // file name must match id, so agents find things by name
-  for (const [list, sub] of [[scenes, 'scenes'], [dialogues, 'dialogues'], [npcs, 'npcs']] as const) {
+  for (const [list, sub] of [[scenes, 'scenes'], [dialogues, 'dialogues'], [npcs, 'npcs'], [deductions, 'deductions']] as const) {
     for (const x of list) {
       const f = yamlFiles(join(dir, sub)).find((p) => basename(p, '.yaml') === x.id)
       if (!f) errors.push(`content/${sub}: id "${x.id}" must live in ${x.id}.yaml`)
@@ -89,6 +90,7 @@ export function loadContent(root: string): LoadResult {
     chapters: [...chapters].sort((a, b) => a.number - b.number),
     scenes: byId(scenes, 'scene', errors),
     dialogues: byId(dialogues, 'dialogue', errors),
+    deductions: byId(deductions, 'deduction', errors),
     characters: byId(characters, 'character', errors),
     npcs: byId(npcs, 'npc', errors),
     items: byId(items, 'item', errors),
@@ -126,6 +128,7 @@ function checkReferences(c: Content, errors: string[]): void {
         else if (e.at && !target.entries[e.at]) errors.push(`${where}: scene ${e.goto} has no entry ${e.at}`)
       }
       if ('dialogue' in e && !c.dialogues[e.dialogue]) errors.push(`${where}: unknown dialogue ${e.dialogue}`)
+      if ('deduce' in e && !c.deductions[e.deduce]) errors.push(`${where}: unknown deduction ${e.deduce}`)
       if ('complete' in e && !objectiveIds.has(e.complete)) errors.push(`${where}: unknown objective ${e.complete}`)
       if ('chapter' in e && !c.chapters.some((ch) => ch.number === e.chapter)) errors.push(`${where}: unknown chapter ${e.chapter}`)
     }
@@ -180,6 +183,12 @@ function checkReferences(c: Content, errors: string[]): void {
     }
   }
 
+  for (const d of Object.values(c.deductions)) {
+    const w = `deduction ${d.id}`
+    for (const f of d.options) if (!c.facts[f]) errors.push(`${w}: unknown fact ${f}`)
+    d.slots.forEach((sl, i) => { for (const f of sl.accept) if (!d.options.includes(f)) errors.push(`${w} slot ${i + 1}: ${f} is not among the options`) })
+    effects(w, d.done)
+  }
   for (const f of Object.values(c.facts)) {
     for (const who of f.known_by) if (!c.npcs[who]) errors.push(`fact ${f.id}: unknown npc ${who}`)
     cond(`fact ${f.id} reveal_when`, f.reveal_when)

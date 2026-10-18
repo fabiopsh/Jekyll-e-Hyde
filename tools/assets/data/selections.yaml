@@ -88,3 +88,23 @@ selections:
   prop_hall_rug: 3
   # (painting, desk, table, landscape, sconce and the dining/hall shells redone with their own prefix / strength 0.65 and re-picked by eye)
   # (hall painting/rug/hearth redone with 4 variants after the cut-out kept only the largest object)
+
+  # 2026-10-17 chapter 3 (default picks by script; jekyll_pale takes the variant of jekyll_neutral: same seeds, same framing)
+  loc_jekyll_dining_room: 1
+  jekyll: 2
+  jekyll_neutral: 2
+  jekyll_pale: 2
+  prop_jdin_door: 2
+  prop_jdin_portrait: 1
+  prop_jdin_table: 1
+  prop_jdin_window: 3
+  prop_jdin_armchair_l: 2
+  prop_jdin_fireplace: 2
+  prop_jdin_mirror: 3
+  prop_jdin_bookcase: 3
+  prop_jdin_rug: 3
+  ill_c3_dinner: 0
+  ill_c3_guests_leave: 2
+  ill_c3_fireside: 2
+  ill_c3_hand: 3
+  # jekyll_neutral/jekyll_pale: v2 of both is the only matched pair (same oval vignette, same framing); v2 neutral is serious more than warm

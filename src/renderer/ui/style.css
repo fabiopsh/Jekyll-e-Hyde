@@ -723,3 +723,37 @@ body.modal-open .hud-bulb, body.modal-open .hud-task { opacity: 0; pointer-event
   91% { transform: rotate(-4deg); }
   94% { transform: rotate(2deg); }
 }
+
+/* ---- deduction (D31): a notebook sheet, questions left, notes right ---- */
+.deduction-screen { display: grid; place-items: center; background: rgba(5, 4, 8, 0.88); z-index: 10; animation: fade-in 0.3s ease; }
+.deduction-sheet {
+  width: min(1180px, 94vw); max-height: 88vh; display: flex; flex-direction: column; padding: 26px 34px 20px;
+  background: #efe3c8; color: #2a1c10; border-radius: 6px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), inset 0 0 0 2px #b39a72;
+  zoom: var(--text-scale, 1);
+}
+.deduction-kicker { color: #8a5a2a; font-variant: small-caps; letter-spacing: 2px; font-size: 18px; }
+.deduction-sheet .deduction-title { margin: 2px 0 6px; color: #3b2412; font-size: 30px; font-weight: normal; } /* beats .screen h2 (gold on paper) */
+.deduction-intro { margin: 0 0 14px; font-size: 20px; font-style: italic; }
+.deduction-body { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; min-height: 0; overflow: hidden; }
+.deduction-slots { display: flex; flex-direction: column; gap: 14px; }
+.deduction-slot {
+  text-align: left; padding: 12px 14px; color: #2a1c10; background: rgba(255, 255, 255, 0.35);
+  border: 2px dashed #b39a72; border-radius: 4px; font-size: 20px; line-height: 1.4;
+}
+.deduction-slot.active { border-style: solid; border-color: #5a2a14; background: rgba(255, 255, 255, 0.6); }
+.deduction-slot.wrong { border-color: #9a1e1e; background: rgba(160, 40, 30, 0.12); }
+.deduction-question { font-weight: bold; color: #5a2a14; }
+.deduction-answer { margin-top: 6px; font-family: 'Segoe Script', 'Brush Script MT', cursive; font-size: 19px; color: #1e2a4a; }
+.deduction-answer.empty { font-family: inherit; font-style: italic; color: #8a6a44; }
+.deduction-notes { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; padding-right: 4px; }
+.deduction-notes-head { color: #8a5a2a; font-variant: small-caps; letter-spacing: 2px; font-size: 18px; }
+.deduction-slip {
+  text-align: left; padding: 8px 12px; font-size: 18px; line-height: 1.35; color: #2a1c10;
+  background: #f8f0dc; border: 1px solid #c4ae86; border-radius: 2px; box-shadow: 1px 2px 0 rgba(0, 0, 0, 0.15);
+}
+.deduction-slip:hover { background: #fffaf0; border-color: #5a2a14; }
+.deduction-slip.used { opacity: 0.45; }
+.deduction-message { min-height: 28px; margin: 12px 0 0; color: #9a1e1e; font-size: 20px; font-style: italic; }
+.deduction-bar { display: flex; gap: 14px; justify-content: flex-end; margin-top: 8px; }
+.deduction-bar button { font-size: 20px; padding: 6px 18px; }
+.deduction-check[disabled] { opacity: 0.4; }

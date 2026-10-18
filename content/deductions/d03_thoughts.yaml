@@ -1,0 +1,19 @@
+# Proposta di gioco (not in the book, D31): before he speaks, Utterson sorts what he already knows. The answers
+# are what he says or fears in the book: the will he never approved (D03.2.5), "something of young Hyde",
+# "abominable" (D03.2.9, D03.2.12; Enfield's story, ch. 1), the fear that Hyde may grow impatient to inherit
+# (D02.9.2). Wrong notes are true facts that do not answer the question.
+id: d03_thoughts
+title: Che cosa dire a Jekyll?
+intro: "Prima di parlare, Utterson mette in fila ciò che sa. Che cosa non può tacere al suo amico?"
+slots:
+  - question: "Che cosa, nel testamento, non ha mai approvato?"
+    accept: [F02.2, F02.3]
+  - question: "Che cosa ha saputo del giovane Hyde, di abominevole?"
+    accept: [F01.5]
+  - question: "Che cosa teme, se Hyde sa del testamento?"
+    accept: [F02.23]
+options: [F01.5, F01.10, F02.2, F02.3, F02.6, F02.7, F02.20, F02.23]
+wrong: "Qualcosa non torna: Utterson rilegge i suoi appunti, una riga dopo l'altra."
+done:
+  - set: c3_prepared
+  - narrate: "Ora Utterson sa che cosa dire al suo amico."

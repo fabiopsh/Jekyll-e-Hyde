@@ -88,10 +88,15 @@ mostra o li nasconde (`RoomScene.refresh()`), così qualcuno può arrivare o and
 ### Dialogo scritto (`content/dialogues/*.yaml`)
 Nodi con battute (`speaker`, `it`, `src: D02.3.4` = riferimento alla battuta del libro), scelte del giocatore
 (testo, condizione, effetti, nodo successivo). Le battute del libro si usano così come sono state tradotte in
-`story/chapters/`; `src` permette di controllare la fedeltà. `thought: true` segna un pensiero ("he thought"):
+`story/chapters/`; `src` permette di controllare la fedeltà. `portrait` cambia il ritratto per una sola battuta. `thought: true` segna un pensiero ("he thought"):
 si mostra in corsivo con il nome "Utterson, tra sé", mai come battuta detta a un altro personaggio.
 `npm run validate` controlla spazi e punteggiatura di ogni testo mostrato (`src/shared/typography.ts`):
 doppi spazi, spazi prima della punteggiatura o mancanti dopo, `...` al posto di `…`, « » non appaiati.
+
+### Deduzione (`content/deductions/*.yaml`, D31)
+Rompicapo "metti in ordine i pensieri": domande con un appunto da scegliere ciascuna (`accept` = appunti giusti,
+`options` = appunti offerti, solo se il giocatore li ha), `wrong` se non torna, `done` = effetti quando torna.
+Si apre con l'effetto `deduce: <id>` (`src/renderer/ui/deduction.ts`).
 
 ### Capitolo (`content/chapters/*.yaml`)
 Personaggio giocato (Utterson; Lanyon e Jekyll/Hyde nei flashback), scena iniziale, obiettivi in ordine con

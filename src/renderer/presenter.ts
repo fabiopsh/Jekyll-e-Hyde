@@ -12,6 +12,7 @@ import { clearToasts, isModal, toast } from './ui/dom'
 import { closeVerbMenu, isVerbMenuOpen } from './ui/room-ui'
 import { playMusic, stopMusic } from './audio'
 import { Hud } from './ui/hud'
+import { deduction } from './ui/deduction'
 
 export class Presenter {
   private queue: Command[] = []
@@ -101,6 +102,7 @@ export class Presenter {
     switch (c.kind) {
       case 'narrate': return narrate([{ text: c.text, image: c.image }])
       case 'dialogue': return playDialogue(this.session, content.dialogues[c.id])
+      case 'deduce': { await deduction(this.session, content.deductions[c.id]); return }
       case 'learned': case 'noted': return this.hud.noteWritten() // the pen on the notebook, no notification
       case 'got': return toast(`Preso: ${content.items[c.item]?.name ?? c.item}`, 'item')
       case 'objective': return this.hud.objectiveDone()

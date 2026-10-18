@@ -26,7 +26,7 @@ export interface RunMeta {
 export interface LogEvent {
   t: string // ISO date
   playtimeMs: number
-  kind: 'scene' | 'dialogue' | 'choice' | 'fact' | 'item' | 'objective' | 'chapter' | 'hint' | 'chat' | 'end'
+  kind: 'scene' | 'dialogue' | 'choice' | 'fact' | 'item' | 'objective' | 'chapter' | 'hint' | 'chat' | 'deduction' | 'end'
   data: Record<string, unknown>
 }
 

@@ -745,5 +745,204 @@
     "seed": 2297203,
     "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, top-down view of a worn persian rug, rectangular, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
     "exported_at": "2026-10-16T13:56:44+00:00"
+  },
+  {
+    "id": "loc_jekyll_dining_room",
+    "kind": "background",
+    "variant": 1,
+    "files": [
+      "backgrounds/loc_jekyll_dining_room.png"
+    ],
+    "seed": 8966501,
+    "prompt": "pixel art, adventure game background, victorian london 1880s, an empty rich dining room interior seen straight on, dark green damask wallpaper, oak wainscot, parquet floor, ceiling cornice, evenly lit, flat colors, muted browns and dark greens",
+    "exported_at": "2026-10-17T14:06:59+00:00"
+  },
+  {
+    "id": "jekyll",
+    "kind": "character",
+    "variant": 2,
+    "flip": false,
+    "files": [
+      "characters/jekyll.png",
+      "characters/jekyll.json"
+    ],
+    "seed": 1219902,
+    "prompt": "pixel art, full body character sprite, large well made victorian gentleman of fifty, handsome smooth clean-shaven face, kindly look, short brown hair, dark blue frock coat, waistcoat with watch chain, silk cravat, black shoes, side view facing right, standing upright, arms at sides, full figure, single character, plain white background, flat colors, dark outline",
+    "exported_at": "2026-10-17T14:06:59+00:00"
+  },
+  {
+    "id": "jekyll_neutral",
+    "kind": "portrait",
+    "variant": 2,
+    "files": [
+      "portraits/jekyll_neutral.png"
+    ],
+    "seed": 1683402,
+    "prompt": "pixel art, portrait, head and shoulders, large well made victorian gentleman of fifty, handsome smooth clean-shaven face, kindly look, short brown hair, dark blue frock coat, waistcoat with watch chain, silk cravat, black shoes, cordial warm kindly relaxed face, plain dark brown backdrop, flat colors, dark outline",
+    "exported_at": "2026-10-17T14:07:15+00:00"
+  },
+  {
+    "id": "jekyll_pale",
+    "kind": "portrait",
+    "variant": 2,
+    "files": [
+      "portraits/jekyll_pale.png"
+    ],
+    "seed": 1683402,
+    "prompt": "pixel art, portrait, head and shoulders, large well made victorian gentleman of fifty, handsome smooth clean-shaven face, kindly look, short brown hair, dark blue frock coat, waistcoat with watch chain, silk cravat, black shoes, face pale to the lips, dark shadows about the eyes, troubled, plain dark brown backdrop, flat colors, dark outline",
+    "exported_at": "2026-10-17T14:07:15+00:00"
+  },
+  {
+    "id": "prop_jdin_door",
+    "kind": "prop",
+    "variant": 2,
+    "files": [
+      "props/prop_jdin_door.png"
+    ],
+    "seed": 1931002,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, closed panelled mahogany door in its frame, brass knob, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-17T14:06:59+00:00"
+  },
+  {
+    "id": "prop_jdin_portrait",
+    "kind": "prop",
+    "variant": 1,
+    "files": [
+      "props/prop_jdin_portrait.png"
+    ],
+    "seed": 5915101,
+    "prompt": "pixel art, game prop sprite, one framed oil portrait, front view, oil portrait of a gentleman in a gilt frame, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-17T14:06:59+00:00"
+  },
+  {
+    "id": "prop_jdin_table",
+    "kind": "prop",
+    "variant": 1,
+    "files": [
+      "props/prop_jdin_table.png"
+    ],
+    "seed": 8828601,
+    "prompt": "pixel art, game prop sprite, one single long dining table, front view, dining table after a dinner for six, white tablecloth, wine glasses, decanters, a lit silver candelabra, chairs pushed back, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-17T14:06:59+00:00"
+  },
+  {
+    "id": "prop_jdin_window",
+    "kind": "prop",
+    "variant": 3,
+    "files": [
+      "props/prop_jdin_window.png"
+    ],
+    "seed": 1797503,
+    "prompt": "pixel art, game prop sprite, one tall window, front view, tall window with heavy drawn dark red velvet curtains and a pelmet, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-17T14:06:59+00:00"
+  },
+  {
+    "id": "prop_jdin_armchair_l",
+    "kind": "prop",
+    "variant": 2,
+    "files": [
+      "props/prop_jdin_armchair_l.png"
+    ],
+    "seed": 9765602,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, leather wing armchair seen from the front, dark brown leather, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-17T14:06:59+00:00"
+  },
+  {
+    "id": "prop_jdin_fireplace",
+    "kind": "prop",
+    "variant": 2,
+    "files": [
+      "props/prop_jdin_fireplace.png"
+    ],
+    "seed": 1440202,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, marble fireplace with a bright fire in the grate, a mantelpiece and a brass fender, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-17T14:06:59+00:00"
+  },
+  {
+    "id": "prop_jdin_mirror",
+    "kind": "prop",
+    "variant": 3,
+    "files": [
+      "props/prop_jdin_mirror.png"
+    ],
+    "seed": 1011203,
+    "prompt": "pixel art, game prop sprite, one gilt framed wall mirror, front view, gilt framed wall mirror with an ornate frame, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-17T14:06:59+00:00"
+  },
+  {
+    "id": "prop_jdin_bookcase",
+    "kind": "prop",
+    "variant": 3,
+    "files": [
+      "props/prop_jdin_bookcase.png"
+    ],
+    "seed": 2492403,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, tall glass-front mahogany bookcase full of books, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-17T14:06:59+00:00"
+  },
+  {
+    "id": "prop_jdin_rug",
+    "kind": "prop",
+    "variant": 3,
+    "files": [
+      "props/prop_jdin_rug.png"
+    ],
+    "seed": 1118903,
+    "prompt": "pixel art, game prop sprite, detailed victorian furniture, front view, straight on, top-down view of a rich persian rug, dark red pattern, rectangular, single object isolated on plain flat grey-green background, centered, even flat lighting, flat colors, dark outline",
+    "exported_at": "2026-10-17T14:06:59+00:00"
+  },
+  {
+    "id": "ill_c3_dinner",
+    "kind": "illustration",
+    "variant": 0,
+    "files": [
+      "illustrations/ill_c3_dinner.png"
+    ],
+    "seed": 4143800,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, five respectable gentlemen in black evening dress at a candlelit dinner table, wine glasses and decanters, a silver candelabra, the host at the head of the table, convivial, dramatic lighting, flat colors",
+    "exported_at": "2026-10-17T14:06:59+00:00"
+  },
+  {
+    "id": "ill_c3_guests_leave",
+    "kind": "illustration",
+    "variant": 2,
+    "files": [
+      "illustrations/ill_c3_guests_leave.png"
+    ],
+    "seed": 9770102,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, gentlemen in dark overcoats and top hats taking their leave at a front door in a hall, one tall dry gentleman in a dark grey frock coat, bare headed, staying behind, dramatic lighting, flat colors",
+    "exported_at": "2026-10-17T14:06:59+00:00"
+  },
+  {
+    "id": "ill_c3_fireside",
+    "kind": "illustration",
+    "variant": 2,
+    "files": [
+      "illustrations/ill_c3_fireside.png"
+    ],
+    "seed": 6525402,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, two gentlemen in black coats sitting in armchairs on opposite sides of a lit fireplace at night, talking quietly, intimate, warm firelight, dramatic lighting, flat colors",
+    "exported_at": "2026-10-17T14:06:59+00:00"
+  },
+  {
+    "id": "ill_c3_hand",
+    "kind": "illustration",
+    "variant": 3,
+    "files": [
+      "illustrations/ill_c3_hand.png"
+    ],
+    "seed": 9610303,
+    "prompt": "pixel art, adventure game illustration, victorian london 1880s, a large smooth-faced man in a dark blue frock coat leans toward a tall thin lawyer in a dark grey coat and lays one bare hand on his forearm, side view, two men beside a fire at night, firelight, dramatic lighting, flat colors",
+    "exported_at": "2026-10-17T14:13:30+00:00"
+  },
+  {
+    "id": "prop_jdin_armchair_r",
+    "kind": "prop",
+    "variant": 2,
+    "mirror_of": "prop_jdin_armchair_l",
+    "files": [
+      "props/prop_jdin_armchair_r.png"
+    ],
+    "exported_at": "2026-10-17T14:06:59+00:00"
   }
 ]

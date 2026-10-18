@@ -178,3 +178,15 @@ blocca la validazione. Corretti due `...` del capitolo 1.
 - Niente più notifiche per gli appunti: in alto a destra un piccolo taccuino; quando si annota qualcosa una
   penna ci scrive sopra, con il suono del pennino, e finché ci sono appunti non letti il taccuino ogni tanto si
   agita appena. I clic sull'HUD non arrivano alla stanza sotto (non fanno camminare).
+
+**D31 — Rompicapi di deduzione: mettere in ordine i pensieri.** (Fabio chiede minigiochi dove la storia si presta;
+scelta dell'agente, 2026-10-17)
+- Nuovo tipo di contenuto `content/deductions/`: domande, appunti offerti (solo quelli che il giocatore ha),
+  appunti accettati per ogni domanda, frase quando non torna, effetti quando torna. Si apre con l'effetto
+  `deduce`. È un'idea di gioco, non un evento del libro: Utterson riordina ciò che sa già, le risposte giuste
+  sono ciò che dice o teme nel libro, e un errore non cambia nulla (si riprova).
+- Primo uso, capitolo 3: prima di parlare a Jekyll del testamento (il testamento mai approvato, la bambina
+  calpestata, il timore che Hyde voglia ereditare). Lo stesso meccanismo servirà per la perizia calligrafica
+  del capitolo 5 e per gli indizi del capitolo 8.
+- Battute con `portrait`: un ritratto diverso per una battuta (Jekyll pallido quando sente il nome di Hyde).
+- Il capitolo 3 non si presta ad altri minigiochi: è un dialogo al camino; tutto il resto resterebbe inventato.
