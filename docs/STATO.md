@@ -128,6 +128,17 @@ Aggiornato: 2026-10-16. Chi lavora qui aggiorna questo file a fine sessione (ved
   gioco* nella pagina iniziale; Cronache rifatte (fascicoli + resoconto per capitolo). Scenario
   `npm run shot -- menus`.
 
+- **Pacchetto e modello (2026-10-18, D34)**: installatore Windows leggero di 157 MB (`npm run dist:win`), provato
+  fuori dal progetto: parte, trova il modello di Ollama, lo carica con Vulkan e risponde. Menu *Chat libera (IA)*
+  con download riprendibile (provato: stop e ripresa sul server vero); *Conversa* grigia senza modello. macOS e
+  Linux: configurati ma non costruiti (servono quei sistemi o il flusso GitHub Actions, non ancora provato).
+
+- **Regressioni corrette (2026-10-18)**: (1) dopo una stanza illuminata (notte, candele) la stanza successiva
+  senza luci restava scura: l'ascoltatore della luce sopravviveva al cambio di stanza
+  (`src/renderer/phaser/lighting.ts`); (2) al primo ingresso in una stanza gli NPC e gli hotspot con `when` non
+  venivano nascosti (controllo `isActive()` falso durante la creazione), quindi nel cap. 3 si cliccava il Jekyll
+  senza chat. Scenario di controllo: `npm run shot -- regress`.
+
 ## Prossimi passi
 
 1. Prova manuale di Fabio dei capitoli 1 e 2 (sotto) e revisione delle immagini del capitolo 2.
@@ -153,6 +164,12 @@ Tutorial e menu:
 - Nuova partita: nella stradina compare il cartellino *Come si gioca*: cammina, clicca la porta, poi *Avanti*
   fino a *Ho capito* (o *Salta il tutorial*). Menu → *Scegli un capitolo* → Capitolo III: il taccuino ha gli
   appunti dei capitoli I e II; il segnalibro *Riprendi* riapre l'ultima partita in corso.
+
+Chat libera e pacchetto:
+- Menu → *Chat libera (IA)*: su questo PC dice "già presente in Ollama". Per vedere il download:
+  `JH_IGNORE_OLLAMA=1 npm run dev` (in PowerShell: `$env:JH_IGNORE_OLLAMA='1'; npm run dev`), poi *Scarica*, *Stop*,
+  di nuovo *Scarica* (riprende). In gioco, senza modello, *Conversa* è grigia con il motivo.
+- `dist/Jekyll e Hyde-0.1.0-setup.exe`: installazione, avvio dal menu Start, una partita breve.
 
 Capitolo 2:
 7. Studio: orologio e fuoco si sentono. La porta non si apre prima del testamento. Cassaforte → *Usa*: il

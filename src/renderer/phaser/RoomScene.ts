@@ -5,6 +5,7 @@ import { assetUrl, cursor } from '../assets'
 import { actionCursor, type CursorIcon } from '../cursors'
 import { addAmbience } from './ambience'
 import { addLighting } from './lighting'
+import { chatAvailable } from '../llm-state'
 import { playFootstep } from '../audio'
 import type { Condition, Effect, Scene as SceneData } from '../../shared/content-schema'
 import { check } from '../../game/rules'
@@ -92,7 +93,8 @@ export class RoomScene extends Phaser.Scene {
       this.interactive(npc, name, () => {
         const opts: VerbOption[] = [{ label: 'Osserva', run: () => this.cb.run([{ narrate: `È ${name}.` }]) }]
         if (n.talk) opts.unshift({ label: 'Parla', run: () => this.cb.talk(n.npc, n.talk, false) })
-        if (n.chat) opts.splice(n.talk ? 1 : 0, 0, { label: 'Conversa', run: () => this.cb.talk(n.npc, undefined, true) })
+        // free chat needs the language model on this computer (D34): without it the option is greyed out
+        if (n.chat) opts.splice(n.talk ? 1 : 0, 0, { label: 'Conversa', run: () => this.cb.talk(n.npc, undefined, true), disabled: chatAvailable() ? undefined : 'Serve il modello IA: si scarica dal menu principale, «Chat libera (IA)».' })
         // close enough: the two just turn to each other (walking would move a follower too)
         if (Phaser.Math.Distance.Between(npc.x, npc.y, this.player.x, this.player.y) < TALK_DISTANCE) {
           this.player.setFlipX(npc.x < this.player.x)
@@ -183,7 +185,10 @@ export class RoomScene extends Phaser.Scene {
 
   // Shows or hides npcs and hotspots with a `when`, after the state changed (e.g. someone arrives).
   refresh(): void {
-    if (!this.conditional || !this.sys.isActive()) return
+    // not isActive(): the scene is still CREATING when create() calls this, and then nothing was hidden
+    // (both versions of an NPC stayed clickable, 2026-10-18)
+    const status = this.sys.settings.status
+    if (!this.conditional || status === Phaser.Scenes.SHUTDOWN || status === Phaser.Scenes.DESTROYED) return
     for (const { when, obj } of this.conditional) {
       const on = check(when, this.session.state)
       if (on === obj.visible && obj.input?.enabled === on) continue

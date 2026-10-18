@@ -145,6 +145,58 @@ const scenarios: Record<string, (page: Page) => Promise<void>> = {
     await shot(page, 'chapters')
   },
 
+  // regressions of 2026-10-18: chapter III from the menu offers "Conversa" at the first click on Jekyll;
+  // then chapter I from the menu is lit by day (no light left over from the night rooms)
+  regress: async (page) => {
+    const fromMenu = async (chapter: string) => {
+      await page.waitForSelector('.menu-btn.chapters', { timeout: 30_000 })
+      await page.click('.menu-btn.chapters')
+      await page.locator('.chapter-select-num', { hasText: new RegExp(`^${chapter}$`, 'i') }).click()
+      await page.waitForSelector('.chapter-card', { timeout: 10_000 })
+      await advanceAll(page)
+      await wait(1500)
+    }
+    await fromMenu('Capitolo III')
+    const pos = await page.evaluate(() => (window as unknown as { __jhNpcs: () => { x: number; y: number }[] }).__jhNpcs())
+    console.log(`visible npcs in chapter III: ${pos.length}`)
+    await clickGame(page, pos[0].x, pos[0].y - 30)
+    await wait(500)
+    const options = await page.locator('.verb-menu button').allTextContents()
+    console.log(`menu of Jekyll: ${options.join(', ')}`)
+    await shot(page, 'c3-first-click')
+    if (!options.includes('Conversa')) throw new Error('Conversa missing at the first click')
+    await page.keyboard.press('Escape')
+    await wait(300)
+    await page.keyboard.press('Escape')
+    await wait(600)
+    await page.locator('button', { hasText: 'Menu' }).first().click()
+    await fromMenu('Capitolo I')
+    await page.waitForSelector('.tutorial-card', { timeout: 10_000 })
+    await page.locator('.tutorial-skip').click()
+    await wait(500)
+    await shot(page, 'c1-after-c3')
+  },
+
+  // without the model (run with JH_IGNORE_OLLAMA=1): the menu offers the download, "Conversa" is greyed out
+  nomodel: async (page) => {
+    await page.waitForSelector('.menu-btn.chatmodel', { timeout: 30_000 })
+    await wait(1500)
+    await shot(page, 'menu')
+    await page.click('.menu-btn.chatmodel')
+    await wait(800)
+    await shot(page, 'model-screen')
+    await page.locator('.model-card button', { hasText: 'Indietro' }).click()
+    await page.click('.menu-btn.new')
+    await page.waitForSelector('.chapter-card', { timeout: 10_000 })
+    await advanceAll(page)
+    await page.waitForSelector('.tutorial-card', { timeout: 10_000 })
+    await page.locator('.tutorial-skip').click()
+    const pos = await page.evaluate(() => (window as unknown as { __jhNpcs: () => { x: number; y: number }[] }).__jhNpcs()[0])
+    await clickGame(page, pos.x, pos.y - 30)
+    await wait(500)
+    await shot(page, 'conversa-disabled')
+  },
+
   // the first-game tutorial, step by step
   tutorial: async (page) => {
     await page.waitForSelector('.menu-btn.new', { timeout: 30_000 })

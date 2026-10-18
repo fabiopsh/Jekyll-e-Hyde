@@ -8,8 +8,31 @@ export type LlmJob = Omit<LlmRequest, 'signal'>
 export interface LlmStatus {
   provider: string // 'embedded' | 'ollama'
   model: string
-  phase: 'loading' | 'ready' | 'error'
+  // missing: no model on this computer (free chat disabled, the menu offers the download); idle: found, not
+  // loaded yet (it loads when a game starts); loading; ready; error
+  phase: 'missing' | 'idle' | 'loading' | 'ready' | 'error'
   detail: string // human readable, e.g. the error
+}
+
+// The model file (src/main/llm/model-store.ts, D34).
+export interface ModelInfo {
+  found: boolean
+  source: 'downloaded' | 'bundled' | 'ollama' | null // where it was found
+  path: string | null
+  size: number // bytes of the file
+  licence: string
+  downloadTo: string // where a download goes
+  download: ModelDownload | null // a download in progress
+}
+
+export interface ModelDownload {
+  // checking: free space; resuming: re-reading the part already downloaded; downloading; verifying: sha256
+  phase: 'checking' | 'resuming' | 'downloading' | 'verifying' | 'done' | 'stopped' | 'error'
+  received: number // bytes
+  total: number
+  startedAt: number // ms since epoch
+  speed: number // bytes per second, last half second
+  error: string | null
 }
 
 export interface RunMeta {
@@ -50,6 +73,12 @@ export interface Api {
     status(): Promise<LlmStatus>
     generate(id: string, job: LlmJob): Promise<string>
     cancel(id: string): Promise<void>
+    warmup(): Promise<void> // loads the model in memory, when a game starts
+    modelInfo(): Promise<ModelInfo>
+    downloadModel(): Promise<void> // resolves when the download ends (done, stopped or failed)
+    stopDownload(): Promise<void>
+    removeModel(): Promise<void> // deletes the copy the game downloaded
+    onDownload(fn: (d: ModelDownload) => void): () => void // progress; returns unsubscribe
   }
   app: {
     quit(): Promise<void>
@@ -67,6 +96,12 @@ export const CHANNELS = {
   llmStatus: 'llm:status',
   llmGenerate: 'llm:generate',
   llmCancel: 'llm:cancel',
+  llmWarmup: 'llm:warmup',
+  llmModelInfo: 'llm:modelInfo',
+  llmDownload: 'llm:download',
+  llmStopDownload: 'llm:stopDownload',
+  llmRemoveModel: 'llm:removeModel',
+  llmDownloadProgress: 'llm:downloadProgress', // main -> renderer event
   appQuit: 'app:quit',
 } as const
 

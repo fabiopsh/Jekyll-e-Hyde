@@ -39,6 +39,7 @@ npm run validate     validazione contenuti (e asset mancanti, come avvisi)
 npm run shot         screenshot automatici dell'app (scenari in scripts/shot.ts): guardali dopo ogni
                      modifica all'interfaccia, prima di chiedere la prova manuale a Fabio
 npm test             test della logica
+npm run dist:win     installatore leggero (senza modello) in dist/; dist:mac e dist:linux sul loro sistema
 ```
 Asset: `tools/assets/README.md`.
 

@@ -6,6 +6,7 @@ import { Presenter } from './presenter'
 import { Session } from './session'
 import { h, toast, ui } from './ui/dom'
 import { mainMenu } from './ui/screens'
+import { refreshLlm } from './llm-state'
 import { playClickSound, playMusic } from './audio'
 import { applySettings } from './settings'
 
@@ -60,7 +61,7 @@ async function main(): Promise<void> {
   game.scene.add('room', RoomScene, false)
 
   // LLM status: shown once, so the player knows whether free chat is available
-  window.api.llm.status().then((s) => { if (s.phase === 'error') toast(`Chat libera non disponibile: ${s.detail}`) })
+  void refreshLlm().then((s) => { if (s?.phase === 'error') toast(`Chat libera non disponibile: ${s.detail}`) })
 
   for (;;) {
     if (!content.chapters.length) {

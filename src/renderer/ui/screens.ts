@@ -1,6 +1,7 @@
 // Full-screen panels: main menu, play history, journal.
 import type { Chapter, Content } from '../../shared/content-schema'
-import type { LogEvent, RunMeta } from '../../shared/ipc'
+import type { LogEvent, ModelDownload, RunMeta } from '../../shared/ipc'
+import { chatAvailable, refreshLlm } from '../llm-state'
 import { chapterOf } from '../../game/rules'
 import type { Session } from '../session'
 import { h, modal, ui } from './dom'
@@ -21,6 +22,15 @@ export function mainMenu(content: Content): Promise<MenuChoice> {
   return new Promise(async (resolve) => {
     const runs = await window.api.runs.list()
     const last = runs.find((r) => !r.endedAt)
+    // free chat: the button says whether the model is here; the screen offers the download (D34)
+    const chatButton = h('button', { class: 'menu-btn chatmodel', onclick: () => modelScreen(() => void label()) })
+    const label = async () => {
+      await refreshLlm()
+      chatButton.replaceChildren(h('span', { class: 'chatmodel-title' }, 'Chat libera (IA)'),
+        h('span', { class: 'chatmodel-state' }, chatAvailable() ? 'pronta' : 'da scaricare'))
+      chatButton.classList.toggle('missing', !chatAvailable())
+    }
+    void label()
     const cover = h('div', { class: 'book-cover' },
       h('div', { class: 'book-frame' },
         h('div', { class: 'book-author' }, 'ROBERT LOUIS STEVENSON'),
@@ -36,9 +46,9 @@ export function mainMenu(content: Content): Promise<MenuChoice> {
         h('div', { class: 'menu-buttons' },
           h('button', { class: 'menu-btn new', onclick: () => open({ kind: 'new' }) }, 'Comincia la lettura (Nuova partita)'),
           h('button', { class: 'menu-btn history', onclick: () => history(content, runs, (id) => open({ kind: 'resume', id })) }, `Cronache delle indagini (${runs.length})`),
-          content.chapters.length > 1
-            ? h('button', { class: 'menu-btn chapters', onclick: () => chapterSelect(content, (n) => open({ kind: 'new', chapter: n })) }, 'Scegli un capitolo')
-            : null,
+          h('div', { class: 'menu-row' },
+            h('button', { class: 'menu-btn chapters', onclick: () => chapterSelect(content, (n) => open({ kind: 'new', chapter: n })) }, 'Scegli un capitolo'),
+            chatButton),
           h('div', { class: 'menu-row' },
             h('button', { class: 'menu-btn settings', onclick: () => settingsScreen() }, 'Impostazioni'),
             h('button', { class: 'menu-btn quit', onclick: () => void (window.api?.app?.quit ? window.api.app.quit() : window.close()) }, 'Esci dal gioco')),
@@ -535,6 +545,102 @@ function chapterSelect(content: Content, pick: (n: number) => void): void {
     ),
   )
   ui().append(screen)
+}
+
+// "Chat libera (IA)" in the main menu (D34): what free chat is, whether the model is on this computer and where,
+// and the download: phase, bytes, speed, elapsed time, time left and a visible Stop. A stopped or broken
+// download resumes from where it stopped. The game is complete without it: only "Conversa" needs the model.
+function modelScreen(onChange: () => void): void {
+  const status = h('div', { class: 'model-status' })
+  const phase = h('div', { class: 'model-phase' })
+  const bar = h('div', { class: 'model-bar-fill' })
+  const numbers = h('div', { class: 'model-numbers' })
+  const progress = h('div', { class: 'model-progress' }, phase, h('div', { class: 'model-bar' }, bar), numbers)
+  progress.hidden = true
+  const actions = h('div', { class: 'model-actions' })
+  let unsubscribe: (() => void) | null = null
+  let timer = 0
+  let last: ModelDownload | null = null
+
+  const mb = (b: number) => b >= 1024 ** 3 ? `${(b / 1024 ** 3).toFixed(2)} GB` : `${Math.round(b / 1024 ** 2)} MB`
+  const clock = (s: number) => { const m = Math.floor(s / 60); return m ? `${m} min ${Math.round(s % 60)} s` : `${Math.round(s)} s` }
+  const PHASES: Record<ModelDownload['phase'], string> = {
+    checking: 'Controllo dello spazio su disco…',
+    resuming: 'Ripresa: rilettura della parte già scaricata…',
+    downloading: 'Download del modello…',
+    verifying: 'Verifica del file scaricato (sha256)…',
+    done: 'Fatto: il modello è pronto.',
+    stopped: 'Download fermato. Riprendendolo, riparte da dove si era fermato.',
+    error: 'Il download non è riuscito.',
+  }
+
+  const drawProgress = () => {
+    const d = last
+    if (!d) { progress.hidden = true; return }
+    progress.hidden = false
+    phase.textContent = d.error ? `${PHASES[d.phase]} ${d.error}` : PHASES[d.phase]
+    bar.style.width = `${Math.min(100, (d.received / d.total) * 100).toFixed(1)}%`
+    const elapsed = (Date.now() - d.startedAt) / 1000
+    const left = d.speed > 0 ? (d.total - d.received) / d.speed : 0
+    numbers.textContent = [
+      `${mb(d.received)} di ${mb(d.total)}`,
+      d.phase === 'downloading' && d.speed ? `${mb(d.speed)}/s` : '',
+      `tempo trascorso ${clock(elapsed)}`,
+      d.phase === 'downloading' && left ? `mancano circa ${clock(left)}` : '',
+    ].filter(Boolean).join(' · ')
+  }
+
+  const draw = async () => {
+    const info = await window.api.llm.modelInfo()
+    const running = !!info.download && ['checking', 'resuming', 'downloading', 'verifying'].includes(info.download.phase)
+    if (info.download) last = info.download
+    const where = { downloaded: 'scaricato dal gioco', bundled: 'incluso nel gioco', ollama: 'già presente in Ollama: il gioco usa quello, senza scaricarlo di nuovo' }
+    status.replaceChildren(
+      h('p', { class: `model-state ${info.found ? 'ok' : 'missing'}` }, info.found ? `Modello presente (${where[info.source!]}).` : 'Modello non presente: «Conversa» è disattivata.'),
+      info.path ? h('p', { class: 'model-path' }, `File: ${info.path}`) : h('p', { class: 'model-path' }, `Verrà salvato in: ${info.downloadTo}`),
+    )
+    const buttons: HTMLElement[] = []
+    if (running) {
+      buttons.push(h('button', { class: 'model-stop', onclick: () => void window.api.llm.stopDownload() }, 'Stop'))
+    } else if (!info.found) {
+      buttons.push(h('button', { class: 'model-download', onclick: () => start() }, `${last?.phase === 'stopped' || last?.phase === 'error' ? 'Riprendi il download' : 'Scarica il modello'} (${mb(info.size)})`))
+    } else if (info.source === 'downloaded') {
+      buttons.push(h('button', { class: 'model-remove', onclick: () => {
+        if (!confirm('Eliminare il modello scaricato? «Conversa» sarà disattivata finché non lo scarichi di nuovo.')) return
+        void window.api.llm.removeModel().then(() => { last = null; onChange(); void draw() })
+      } }, 'Elimina il modello scaricato'))
+    }
+    buttons.push(h('button', { onclick: () => close() }, running ? 'Chiudi (il download continua)' : 'Indietro'))
+    actions.replaceChildren(...buttons)
+    drawProgress()
+  }
+
+  const start = () => {
+    last = { phase: 'checking', received: 0, total: 0, startedAt: Date.now(), speed: 0, error: null }
+    void window.api.llm.downloadModel().then(() => { onChange(); void draw() })
+    setTimeout(() => void draw(), 200)
+  }
+
+  const close = () => {
+    unsubscribe?.()
+    clearInterval(timer)
+    screen.remove()
+  }
+
+  const screen = h('div', { class: 'screen settings-screen model-screen' },
+    h('div', { class: 'pause-card model-card' },
+      h('h2', { class: 'pause-title' }, 'Chat libera (IA)'),
+      h('p', { class: 'model-about' }, '«Conversa» permette di parlare liberamente con i personaggi: scrivi tu le domande e un modello di linguaggio, che gira su questo computer senza internet, risponde nei panni del personaggio. È facoltativa: i dialoghi del libro, i suggerimenti e tutta la storia funzionano anche senza.'),
+      h('p', { class: 'model-about' }, `Modello: Qwen 3.5 4B (licenza ${'Apache 2.0'}), un file da 2,5 GB scaricato una volta sola.`),
+      status, progress, actions))
+  unsubscribe = window.api.llm.onDownload((d) => {
+    last = d
+    drawProgress()
+    if (['done', 'stopped', 'error'].includes(d.phase)) void draw()
+  })
+  timer = window.setInterval(drawProgress, 1000) // the elapsed time moves also between two progress events
+  ui().append(screen)
+  void draw()
 }
 
 function settingsScreen(): void {

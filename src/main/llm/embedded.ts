@@ -41,6 +41,11 @@ export class EmbeddedProvider implements MainProvider {
     return { nlc, llama, context }
   }
 
+  // Frees the model (memory and the open file), e.g. before the downloaded copy is deleted.
+  async dispose(): Promise<void> {
+    try { (await this.ready).llama.dispose() } catch { /* never loaded */ }
+  }
+
   async generate(req: LlmRequest): Promise<string> {
     const { nlc, llama, context } = await this.ready
     const sequence = context.getSequence()

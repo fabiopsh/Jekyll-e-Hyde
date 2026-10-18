@@ -23,6 +23,10 @@ function haloTexture(scene: Phaser.Scene): string {
 }
 
 export function addLighting(scene: Phaser.Scene, room: SceneData): void {
+  // The room scene is restarted for every room: the lights of the previous one must not survive into this one
+  // (a day room after a night one stayed dark, 2026-10-18).
+  // (Phaser drops the lights themselves when the scene shuts down; the enabled state and the listener stay)
+  scene.lights.disable()
   const lit = room.lighting
   if (!lit || scene.renderer.type !== Phaser.WEBGL) return
   scene.lights.enable().setAmbientColor(hex(lit.ambient))
@@ -46,4 +50,6 @@ export function addLighting(scene: Phaser.Scene, room: SceneData): void {
   }
   scene.children.list.forEach(lightUp)
   scene.events.on(Phaser.Scenes.Events.ADDED_TO_SCENE, lightUp) // sprites made later
+  // scene.events outlives a restart: without this the next room would keep lighting its sprites with this light
+  scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => scene.events.off(Phaser.Scenes.Events.ADDED_TO_SCENE, lightUp))
 }

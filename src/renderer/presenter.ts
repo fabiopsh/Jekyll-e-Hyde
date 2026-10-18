@@ -75,6 +75,7 @@ export class Presenter {
   // Shows the current chapter intro (on a new game) and the current scene; resolves when the game ends.
   async start(withIntro: boolean): Promise<void> {
     const done = new Promise<void>((resolve) => (this.ended = resolve))
+    void window.api.llm.warmup() // the model (if any) loads in memory while the intro is read
     if (withIntro) await this.chapterIntro(this.session.state.chapter)
     this.showScene(this.session.state.scene)
     return done

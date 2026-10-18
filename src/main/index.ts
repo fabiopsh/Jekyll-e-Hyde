@@ -4,6 +4,7 @@ import { loadContent } from '../shared/content-loader'
 import { CHANNELS } from '../shared/ipc'
 import { RunStore } from './saves/runs'
 import { LlmService } from './llm'
+import { ModelStore } from './llm/model-store'
 
 
 // Screenshot runs (scripts/shot.ts) use a throwaway profile so they never touch the real play history.
@@ -48,8 +49,14 @@ app.whenReady().then(() => {
   ipcMain.handle(CHANNELS.runsLog, (_e, id, events) => runs.log(id, events))
   ipcMain.handle(CHANNELS.runsReadLog, (_e, id) => runs.readLog(id))
 
-  const llm = new LlmService(join(app.getPath('userData'), 'llm.json'), root)
+  const models = new ModelStore(app.getPath('userData'), root)
+  const llm = new LlmService(join(app.getPath('userData'), 'llm.json'), models)
   ipcMain.handle(CHANNELS.llmStatus, () => llm.status())
+  ipcMain.handle(CHANNELS.llmWarmup, () => llm.warmup())
+  ipcMain.handle(CHANNELS.llmModelInfo, () => models.info())
+  ipcMain.handle(CHANNELS.llmDownload, (e) => models.download((d) => { if (!e.sender.isDestroyed()) e.sender.send(CHANNELS.llmDownloadProgress, d) }))
+  ipcMain.handle(CHANNELS.llmStopDownload, () => models.stop())
+  ipcMain.handle(CHANNELS.llmRemoveModel, async () => { await llm.unload(); models.remove() })
   ipcMain.handle(CHANNELS.llmGenerate, (_e, id, job) => llm.generate(id, job))
   ipcMain.handle(CHANNELS.llmCancel, (_e, id) => llm.cancel(id))
   ipcMain.handle(CHANNELS.appQuit, () => {

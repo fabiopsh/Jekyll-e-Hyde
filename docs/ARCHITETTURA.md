@@ -142,6 +142,11 @@ Implementazioni: `embedded` (node-llama-cpp nel processo main) e `ollama` (HTTP)
 Le richieste passano da una coda: una per volta, annullabili. Il modello si carica all'avvio in background;
 finché non è pronto la chat libera mostra lo stato di caricamento e i dialoghi scritti restano disponibili.
 
+### Il modello sul computer del giocatore (D34)
+`src/main/llm/model-store.ts`: cerca il file (copia scaricata → pacchetto → Ollama, su ogni sistema), lo scarica
+con ripresa e verifica sha256. `LlmService` crea il motore solo quando serve (`warmup` all'inizio della partita).
+Senza modello lo stato è `missing`: *Conversa* è grigia (`src/renderer/llm-state.ts`) e il menu offre il download.
+
 ## 6. Salvataggi e storico partite
 
 Cartella utente Electron (`app.getPath('userData')/runs/`):

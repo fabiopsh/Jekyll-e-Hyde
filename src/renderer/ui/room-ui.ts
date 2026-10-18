@@ -4,6 +4,7 @@ import { h, ui } from './dom'
 export interface VerbOption {
   label: string
   run: () => void
+  disabled?: string // shown greyed out, with this reason under it (e.g. free chat without the model)
 }
 
 let label: HTMLElement | null = null
@@ -45,8 +46,9 @@ export function verbMenu(title: string, at: MouseEvent, options: VerbOption[]): 
   window.dispatchEvent(new CustomEvent('jh:verbmenu')) // the tutorial listens
   const menu = h('div', { class: 'verb-menu panel' },
     h('div', { class: 'verb-title' }, title),
-    ...options.map((o) =>
-      h('button', {
+    ...options.map((o) => o.disabled
+      ? h('div', { class: 'verb-disabled' }, h('button', { disabled: 'disabled' }, o.label), h('div', { class: 'verb-reason' }, o.disabled))
+      : h('button', {
         onclick: (e: Event) => {
           e.stopPropagation()
           closeVerbMenu()
@@ -64,11 +66,12 @@ export function verbMenu(title: string, at: MouseEvent, options: VerbOption[]): 
   menu.addEventListener('click', (e) => e.stopPropagation())
 
   // Position near cursor, ensuring it stays fully within window viewport
-  const left = Math.max(10, Math.min(at.clientX, window.innerWidth - 230))
-  const top = Math.max(10, Math.min(at.clientY, window.innerHeight - 60 - options.length * 52))
-  menu.style.left = `${left}px`
-  menu.style.top = `${top}px`
+  menu.style.visibility = 'hidden'
   ui().append(menu)
+  const r = menu.getBoundingClientRect() // its real size (an option with a reason is taller)
+  menu.style.left = `${Math.max(10, Math.min(at.clientX, window.innerWidth - r.width - 10))}px`
+  menu.style.top = `${Math.max(10, Math.min(at.clientY, window.innerHeight - r.height - 10))}px`
+  menu.style.visibility = ''
   open = menu
 
   dismissListener = (e: PointerEvent) => {

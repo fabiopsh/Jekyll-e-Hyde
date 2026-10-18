@@ -15,6 +15,16 @@ const api: Api = {
     status: () => ipcRenderer.invoke(CHANNELS.llmStatus),
     generate: (id, job) => ipcRenderer.invoke(CHANNELS.llmGenerate, id, job),
     cancel: (id) => ipcRenderer.invoke(CHANNELS.llmCancel, id),
+    warmup: () => ipcRenderer.invoke(CHANNELS.llmWarmup),
+    modelInfo: () => ipcRenderer.invoke(CHANNELS.llmModelInfo),
+    downloadModel: () => ipcRenderer.invoke(CHANNELS.llmDownload),
+    stopDownload: () => ipcRenderer.invoke(CHANNELS.llmStopDownload),
+    removeModel: () => ipcRenderer.invoke(CHANNELS.llmRemoveModel),
+    onDownload: (fn) => {
+      const listener = (_e: unknown, d: Parameters<typeof fn>[0]) => fn(d)
+      ipcRenderer.on(CHANNELS.llmDownloadProgress, listener)
+      return () => { ipcRenderer.removeListener(CHANNELS.llmDownloadProgress, listener) }
+    },
   },
   app: {
     quit: () => ipcRenderer.invoke(CHANNELS.appQuit),

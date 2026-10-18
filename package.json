@@ -1,7 +1,7 @@
 {
   "name": "jekyll-e-hyde",
   "version": "0.1.0",
-  "description": "Avventura grafica in pixel art da The Strange Case of Dr Jekyll and Mr Hyde",
+  "description": "Avventura grafica in pixel art da \"The Strange Case of Dr Jekyll and Mr Hyde\"",
   "private": true,
   "type": "module",
   "main": "out/main/index.js",
@@ -13,12 +13,19 @@
     "test": "vitest run",
     "validate": "tsx scripts/validate-content.ts",
     "check:story": "tsx scripts/check-story.ts",
-    "shot": "tsx scripts/shot.ts"
+    "shot": "tsx scripts/shot.ts",
+    "dist": "electron-vite build && electron-builder",
+    "dist:dir": "electron-vite build && electron-builder --dir",
+    "dist:win": "electron-vite build && electron-builder --win",
+    "dist:mac": "electron-vite build && electron-builder --mac",
+    "dist:linux": "electron-vite build && electron-builder --linux"
   },
   "devDependencies": {
     "@types/node": "^24.19.2",
     "electron": "^44.7.2",
+    "electron-builder": "^26.15.3",
     "electron-vite": "^6.0.0",
+    "phaser": "^3.90.0",
     "playwright-core": "^1.64.1",
     "tsx": "^4.23.15",
     "typescript": "^5.9.3",
@@ -27,8 +34,69 @@
   },
   "dependencies": {
     "node-llama-cpp": "^3.22.1",
-    "phaser": "^3.90.0",
     "yaml": "^2.9.1",
     "zod": "^4.6.7"
+  },
+  "build": {
+    "appId": "it.jekyllhyde.game",
+    "productName": "Jekyll e Hyde",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "out/main/**",
+      "out/preload/**",
+      "out/renderer/**",
+      "!out/renderer/audio/**/*.wav",
+      "package.json",
+      "!**/node_modules/@node-llama-cpp/*cuda*/**"
+    ],
+    "extraResources": [
+      {
+        "from": "content",
+        "to": "content"
+      },
+      {
+        "from": "story/chapters",
+        "to": "story/chapters"
+      }
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/node-llama-cpp/**",
+      "node_modules/@node-llama-cpp/**"
+    ],
+    "electronLanguages": [
+      "it",
+      "en-US"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "${productName}-${version}-setup.${ext}"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "category": "public.app-category.adventure-games"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Game"
+    }
   }
 }

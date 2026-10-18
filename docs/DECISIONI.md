@@ -210,3 +210,23 @@ scelta dell'agente, 2026-10-17)
 - *Cronache delle indagini*: a sinistra un fascicolo per partita (numero, stato, capitolo raggiunto, data, tempo,
   suggerimenti; *Riprendi* se è in corso); a destra il resoconto su carta, capitolo per capitolo: scoperte,
   scelte, conversazioni libere riportate parola per parola, ragionamenti risolti, suggerimenti usati.
+
+**D34 — Pacchetto leggero; il modello si scarica dal menu.** (Fabio, 2026-10-18)
+- Il pacchetto non contiene il modello: installatore Windows di 157 MB (misurato; installato circa 494 MB:
+  Electron 235 MB, motori IA per processore e Vulkan 112 MB). I motori CUDA (520 MB) sono esclusi: Vulkan usa
+  la scheda video anche su NVIDIA. Misurato su una copia fuori dal progetto: modello caricato in 14 s con
+  Vulkan, risposta breve in 4 s (su questo PC).
+- Il modello (Qwen 3.5 4B Q4_K_M, 2 648 593 216 byte, licenza Apache 2.0) si cerca in quest'ordine: la copia
+  scaricata dal gioco (`<userData>/models/`), una copia inclusa in un pacchetto completo (`resources/models/`),
+  il modello già scaricato da Ollama (manifest `qwen3.5:4b`, cartelle di Ollama di Windows, macOS e Linux, o
+  `OLLAMA_MODELS`). Così durante i test non si riscarica nulla.
+- Se non c'è, *Conversa* è disattivata (grigia, con il motivo) e il menu principale offre *Chat libera (IA)*:
+  spiegazione, dove verrà salvato, download con fase, byte, velocità, tempo trascorso e rimanente, Stop. Il
+  download riprende da dove si è fermato, controlla lo spazio libero e verifica lo sha256. Fonte: il registro
+  pubblico di Ollama, che serve lo stesso file (verificato il 2026-10-18; `MODEL.urls` in
+  `src/main/llm/model-store.ts`). Il modello si carica in memoria quando inizia una partita, non nel menu.
+- Ogni sistema operativo si costruisce sul proprio sistema (`npm run dist:win`, `dist:mac`, `dist:linux`; tre
+  in parallelo con `.github/workflows/build.yml`, non ancora provato). Senza certificato di firma Windows mostra
+  l'avviso SmartScreen e macOS quello di Gatekeeper: per distribuire senza avvisi servono un certificato Windows
+  e un account Apple Developer (notarizzazione). Non ancora fatto.
+- `JH_IGNORE_OLLAMA=1` (solo test): il gioco ignora Ollama, per vedere il percorso di download.
