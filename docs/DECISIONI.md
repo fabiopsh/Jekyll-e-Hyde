@@ -231,16 +231,22 @@ scelta dell'agente, 2026-10-17)
   e un account Apple Developer (notarizzazione). Non ancora fatto.
 - `JH_IGNORE_OLLAMA=1` (solo test): il gioco ignora Ollama, per vedere il percorso di download.
 
-**D35 — Prima release pubblica (0.1, capitoli I-III) con GitHub Releases.** (Fabio, 2026-11-24)
-- Un tag `vX.Y.Z` uguale alla `version` di `package.json` avvia `.github/workflows/release.yml`: costruisce
+**D35 — Prima release pubblica (0.1, capitoli I-III) con GitHub Releases.** (Fabio, 2026-11-24; rivista lo
+stesso giorno: il primo meccanismo a tag era poco intuitivo)
+- Un pulsante: *Actions → Pubblica il gioco → Run workflow* (`.github/workflows/release.yml`). *Prova* costruisce
   Windows (installatore NSIS), macOS Apple Silicon (dmg) e Linux (AppImage e deb), ciascuno sul proprio sistema, e
-  pubblica una Release con i file e il testo di `.github/release-notes.md` (*pre-release* per le `0.x`). Avviato a
-  mano, il flusso costruisce soltanto.
-- Nomi dei file senza spazi e con il sistema (`Jekyll-e-Hyde-0.1.0-Windows-Setup.exe`…); icona da
-  `build/icon.png` (un ritaglio della tavola della porta, ingrandito ×4 a pixel interi).
+  lascia i file nel flusso. *Pubblica la versione* crea anche tag e Release con i quattro file e il testo di
+  `.github/release-notes.md` (con i link diretti), come *ultima versione*. Versione dal modulo o da
+  `package.json`; se è già pubblicata il flusso si ferma prima di costruire; un tag rimasto da una prova senza
+  Release viene spostato sul commit pubblicato.
+- Niente *pre-release*: la pagina `releases/latest` (e i link del README) non le considera.
+- Nomi dei file senza versione (`Jekyll-e-Hyde-Windows-Setup.exe`…), così
+  `…/releases/latest/download/<file>` scarica sempre l'ultima; icona da `build/icon.png` (tavola della porta
+  ingrandita ×4 a pixel interi).
 - Nessuna firma a pagamento: Windows mostra l'avviso SmartScreen; su macOS firma *ad-hoc* (`identity: "-"`, senza
-  hardened runtime: verificato nel codice di electron-builder 26 che `"-"` fa la firma ad-hoc e che senza identità
-  non firma affatto), Gatekeeper chiede *Apri comunque*. Il README spiega i passi.
+  hardened runtime; nel codice di electron-builder 26 `"-"` fa la firma ad-hoc, senza identità non firma),
+  Gatekeeper chiede *Apri comunque*. Il README spiega i passi.
 - macOS solo Apple Silicon: il runner è arm64 e npm installa solo i motori IA della macchina che costruisce.
 - Il modello non può stare in una Release: il limite di GitHub è 2 GiB per file e il modello ne pesa 2,47. Resta
   il download dal menu (D34).
+- Prima prova su GitHub (2026-11-24): i tre pacchetti costruiti in circa 2 minuti ciascuno.

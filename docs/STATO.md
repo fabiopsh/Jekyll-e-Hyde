@@ -141,8 +141,9 @@ Aggiornato: 2026-10-16. Chi lavora qui aggiorna questo file a fine sessione (ved
 
 - **Pronto per la prima release (2026-11-24, D35)**: `README.md` (scaricare, primo avvio su ogni sistema, chat
   libera, comandi, salvataggi, sviluppo, crediti), screenshot in `docs/images/`, icona `build/icon.png`, flusso
-  `.github/workflows/release.yml` (sostituisce `build.yml`), testo della release `.github/release-notes.md`.
-  Provato solo il pacchetto Windows; macOS e Linux si costruiranno la prima volta su GitHub Actions.
+  *Pubblica il gioco* (`.github/workflows/release.yml`, un pulsante: Prova o Pubblica), testo della release con link
+  diretti (`.github/release-notes.md`). Su GitHub i tre pacchetti si costruiscono (prova del 2026-11-24); non ancora
+  provati a mano su macOS e Linux. Il tag `v0.1.0` della prima prova è rimasto senza Release: il flusso lo sposta.
   Manca: la licenza del codice (scelta di Fabio).
 
 ## Prossimi passi

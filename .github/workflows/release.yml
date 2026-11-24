@@ -1,24 +1,66 @@
-# Release (docs/DECISIONI.md D35). Pushing a tag vX.Y.Z (equal to "version" in package.json) builds the game on
-# Windows, macOS (Apple Silicon) and Linux, each on its own system, and publishes a GitHub Release with the
-# packages attached and the text of .github/release-notes.md. Started by hand (Actions > release > Run workflow)
-# it only builds: the packages stay attached to the run, to try them before a release.
+# "Pubblica il gioco" (docs/DECISIONI.md D35). One button: GitHub > Actions > Pubblica il gioco > Run workflow.
+#   - "Prova": builds Windows, macOS (Apple Silicon) and Linux, each on its own system; the packages stay
+#     attached to the run (bottom of its page, "Artifacts"), nothing is published.
+#   - "Pubblica": the same, then creates the tag vX.Y.Z and the GitHub Release with the four packages and the
+#     text of .github/release-notes.md, marked as the latest release (the README download links point to it).
+# The version is the one in package.json unless typed in the form. The packages have no version in their name,
+# so ".../releases/latest/download/<file>" always gives the newest one.
 # The language model is not in the packages (D34): the game downloads it from its main menu.
-name: release
+name: Pubblica il gioco
 on:
-  push:
-    tags: ['v*']
   workflow_dispatch:
+    inputs:
+      cosa:
+        description: Cosa fare
+        type: choice
+        options:
+          - Prova (solo i file, senza pubblicare)
+          - Pubblica la versione
+        default: Prova (solo i file, senza pubblicare)
+      versione:
+        description: Numero di versione, per esempio 0.2.0 (vuoto = quello di package.json)
+        type: string
+        required: false
 permissions:
   contents: write
 jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      number: ${{ steps.v.outputs.number }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: v
+        shell: bash
+        env:
+          TYPED: ${{ inputs.versione }}
+        run: |
+          v="${TYPED:-$(node -p "require('./package.json').version")}"
+          v="${v#v}"
+          [[ "$v" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "versione non valida: $v (serve X.Y.Z)"; exit 1; }
+          echo "number=$v" >> "$GITHUB_OUTPUT"
+          echo "Versione $v" >> "$GITHUB_STEP_SUMMARY"
+      - name: Not published yet (checked before the build, so a wrong number stops at once)
+        if: inputs.cosa == 'Pubblica la versione'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          V: ${{ steps.v.outputs.number }}
+        run: |
+          if gh release view "v$V" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "::error::La versione $V è già pubblicata: avvia di nuovo il flusso scrivendo un numero nuovo nel campo versione."
+            exit 1
+          fi
+
   package:
+    needs: version
     strategy:
       fail-fast: false
       matrix:
         include:
           - os: windows-latest
             dist: dist:win
-          - os: macos-latest # arm64 runner: the native AI engines installed by npm are the arm64 ones
+          - os: macos-latest # arm64 runner: npm installs the arm64 AI engines only
             dist: dist:mac
           - os: ubuntu-latest
             dist: dist:linux
@@ -29,19 +71,16 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - name: Tag and package.json agree
-        if: startsWith(github.ref, 'refs/tags/v')
-        shell: bash
-        run: |
-          v=$(node -p "require('./package.json').version")
-          [ "v$v" = "$GITHUB_REF_NAME" ] || { echo "tag $GITHUB_REF_NAME but package.json says $v"; exit 1; }
       - run: npm ci
+      - name: Version of this build
+        shell: bash
+        run: npm version "${{ needs.version.outputs.number }}" --no-git-tag-version --allow-same-version
       - run: npm run validate
       - run: npm test
       - run: npm run ${{ matrix.dist }}
       - uses: actions/upload-artifact@v4
         with:
-          name: packages-${{ matrix.os }}
+          name: pacchetti-${{ matrix.os }}
           path: |
             dist/*.exe
             dist/*.dmg
@@ -50,8 +89,8 @@ jobs:
           if-no-files-found: error
 
   release:
-    needs: package
-    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [version, package]
+    if: inputs.cosa == 'Pubblica la versione'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -59,9 +98,26 @@ jobs:
         with:
           path: packages
           merge-multiple: true
+      - name: Release text with the version and the download links
+        shell: bash
+        run: sed "s/{{VERSIONE}}/${{ needs.version.outputs.number }}/g" .github/release-notes.md > release-body.md
+      - name: A tag left over from a try moves to this commit
+        shell: bash
+        env:
+          V: ${{ needs.version.outputs.number }}
+        run: |
+          tag="v$V"
+          # a tag without a release is left over from a try: move it to the commit being published
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null; then
+            git tag -f "$tag"
+            git push -f origin "refs/tags/$tag"
+          fi
       - uses: softprops/action-gh-release@v2
         with:
-          name: Jekyll e Hyde ${{ github.ref_name }}
-          body_path: .github/release-notes.md
-          prerelease: ${{ startsWith(github.ref_name, 'v0.') }}
+          tag_name: v${{ needs.version.outputs.number }}
+          target_commitish: ${{ github.sha }}
+          name: Jekyll e Hyde ${{ needs.version.outputs.number }}
+          body_path: release-body.md
+          prerelease: false
+          make_latest: true
           files: packages/*

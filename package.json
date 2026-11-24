@@ -86,7 +86,7 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "artifactName": "Jekyll-e-Hyde-${version}-Windows-Setup.${ext}"
+      "artifactName": "Jekyll-e-Hyde-Windows-Setup.${ext}"
     },
     "mac": {
       "target": [
@@ -101,7 +101,7 @@
       "icon": "build/icon.png",
       "identity": "-",
       "hardenedRuntime": false,
-      "artifactName": "Jekyll-e-Hyde-${version}-macOS-${arch}.${ext}"
+      "artifactName": "Jekyll-e-Hyde-macOS-${arch}.${ext}"
     },
     "linux": {
       "target": [
@@ -123,15 +123,15 @@
       "maintainer": "fabiopsh",
       "synopsis": "Avventura grafica dal romanzo di Stevenson"
     },
-    "artifactName": "Jekyll-e-Hyde-${version}-${os}-${arch}.${ext}",
+    "artifactName": "Jekyll-e-Hyde-${os}-${arch}.${ext}",
     "dmg": {
-      "artifactName": "Jekyll-e-Hyde-${version}-macOS-${arch}.${ext}"
+      "artifactName": "Jekyll-e-Hyde-macOS-${arch}.${ext}"
     },
     "appImage": {
-      "artifactName": "Jekyll-e-Hyde-${version}-Linux-x64.${ext}"
+      "artifactName": "Jekyll-e-Hyde-Linux-x64.${ext}"
     },
     "deb": {
-      "artifactName": "Jekyll-e-Hyde-${version}-Linux-amd64.${ext}"
+      "artifactName": "Jekyll-e-Hyde-Linux-amd64.${ext}"
     },
     "publish": null
   },

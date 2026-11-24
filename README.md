@@ -13,22 +13,23 @@ linguaggio che gira sul tuo computer, senza internet, risponde nei loro panni se
 
 ## Scarica e gioca
 
-**[Scarica l'ultima versione](https://github.com/fabiopsh/Jekyll-e-Hyde/releases/latest)**: in fondo alla pagina,
-sotto *Assets*, scegli il file del tuo sistema.
+Un clic sul tuo sistema scarica l'ultima versione:
 
-| Sistema | File da scaricare |
+| Sistema | Scarica |
 |---|---|
-| Windows 10 o 11, 64 bit | `Jekyll-e-Hyde-<versione>-Windows-Setup.exe` |
-| macOS con chip Apple (M1 e successivi) | `Jekyll-e-Hyde-<versione>-macOS-arm64.dmg` |
-| Linux 64 bit: Ubuntu, Debian, Mint | `Jekyll-e-Hyde-<versione>-Linux-amd64.deb` |
-| Linux 64 bit: altre distribuzioni | `Jekyll-e-Hyde-<versione>-Linux-x64.AppImage` |
+| **Windows** 10 o 11, 64 bit | [Installatore per Windows](https://github.com/fabiopsh/Jekyll-e-Hyde/releases/latest/download/Jekyll-e-Hyde-Windows-Setup.exe) |
+| **macOS** con chip Apple (M1 e successivi) | [Immagine disco per Mac](https://github.com/fabiopsh/Jekyll-e-Hyde/releases/latest/download/Jekyll-e-Hyde-macOS-arm64.dmg) |
+| **Linux**: Ubuntu, Debian, Mint | [Pacchetto .deb](https://github.com/fabiopsh/Jekyll-e-Hyde/releases/latest/download/Jekyll-e-Hyde-Linux-amd64.deb) |
+| **Linux**: altre distribuzioni | [AppImage](https://github.com/fabiopsh/Jekyll-e-Hyde/releases/latest/download/Jekyll-e-Hyde-Linux-x64.AppImage) |
+
+Le versioni precedenti e le novità di ognuna sono nella pagina [Releases](https://github.com/fabiopsh/Jekyll-e-Hyde/releases).
 
 Il pacchetto pesa circa 160 MB. Il gioco non è firmato digitalmente (la firma costa un abbonamento annuale), quindi
 al primo avvio Windows e macOS lo trattano con sospetto. I passi qui sotto spiegano come aprirlo.
 
 ### Windows
 
-1. Scarica `…-Windows-Setup.exe` e aprilo con un doppio clic.
+1. Scarica l'installatore per Windows e aprilo con un doppio clic.
 2. Se compare *Windows ha protetto il PC*, fai clic su **Ulteriori informazioni**, poi su **Esegui comunque**.
 3. Segui l'installazione. Se ti chiede per chi installare, scegli *solo per me*: così non servono permessi di
    amministratore.
@@ -36,7 +37,7 @@ al primo avvio Windows e macOS lo trattano con sospetto. I passi qui sotto spieg
 
 ### macOS (chip Apple)
 
-1. Scarica `…-macOS-arm64.dmg`, aprilo e trascina *Jekyll e Hyde* nella cartella **Applicazioni**.
+1. Scarica l'immagine disco per Mac, aprila e trascina *Jekyll e Hyde* nella cartella **Applicazioni**.
 2. Apri il gioco da Applicazioni. La prima volta macOS lo blocca perché non viene da uno sviluppatore registrato.
 3. Apri **Impostazioni di Sistema → Privacy e sicurezza**, scorri fino al messaggio su *Jekyll e Hyde* e fai clic
    su **Apri comunque**; conferma.
@@ -54,7 +55,7 @@ I Mac con processore Intel non sono supportati in questa versione.
 Con Ubuntu, Debian o Mint usa il pacchetto `.deb`:
 
 ```bash
-sudo apt install ./Jekyll-e-Hyde-<versione>-Linux-amd64.deb
+sudo apt install ./Jekyll-e-Hyde-Linux-amd64.deb
 ```
 
 Poi apri *Jekyll e Hyde* dal menu delle applicazioni.
@@ -62,8 +63,8 @@ Poi apri *Jekyll e Hyde* dal menu delle applicazioni.
 Con altre distribuzioni usa l'AppImage: rendila eseguibile e avviala.
 
 ```bash
-chmod +x Jekyll-e-Hyde-<versione>-Linux-x64.AppImage
-./Jekyll-e-Hyde-<versione>-Linux-x64.AppImage
+chmod +x Jekyll-e-Hyde-Linux-x64.AppImage
+./Jekyll-e-Hyde-Linux-x64.AppImage
 ```
 
 Se l'AppImage non parte e cita *FUSE*, installa la libreria `libfuse2` (su Ubuntu 24.04 si chiama `libfuse2t64`).
@@ -165,18 +166,19 @@ lavora con un assistente IA, e l'ordine in cui leggere [`docs/STATO.md`](docs/ST
 | `npm run shot -- <scenario>` | gioca da solo e salva screenshot in `out/shots/` |
 | `npm run dist:win` | crea l'installatore Windows in `dist/` (macOS e Linux: `dist:mac`, `dist:linux`, sul loro sistema) |
 
-**Pubblicare una versione.** Le release le costruisce GitHub Actions
-([`.github/workflows/release.yml`](.github/workflows/release.yml)), ogni sistema sul proprio:
+**Pubblicare una versione.** Le release le costruisce GitHub Actions, ogni sistema sul proprio
+([`.github/workflows/release.yml`](.github/workflows/release.yml)). Non servono tag né comandi:
 
-1. Aggiorna `version` in `package.json` (per esempio `0.2.0`) e il testo della release in
+1. Fai il push su `main` del codice da pubblicare, con le novità scritte in
    [`.github/release-notes.md`](.github/release-notes.md).
-2. Fai il commit e il push su `main`.
-3. Crea e invia il tag con lo stesso numero: `git tag v0.2.0` e poi `git push origin v0.2.0`.
-4. Quando il flusso finisce (lo segui nella scheda *Actions*), la pagina *Releases* ha la nuova versione con i
-   quattro file. Una versione `0.x` viene pubblicata come *pre-release*.
+2. Su GitHub apri **Actions → Pubblica il gioco → Run workflow**.
+3. In *Cosa fare* scegli **Prova** per costruire soltanto: i file restano in fondo alla pagina del flusso, sotto
+   *Artifacts*, da scaricare e provare. Scegli **Pubblica la versione** per pubblicare.
+4. In *Versione* scrivi il numero, per esempio `0.2.0`, oppure lascialo vuoto per usare quello di `package.json`.
+5. Fai clic su **Run workflow**. Quando il flusso finisce (pochi minuti), la Release è online, completa dei quattro
+   file, e i link del README scaricano la nuova versione.
 
-Dalla scheda *Actions* puoi anche avviare il flusso a mano: costruisce i pacchetti senza pubblicare nulla, per
-provarli prima.
+Se scegli un numero già pubblicato, il flusso si ferma subito e te lo dice.
 
 ## Crediti e licenze
 
