@@ -1,0 +1,67 @@
+# Release (docs/DECISIONI.md D35). Pushing a tag vX.Y.Z (equal to "version" in package.json) builds the game on
+# Windows, macOS (Apple Silicon) and Linux, each on its own system, and publishes a GitHub Release with the
+# packages attached and the text of .github/release-notes.md. Started by hand (Actions > release > Run workflow)
+# it only builds: the packages stay attached to the run, to try them before a release.
+# The language model is not in the packages (D34): the game downloads it from its main menu.
+name: release
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  package:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            dist: dist:win
+          - os: macos-latest # arm64 runner: the native AI engines installed by npm are the arm64 ones
+            dist: dist:mac
+          - os: ubuntu-latest
+            dist: dist:linux
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Tag and package.json agree
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        run: |
+          v=$(node -p "require('./package.json').version")
+          [ "v$v" = "$GITHUB_REF_NAME" ] || { echo "tag $GITHUB_REF_NAME but package.json says $v"; exit 1; }
+      - run: npm ci
+      - run: npm run validate
+      - run: npm test
+      - run: npm run ${{ matrix.dist }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packages-${{ matrix.os }}
+          path: |
+            dist/*.exe
+            dist/*.dmg
+            dist/*.AppImage
+            dist/*.deb
+          if-no-files-found: error
+
+  release:
+    needs: package
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: packages
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: Jekyll e Hyde ${{ github.ref_name }}
+          body_path: .github/release-notes.md
+          prerelease: ${{ startsWith(github.ref_name, 'v0.') }}
+          files: packages/*

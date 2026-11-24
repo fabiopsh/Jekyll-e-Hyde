@@ -139,6 +139,12 @@ Aggiornato: 2026-10-16. Chi lavora qui aggiorna questo file a fine sessione (ved
   venivano nascosti (controllo `isActive()` falso durante la creazione), quindi nel cap. 3 si cliccava il Jekyll
   senza chat. Scenario di controllo: `npm run shot -- regress`.
 
+- **Pronto per la prima release (2026-11-24, D35)**: `README.md` (scaricare, primo avvio su ogni sistema, chat
+  libera, comandi, salvataggi, sviluppo, crediti), screenshot in `docs/images/`, icona `build/icon.png`, flusso
+  `.github/workflows/release.yml` (sostituisce `build.yml`), testo della release `.github/release-notes.md`.
+  Provato solo il pacchetto Windows; macOS e Linux si costruiranno la prima volta su GitHub Actions.
+  Manca: la licenza del codice (scelta di Fabio).
+
 ## Prossimi passi
 
 1. Prova manuale di Fabio dei capitoli 1 e 2 (sotto) e revisione delle immagini del capitolo 2.
